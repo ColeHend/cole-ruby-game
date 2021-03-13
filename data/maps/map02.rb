@@ -11,14 +11,16 @@ class Map02 < Map
     include WindowBase
     def initialize()
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
-        @map = Map.new("data/images/CastleTown.bmp",40,30,@mapfile)
+        @tileset = $scene_manager.images["CastleTownTileset"]
+        @map = Mapper.new(@tileset,40,30,@mapfile)
+        
         @width, @height = 40, 30
-        lightCoatSprite = Gosu::Image.load_tiles("data/images/lightCoat.bmp", 32, 48) 
-        shadowGuySprite = Gosu::Image.load_tiles("data/images/shadowGuy.bmp", 32, 48) 
         @followDialog = DialogBox.new(0,10,20,5,"ev0SetMove","I LOVE YOU!! I'm going to follow you. Have 5000 XP.")
         @talkin = false
+        $scene_manager.register_object("Event201","shadowGuy",6*32,5*32,32,48,4,4)
+        $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
         $scene_manager.registerEvent(2,"john1",
-            Event.new(shadowGuySprite, 6, 5, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event201"], EventTrigger::ACTION_KEY, true, ->(){
                 @talkin = true
                 $scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
@@ -33,7 +35,7 @@ class Map02 < Map
         }))
 
         $scene_manager.registerEvent(2,"john2",
-            Event.new(lightCoatSprite, 15, 10, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
                 $scene_manager.scene["map"].change_map("map1")
             })
         )
@@ -41,7 +43,8 @@ class Map02 < Map
         
     end
     def draw()
-        @map.draw(@events)
+        @map.draw()
+        $scene_manager.eventMap[2].each {|e|e.draw(@theMap)}
         if @talkin
             @followDialog.draw_box(->(){@talkin = false})
         end

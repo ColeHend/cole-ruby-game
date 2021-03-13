@@ -16,7 +16,6 @@ class SceneMap
         @mWidth = 40  # @mWidth = @currentMap.map.width
         @mHeight = 30   # @mHeight = @currentMap.map.height
         @camera_x = @camera_y = 0
-        $scene_manager.register_image("firebolt","data/images/fireshot_character.bmp",32,48)
     end 
     def change_map(map)
         $scene_manager.input.addToStack("map")
@@ -27,23 +26,22 @@ class SceneMap
     end
     def update()
         
-        #@player.update()
+        @player.update()
         @currentMap.update()
         stackLength = ($scene_manager.input.inputStack.length-1)
         if $scene_manager.input.inputStack[stackLength] == "map"
-            @currentMap.events.each {|e|e.update(@player.x, @player.y, @input.keyDown(InputTrigger::SELECT),@currentMap.map.collision)}
+            @currentMap.events.each {|e|e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT),@currentMap.map.collision)}
             
-            @player.move(@input, @currentMap.map.collision,@currentMap.map.width,@currentMap.map.height)
+            
         end
-        @camera_x = [[(@player.x*32) - 640 / 2, 0].max, @mWidth * 50 - 640].min
-        @camera_y = [[(@player.y*32) - 480 / 2, 0].max, @mHeight * 50 - 480].min
+        @player.move(@input, @currentMap.map.collision,@currentMap.map.theMap)
     end
     def draw()
         @player = $scene_manager.scene["player"]
-        Gosu.translate(-@camera_x, -@camera_y) do
-            @player.draw
-            @currentMap.draw
-            @currentMap.events.each {|e|e.draw()}    
-        end
+        #Gosu.translate(-@camera_x, -@camera_y) do
+            
+        @currentMap.draw
+        @player.draw    
+        #end
     end
 end
