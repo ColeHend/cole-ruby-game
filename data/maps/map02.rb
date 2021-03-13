@@ -10,6 +10,7 @@ class Map02 < Map
     attr_reader :mapfile, :map , :events, :width, :height
     include WindowBase
     def initialize()
+        #Variable Init
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
         @tileset = $scene_manager.images["CastleTownTileset"]
         @map = Mapper.new(@tileset,40,30,@mapfile)
@@ -17,6 +18,8 @@ class Map02 < Map
         @width, @height = 40, 30
         @followDialog = DialogBox.new(0,10,20,5,"ev0SetMove","I LOVE YOU!! I'm going to follow you. Have 5000 XP.")
         @talkin = false
+
+        #Events
         $scene_manager.register_object("Event201","shadowGuy",6*32,5*32,32,48,4,4)
         $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
         $scene_manager.registerEvent(2,"john1",
@@ -40,19 +43,18 @@ class Map02 < Map
             })
         )
         
-        
     end
+
     def draw()
-        @map.draw()
-        $scene_manager.eventMap[2].each {|e|
-        e.draw()
-        @map.collision[e.x][e.y] = 1
-        }
+        #@map.draw()
+        #$scene_manager.eventMap[2].each {|e|e.draw()}
         if @talkin
             @followDialog.draw_box(->(){@talkin = false})
         end
     end
+
     def update()
         @map.update()
+        #$scene_manager.eventMap[1].each {|e|@map.collision[e.x][e.y] = 1}
     end
 end

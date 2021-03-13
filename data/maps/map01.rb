@@ -15,7 +15,7 @@ class Map01
         @talkin = false
         @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
-        @events = $scene_manager.eventMap[1].each {|e|e.draw()}
+        @events = $scene_manager.eventMap[1]
         @map = Mapper.new(@tileset,40,30,@mapfile)
         @width = 40
         @height = 30
@@ -52,19 +52,21 @@ class Map01
         @optionsBox = OptionsBox.new("evntOneOptions",3,8,5,2,@choice,"")
         @windowSkinBox = OptionsBox.new("windowSkinOptions",9,8,5,2,@windowSkinChoice,"")
         #@optionBox.hidden(true) 
-        
+
+        # Events
         $scene_manager.register_object("Event101","greenMan",7*32,10*32,32,48,4,4)
         $scene_manager.register_object("Event102","ghost",5*32,5*32,32,48,4,4)
+        #$scene_manager.object["Event101"].set_move("random",1)
+        #$scene_manager.object["Event102"].set_move("facePlayer",10)
         $scene_manager.registerEvent(1,"fred1",
             Event.new($scene_manager.object["Event101"], EventTrigger::ACTION_KEY, true, ->(){
-                $scene_manager.input.addToStack("ev0Dialog")
+                #$scene_manager.input.addToStack("ev0Dialog")
                 @talkin = true
                 $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Johnny",5))
                 $scene_manager.feature["party"].party[0].give_xp(300)
                 $scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
                 $scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
-                $scene_manager.object["Event101"].set_move("random",1)
-                $scene_manager.object["Event102"].set_move("facePlayer",10)
+                
         }))
         
         
@@ -79,11 +81,11 @@ class Map01
                 end
         }))
 
-        @events = $scene_manager.eventMap[1] 
+        
     end
     def draw
-        @map.draw()
-        $scene_manager.eventMap[1].each {|e|e.draw()}
+        #@map.draw()
+        #$scene_manager.eventMap[1]
         if @showChoices
             @optionsBox.draw
         end
@@ -98,7 +100,7 @@ class Map01
         end
     end
     def update
-        $scene_manager.eventMap[1].each {|e|@map.collision[e.x][e.y] = 1}
+        #$scene_manager.eventMap[1]
         @map.update()
         if @showChoices
             @optionsBox.update

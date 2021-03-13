@@ -28,6 +28,7 @@ class SceneMap
         
         @player.update()
         @currentMap.update()
+        @currentMap.events.each {|e|@currentMap.map.collision[e.x][e.y] = 1}
         stackLength = ($scene_manager.input.inputStack.length-1)
         if $scene_manager.input.inputStack[stackLength] == "map"
             @currentMap.events.each {|e|e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT),@currentMap.map.collision)}
@@ -40,9 +41,10 @@ class SceneMap
         
         @player = $scene_manager.scene["player"]
         Gosu.translate(-@camera_x, -@camera_y) do
-            
-        @currentMap.draw
-        @player.draw    
+            @currentMap.map.draw
+            @player.draw 
+            @currentMap.events.each {|e|e.draw()}
+            @currentMap.draw
         end
     end
 end
