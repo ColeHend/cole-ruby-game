@@ -4,22 +4,78 @@ module MoveCollision
         @collisionArray = collisionArray
         @forces = forceVar
         @objectToMove = objectToMove
+        @x = @objectToMove.x / 32
+        @y = @objectToMove.y / 32
+        def check_surrounding(direction)
+            toLeft = (@x - 1)
+            toRight = (@x + 1)
+            toTop =  (@y - 1)
+            toBottom = (@y + 1)
+            case direction
+            when "up"
+               return @collisionArray[@x][toTop]
+            when "down"
+                return @collisionArray[@x][toBottom]
+            when "left"
+                return @collisionArray[toLeft][@y]
+            when "right"
+                return @collisionArray[toRight][@y]
+            end
+        end
+        def willCollide(direction,mWidth,mHeight,surroundingCheck)
+            if @x == (mWidth - 2) && direction ==  "right"
+                return true
+            elsif @y == 0 && direction == "up"
+                return true
+            elsif @y == (mHeight - 2) && direction ==  "down"
+                return true
+            elsif @x == 0 && direction == "left"
+                return true
+            elsif surroundingCheck == 0
+                return false
+            elsif surroundingCheck == 1
+                return true
+            else
+                return true
+            end
+        end
+
+        upCheck = check_surrounding("up")
+        downCheck = check_surrounding("down")
+        leftCheck = check_surrounding("left")
+        rightCheck = check_surrounding("right")
 
         moveUp = ->(force){ 
-            @forces.y = (@forces.y - 50)
-            draw_character(@objectToMove, "up",5)
+            if !willCollide("up",40,30,upCheck)
+                draw_character(@objectToMove, "up",2)
+                @objectToMove.y = (@objectToMove.y - 32)
+            else
+                @objectToMove.set_animation(12)
+            end
         }
         moveDown = ->(force){
-            @forces.y = (@forces.y + 50)
-            draw_character(@objectToMove, "down",5) 
+            if !willCollide("down",40,30,downCheck)
+                draw_character(@objectToMove, "down",2) 
+                @objectToMove.y = (@objectToMove.y + 32)
+            else
+                @objectToMove.set_animation(0)
+            end
         }
         moveRight = ->(force){
-            @forces.x = ( @forces.x + 50)
-            draw_character(@objectToMove, "right",5) 
+            if !willCollide("right",40,30,rightCheck)
+                draw_character(@objectToMove, "right",2) 
+                @objectToMove.x = ( @objectToMove.x + 32)
+            else
+                @objectToMove.set_animation(8)
+            end
         }
         moveLeft = ->(force){ 
-            @forces.x = (@forces.x - 50)
-            draw_character(@objectToMove, "left",5)
+            if !willCollide("left",40,30,leftCheck)
+                draw_character(@objectToMove, "left",2)
+                @objectToMove.x = (@objectToMove.x - 32)
+            else
+                @objectToMove.set_animation(4)
+            end
         }
         randomDir = rand(4)
         moveRandom = ->(){

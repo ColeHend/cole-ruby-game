@@ -70,9 +70,9 @@ class Map01
                 if !@showChoices 
                     #$scene_manager.input.removeFromStack(@optionsBox.stackName)
                     $scene_manager.input.addToStack(@optionsBox.stackName)
-                    @optionBox.hidden(false)
+                  #  @optionBox.hidden(false)
                 else
-                    @optionBox.hidden(true)
+                    #@optionBox.hidden(true)
                 end
         }))
 
@@ -80,7 +80,7 @@ class Map01
     end
     def draw
         @map.draw()
-        $scene_manager.eventMap[1].each {|e|e.draw(@theMap)}
+        $scene_manager.eventMap[1].each {|e|e.draw()}
         if @showChoices
             @optionsBox.draw
         end
@@ -95,7 +95,7 @@ class Map01
         end
     end
     def update
-        #@events.each {|e| @map.collision[e.x][e.y] = 1}
+        @events.each {|e| @map.collision[e.x][e.y] = 1}
         
         @map.update()
         if @showChoices

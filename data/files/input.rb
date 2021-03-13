@@ -34,6 +34,11 @@ class Input
             return true
         end
     end
+    def keyReleased(key)
+        if KB.key_released?(key)
+            return true
+        end
+    end
     def keyDown(id)
         stackLength = ($scene_manager.input.inputStack.length-1)
         if $scene_manager.input.inputStack[stackLength] == "map"

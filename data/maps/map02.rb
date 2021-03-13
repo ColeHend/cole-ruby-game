@@ -44,7 +44,7 @@ class Map02 < Map
     end
     def draw()
         @map.draw()
-        $scene_manager.eventMap[2].each {|e|e.draw(@theMap)}
+        $scene_manager.eventMap[2].each {|e|e.draw()}
         if @talkin
             @followDialog.draw_box(->(){@talkin = false})
         end

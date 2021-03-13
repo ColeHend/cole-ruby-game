@@ -26,7 +26,7 @@ class DialogBox
         end
         drawing()
         if (Gosu.milliseconds / 30 % 3 == 0)
-            if $window.button_down(InputTrigger::SELECT)
+            if @input.keyDown(InputTrigger::SELECT)
                 exitLambda.call()
                 @input.removeFromStack(@stackName)
             end
