@@ -3,17 +3,17 @@ require_relative "../move_collision.rb"
 class Event
   attr_accessor :animate, :canMove, :moving, :collidable, :x,:y,:dir, :type, :distance
   include MoveCollision, Animate
-  def initialize(sprite, x, y, eventTrigger, collidable, event)
-    @x = x
-    @y = y
+  def initialize(object, eventTrigger, collidable, event)
+    @x = object.x
+    @y = object.y
     @z = 5
     @dir = 8
-    @sprite = sprite
+    @eventObject = object
     @eventTrigger = eventTrigger
     @solid = collidable
     @moveType = "facePlayer"
     @distance = 4
-
+    @forces = Vector.new(0,0)
     if @solid
       @collidable = 1
     else
@@ -42,9 +42,9 @@ class Event
   end
   def update(playerX, playerY, actionKeyTriggered,collisionArray)
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
-    collisionArray[@x][@y] = @collidable
+    #collisionArray[@x][@y] = @collidable
     
-    move_event(collisionArray,@moveType,@distance,40,30)
+    move_event(collisionArray,@moveType,@distance,40,30,@eventObject,@forces)
    
 
     case @eventTrigger
@@ -75,7 +75,8 @@ class Event
     end
   end
 
-  def draw()
-    draw_character(@sprite,@dir,@x,@y,@z,@animate,@canMove,@time,@frame,@moving)
+  def draw(theMap)
+    @eventObject.draw(theMap)
+    #draw_character(@sprite,@dir,@x,@y,@z,@animate,@canMove,@time,@frame,@moving)
   end
 end

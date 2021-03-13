@@ -6,15 +6,27 @@ Dir[File.join(__dir__,'data', 'maps', '*.rb')].each { |file| require file }
 Dir[File.join(__dir__,'data', 'maps','characters', '*.rb')].each { |file| require file }
 class MyGame < GameWindow
   def initialize
-    super 800, 600, false 
+    super 800, 600, false
+    $scene_manager = SceneManager.new
+    $scene_manager.register("title",TitleScreen.new()) 
+    $scene_manager.register("player",Player.new())
+    $scene_manager.register_object("fancyWindowSkin","fancyWindowSkin",0,0,0,0,6,4)
+    $scene_manager.register_object("earthboundWindowSkin","earthboundWindowSkin",0,0,0,0,6,4)
+    $scene_manager.register_object("blackWindowSkin","blackWindowSkin",0,0,0,0,6,4)
+    $scene_manager.register_image("CastleTownTileset","CastleTown",8,23)
+    $scene_manager.images["windowSkin"] = $scene_manager.object["fancyWindowSkin"]
+    $scene_manager.switch_scene("title") 
   end
 
   def update
-    # game logic here
+    self.caption = "Game FPS = " +(Gosu.fps()).to_s
+    KB.update
+    
+    $scene_manager.update
   end
 
   def draw
-    # drawing logic here
+    $scene_manager.draw
   end
 end
 

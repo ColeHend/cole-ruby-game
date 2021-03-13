@@ -13,10 +13,10 @@ class TitleScreen
             $scene_manager.register("player",Player.new())
             $scene_manager.registerFeature("party",PlayerParty.new)
             $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10))
-            
-            $scene_manager.register_image("fancyWindowSkin","data/images/fancyWindowSkin.bmp", 32, 32)
-            $scene_manager.register_image("earthboundWindowSkin","data/images/earthboundWindowSkin.bmp", 32, 32)
-            $scene_manager.register_image("blackWindowSkin","data/images/blackWindowSkin.bmp", 32, 32)
+            $scene_manager.register_object("fancyWindowSkin","fancyWindowSkin",0,0,0,0,6,4)
+            $scene_manager.register_object("earthboundWindowSkin","earthboundWindowSkin",0,0,0,0,6,4)
+            $scene_manager.register_object("blackWindowSkin","blackWindowSkin",0,0,0,0,6,4)
+            $scene_manager.register_image("CastleTownTileset",:CastleTown,8,23)
             $scene_manager.images["windowSkin"] = $scene_manager.images["fancyWindowSkin"]
             $scene_manager.input.removeFromStack("optionsBox")
             $scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
@@ -28,7 +28,7 @@ class TitleScreen
             Option.new("Load Game",->(){}),
             Option.new("Exit",->(){$window.close()})]
         @optionsBox = OptionsBox.new("optionsBox",8,8,3,2,@choice,"")
-        @optionsBox.currentColor = Gosu::Color.argb(0xff_2ca81e)
+        #@optionsBox.currentColor = Gosu::Color.argb(0xff_2ca81e)
     end
 
     def update()

@@ -12,8 +12,10 @@ class Map01
     include WindowBase
     def initialize()
         @talkin = false
+        @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
-        @map = Map.new("data/images/CastleTown.bmp",40,30,@mapfile)
+        
+        @map = Mapper.new(@tileset,40,30,@mapfile)
         @width = 40
         @height = 30
         @curEvnt = false
@@ -47,13 +49,11 @@ class Map01
         @optionsBox = OptionsBox.new("evntOneOptions",3,8,5,2,@choice,"")
         @windowSkinBox = OptionsBox.new("windowSkinOptions",9,8,5,2,@windowSkinChoice,"")
         #@optionBox.hidden(true)
-        greenGuySprite = Gosu::Image.load_tiles("data/images/greenMan.bmp", 32, 48) 
-        ghostSprite = Gosu::Image.load_tiles("data/images/ghost.bmp", 32, 48) 
-        sameGuySprite = Gosu::Image.load_tiles("data/images/untitled.bmp", 32, 48) 
-        sameGuySprite = Gosu::Image.load_tiles("data/images/untitled.bmp", 32, 48)
-
+        
+        $scene_manager.register_object("Event101","greenMan",7*32,10*32,32,48,4,4)
+        $scene_manager.register_object("Event102","ghost",5*32,5*32,32,48,4,4)
         $scene_manager.registerEvent(1,"fred1",
-            Event.new(greenGuySprite, 7, 10, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event101"], EventTrigger::ACTION_KEY, true, ->(){
                 $scene_manager.input.addToStack("ev0Dialog")
                 @talkin = true
                 $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Johnny",5))
@@ -63,9 +63,10 @@ class Map01
                 # @events[0].set_move("random",1)
                 # @events[1].set_move("followPlayer",2)
         }))
-
+        
+        
         $scene_manager.registerEvent(1,"fred2",
-            Event.new(ghostSprite, 5, 5, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event102"], EventTrigger::ACTION_KEY, true, ->(){
                 if !@showChoices 
                     #$scene_manager.input.removeFromStack(@optionsBox.stackName)
                     $scene_manager.input.addToStack(@optionsBox.stackName)
@@ -78,7 +79,8 @@ class Map01
         @events = $scene_manager.eventMap[1] 
     end
     def draw
-        @map.draw(@events)
+        @map.draw()
+        $scene_manager.eventMap[1].each {|e|e.draw(@theMap)}
         if @showChoices
             @optionsBox.draw
         end
@@ -93,7 +95,8 @@ class Map01
         end
     end
     def update
-        @events.each {|e| @map.collision[e.x][e.y] = 1}
+        #@events.each {|e| @map.collision[e.x][e.y] = 1}
+        
         @map.update()
         if @showChoices
             @optionsBox.update

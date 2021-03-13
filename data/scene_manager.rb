@@ -1,12 +1,13 @@
 require_relative "files/input.rb"
 class SceneManager
-    attr_accessor :scene, :currentScene, :feature, :images, :events, :eventMap
+    attr_accessor :scene, :currentScene, :feature, :images, :events, :eventMap, :object
     attr_reader :input
     def initialize()    
         @scene = Hash.new
         @feature = Hash.new
         @events = Hash.new
         @eventMap = Array.new(20){Array.new()}
+        @object = Hash.new
         @images = Hash.new()
         @input = Input.new()
     end
@@ -14,8 +15,12 @@ class SceneManager
         @scene[sceneName] = sceneObject
     end
 
-    def register_image(name,imgLocation,tileWidth,tileHeight)
-        @images[name] = Gosu::Image.load_tiles(imgLocation, tileWidth, tileHeight)   
+    def register_image(name,imgName,columns,rows)
+        @images[name] = GameObject.new(0,0,0,0,imgName,nil,columns,rows)
+           
+    end
+    def register_object(name,img,x,y,bbWidth,bbHeight,cols,rows)
+        @object[name]= GameObject.new(x, y, bbWidth, bbHeight, img, nil, cols, rows)
     end
 
     def registerFeature(featureName,featureClass)
@@ -42,7 +47,7 @@ class SceneManager
 
     def update()
         @currentScene.update() 
-        @input.update
+        #@input.update
     end
 
     def draw()

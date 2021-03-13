@@ -23,51 +23,38 @@ class Input
         length = @inputStack.length
         @inputStack[(length-1)]
     end
-    
-    def keyPressed(key)
-        if $window.button_down?(key) then
+
+    def keyHeld(key)
+        if KB.key_held?(key) or KB.key_pressed?(key)
             return true
         end
     end
-
+    def keyPressed(key)
+        if KB.key_pressed?(key)
+            return true
+        end
+    end
     def keyDown(id)
-        if keyPressed(id)
-                case id
-                when InputTrigger::UP 
-                    puts(@inputStack)
-                    return true
-                when InputTrigger::DOWN 
-                    puts("down")
-                    return true
-                when InputTrigger::LEFT
-                    puts("left")
-                    return true
-                when InputTrigger::RIGHT 
-                    puts("right")
-                    return true
-                when InputTrigger::SELECT 
-                    puts("select")
-                    
-                    if @pressed == 0
-                        @pressed = 2
-                        return true
-                    end
-                when InputTrigger::ESCAPE 
-                    puts("escape")
-                    if @pressed == 0
-                        @pressed = 2
-                        return true
-                    end
-                else 
-                    return false
-                end
+        stackLength = ($scene_manager.input.inputStack.length-1)
+        if $scene_manager.input.inputStack[stackLength] == "map"
+            case id
+            when InputTrigger::UP
+                keyHeld(InputTrigger::UP)
+            when InputTrigger::DOWN
+                keyHeld(InputTrigger::DOWN)
+            when InputTrigger::LEFT
+                keyHeld(InputTrigger::LEFT)
+            when InputTrigger::RIGHT
+                keyHeld(InputTrigger::RIGHT)
+            when InputTrigger::SELECT
+                keyPressed(InputTrigger::SELECT)
+            when InputTrigger::ESCAPE
+                keyPressed(InputTrigger::ESCAPE)
             end
-        
+            
+        end
+    end
 
-    end
     def update
-        if @pressed >= 1 then @pressed = @pressed - 1 end
-    end
-    def keyUp(id)
     end
 end

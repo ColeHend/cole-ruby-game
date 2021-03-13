@@ -12,7 +12,7 @@
       "endX": 40,
       "endY": 30,
       "z": 0,
-      "collidable": 0
+      "collidable": false
     },
     {
     "tile": 1,
@@ -21,7 +21,7 @@
     "endX": 28,
     "endY": 19,
     "z": 1,
-    "collidable": 1
+    "collidable": true
     },
     {
     "tile": 11,
@@ -30,7 +30,7 @@
     "endX": 20,
     "endY": 20,
     "z": 1,
-    "collidable": 0
+    "collidable": false
   }
   
     ]

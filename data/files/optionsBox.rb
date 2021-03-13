@@ -61,13 +61,13 @@ class OptionsBox
     end
 
     def update
-        if $window.button_down(InputTrigger::UP) then #down
+        if @input.keyPressed(InputTrigger::UP) then #down
             doInput("up") 
             puts("optionsBox up")
-        elsif $window.button_down(InputTrigger::DOWN) then #up
+        elsif @input.keyPressed(InputTrigger::DOWN) then #up
             doInput("down")
             puts("optionsBox down")
-        elsif $window.button_down(InputTrigger::SELECT) then #select
+        elsif @input.keyPressed(InputTrigger::SELECT) then #select
             doInput("select")
             #@hidden = !@hidden
             puts("optionsBox select")
