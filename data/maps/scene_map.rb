@@ -33,8 +33,8 @@ class SceneMap
             @currentMap.events.each {|e|e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT),@currentMap.map.collision)}
             @player.move(@input, @currentMap.map.collision,@currentMap.map.theMap)
         end
-        @camera_x = [[(@player.x*32) - 800 / 2, 0].max, @mWidth * 32 - 800].min
-        @camera_y = [[(@player.y*32) - 600 / 2, 0].max, @mHeight * 32 - 600].min
+        @camera_x = [[(@player.x*32) - 800 / 2, 0].max, @mWidth * 75 - 800].min
+        @camera_y = [[(@player.y*32) - 600 / 2, 0].max, @mHeight * 75 - 600].min
     end
     def draw()
         

@@ -78,7 +78,7 @@ class Menu
         end
         #Draw Map Backing
         @currentMap.draw
-        #@currentMap.events.each {|e|e.draw()}
+        @currentMap.events.each {|e|e.draw()}
         @player.draw
 
         #Draw Party Info

@@ -13,7 +13,7 @@ class Map02 < Map
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
         @tileset = $scene_manager.images["CastleTownTileset"]
         @map = Mapper.new(@tileset,40,30,@mapfile)
-        
+        @events = $scene_manager.eventMap[2]
         @width, @height = 40, 30
         @followDialog = DialogBox.new(0,10,20,5,"ev0SetMove","I LOVE YOU!! I'm going to follow you. Have 5000 XP.")
         @talkin = false
@@ -39,18 +39,20 @@ class Map02 < Map
                 $scene_manager.scene["map"].change_map("map1")
             })
         )
-        @events = $scene_manager.eventMap[2]
+        
         
     end
     def draw()
         @map.draw()
-        $scene_manager.eventMap[2].each {|e|e.draw()}
+        $scene_manager.eventMap[2].each {|e|
+        e.draw()
+        @map.collision[e.x][e.y] = 1
+        }
         if @talkin
             @followDialog.draw_box(->(){@talkin = false})
         end
     end
     def update()
-        @events.each {|e| @map.collision[e.x][e.y] = 1}
         @map.update()
     end
 end

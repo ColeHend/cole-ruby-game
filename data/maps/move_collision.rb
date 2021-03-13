@@ -23,7 +23,7 @@ module MoveCollision
             end
         end
         def willCollide(direction,mWidth,mHeight,surroundingCheck)
-            if @x == (mWidth - 2) && direction ==  "right"
+            if @x == (mWidth - 1) && direction ==  "right"
                 return true
             elsif @y == 0 && direction == "up"
                 return true
@@ -77,13 +77,15 @@ module MoveCollision
                 @objectToMove.set_animation(4)
             end
         }
-        randomDir = rand(4)
+        
         moveRandom = ->(){
-            if (Gosu.milliseconds / 100 % 16 == 0)
+            #if (Gosu.milliseconds / 100 % 16 == 0)
+            randomDir = rand(4)
+            puts(randomDir)
                 @animate = true
                 case randomDir
                 when 0
-                  @animate = false
+                    @objectToMove.set_animation(0)
                 when 1
                     moveRight.call(1)
                 when 2
@@ -93,7 +95,7 @@ module MoveCollision
                 when 4
                     moveDown.call(1)
                 end
-            end
+            #end
         }
         facePlayer = ->(sight=6){
            x = $scene_manager.scene["player"].x
@@ -102,13 +104,13 @@ module MoveCollision
            if (x - @x).abs <= @range && (y - @y).abs <= @range
             if (y - @y) < 0  && (x - @x) > 0
                if (x-@x).abs < (y-@y).abs
-               @dir = 12
-               else @dir = 8
+                @objectToMove.set_animation(12)
+               else @objectToMove.set_animation(8)
                end
             elsif  (y - @y) > 0 && (x - @x) < 0
                if (x-@x).abs < (y-@y).abs
-               @dir = 0
-               else @dir = 4
+                @objectToMove.set_animation(0)
+               else @objectToMove.set_animation(4)
                end
             end
            end

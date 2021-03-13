@@ -22,7 +22,7 @@ class Event
 
     @event = event
     @moving = false
-    @animate, @canMove, @time, @frame = false, false, 100, 4
+    @animate, @canMove = false, false
 
   end
 
@@ -59,6 +59,7 @@ class Event
     else
       throw "Event trigger not recognized"
     end
+
   end
 
   def isInTriggerSpot(playerX, playerY)

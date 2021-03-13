@@ -11,16 +11,19 @@ class Map01
     attr_reader :map, :mapfile, :events, :width, :height
     include WindowBase
     def initialize()
+        # Initilize variables
         @talkin = false
         @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
-        
+        @events = $scene_manager.eventMap[1].each {|e|e.draw()}
         @map = Mapper.new(@tileset,40,30,@mapfile)
         @width = 40
         @height = 30
         @curEvnt = false
         @sceneMap = $scene_manager.scene["map"]
         @theParty = $scene_manager.feature["party"]
+
+        #Event choices and Windows
         @diffDialog = DialogBox.new(0,10,20,5,"ev0Dialog","Here's Johnny!! Have fun on map 2 with 300 more XP.")
         
         @showSkinChoices = false
@@ -48,7 +51,7 @@ class Map01
             ]
         @optionsBox = OptionsBox.new("evntOneOptions",3,8,5,2,@choice,"")
         @windowSkinBox = OptionsBox.new("windowSkinOptions",9,8,5,2,@windowSkinChoice,"")
-        #@optionBox.hidden(true)
+        #@optionBox.hidden(true) 
         
         $scene_manager.register_object("Event101","greenMan",7*32,10*32,32,48,4,4)
         $scene_manager.register_object("Event102","ghost",5*32,5*32,32,48,4,4)
@@ -60,8 +63,8 @@ class Map01
                 $scene_manager.feature["party"].party[0].give_xp(300)
                 $scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
                 $scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
-                # @events[0].set_move("random",1)
-                # @events[1].set_move("followPlayer",2)
+                $scene_manager.object["Event101"].set_move("random",1)
+                $scene_manager.object["Event102"].set_move("facePlayer",10)
         }))
         
         
@@ -95,8 +98,7 @@ class Map01
         end
     end
     def update
-        @events.each {|e| @map.collision[e.x][e.y] = 1}
-        
+        $scene_manager.eventMap[1].each {|e|@map.collision[e.x][e.y] = 1}
         @map.update()
         if @showChoices
             @optionsBox.update
