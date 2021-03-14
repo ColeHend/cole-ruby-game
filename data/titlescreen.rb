@@ -19,8 +19,7 @@ class TitleScreen
             $scene_manager.register_image("CastleTownTileset",:CastleTown,8,23)
             $scene_manager.images["windowSkin"] = $scene_manager.images["fancyWindowSkin"]
             $scene_manager.input.removeFromStack("optionsBox")
-            $scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
-            $scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
+            
             $scene_manager.register("menu",Menu.new())
             $scene_manager.input.addToStack("map")
             $scene_manager.switch_scene("map")

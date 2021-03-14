@@ -13,7 +13,7 @@ class Event
     @solid = collidable
     @moveType = "facePlayer"
     @distance = 4
-    @forces = Vector.new(0,0)
+    @forces = 5
     if @solid
       @collidable = 1
     else
@@ -42,10 +42,10 @@ class Event
   end
   def update(playerX, playerY, actionKeyTriggered,collisionArray)
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
-    collisionArray[@x][@y] = @collidable
+    
     
     move_event(collisionArray,@moveType,@distance,40,30,@eventObject,@forces)
-   
+    collisionArray[@x][@y] = @collidable
 
     case @eventTrigger
     when EventTrigger::AUTOMATIC

@@ -46,6 +46,7 @@ class Mapper
 
       def update()
         @player = $scene_manager.scene["player"]
+        @collision[@player.x][@player.y] = 1
       end
       def draw()
         

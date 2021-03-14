@@ -7,8 +7,11 @@ class PlayerParty
         @gold = 24 
     end
      def use_item(spot,person)
-        @inventory[spot].function.call(person)
+        puts(spot)
+        puts(person)
+        @inventory[spot].call(person)
         @inventory.delete_at(spot)
+        $scene_manager.feature["party"].inventory = @inventory
      end
 
     def addToParty(character)

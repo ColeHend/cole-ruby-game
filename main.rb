@@ -15,6 +15,9 @@ class MyGame < GameWindow
     $scene_manager.register_object("blackWindowSkin","blackWindowSkin",0,0,0,0,6,4)
     $scene_manager.register_image("CastleTownTileset","CastleTown",8,23)
     $scene_manager.images["windowSkin"] = $scene_manager.object["fancyWindowSkin"]
+    $scene_manager.registerFeature("party",PlayerParty.new)
+    $scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
+    $scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
     $scene_manager.switch_scene("title") 
   end
 

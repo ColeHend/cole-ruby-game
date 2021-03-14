@@ -6,6 +6,7 @@ module MoveCollision
         @objectToMove = objectToMove
         @x = @objectToMove.x / 32
         @y = @objectToMove.y / 32
+        @delayStart = 950
         def check_surrounding(direction)
             toLeft = (@x - 1)
             toRight = (@x + 1)
@@ -23,7 +24,7 @@ module MoveCollision
             end
         end
         def willCollide(direction,mWidth,mHeight,surroundingCheck)
-            if @x == (mWidth - 1) && direction ==  "right"
+            if @x == (mWidth - 2) && direction ==  "right"
                 return true
             elsif @y == 0 && direction == "up"
                 return true
@@ -79,10 +80,15 @@ module MoveCollision
         }
         
         moveRandom = ->(){
-            #if (Gosu.milliseconds / 100 % 16 == 0)
-            randomDir = rand(4)
-            puts(randomDir)
+            
+            @delayStop = Gosu.milliseconds
+            puts("delayStop v")
+            puts(@delayStop)
+            if (@delayStop - @delayStart < 1000)
+
+                puts("RANDOM EVENT MOVE TRIGGERED") 
                 @animate = true
+                randomDir = rand(4)
                 case randomDir
                 when 0
                     @objectToMove.set_animation(0)
@@ -95,7 +101,9 @@ module MoveCollision
                 when 4
                     moveDown.call(1)
                 end
-            #end
+            else
+                @objectToMove.set_animation(0)
+            end
         }
         facePlayer = ->(sight=6){
            x = $scene_manager.scene["player"].x
@@ -115,7 +123,9 @@ module MoveCollision
             end
            end
         }
-        followPlayer = ->(sight=2){
+        followPlayer = ->(sight=2,betweenMove=250){
+            @delayStop = Gosu.milliseconds
+            if (@delayStop - @delayStart < betweenMove)
            x = $scene_manager.scene["player"].x
            y = $scene_manager.scene["player"].y
            @range = sight
@@ -198,6 +208,7 @@ module MoveCollision
                 elsif (y - @y).abs <= (@range) && (x - @x).abs <= (@range)
                    # @animate = false
             end
+        end
          }
         case moveType
         when "none"
@@ -211,11 +222,17 @@ module MoveCollision
         when "right" 
             moveRight.call(force)
         when "random"
-            moveRandom.call()
+            
+            @delayStart = Gosu.milliseconds
+            if (Gosu.milliseconds / 175 % 16 == 0)
+                puts(@delayStart)
+                moveRandom.call()
+            end
         when "facePlayer"
             @animate = false
             facePlayer.call(force)
         when "followPlayer"
+            @delayStart = Gosu.milliseconds
             followPlayer.call(force)
         else
             @animate = false 

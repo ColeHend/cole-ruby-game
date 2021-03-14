@@ -12,13 +12,25 @@ class Input
     def removeFromStack(nameToRemove)
         stackLength = ($scene_manager.input.inputStack.length-1)
         for a in (0..stackLength) do
-            if $scene_manager.input.inputStack[a] == nameToRemove
+            if @inputStack[a] == nameToRemove
                 @inputStack.pop
                 #puts("popped! "+nameToRemove)
             end
         end
         
     end
+    def checkStack(nameToCheck)
+        stackLength = ($scene_manager.input.inputStack.length-1)
+        for a in (0..stackLength) do
+            if @inputStack[a] == nameToCheck
+                return true
+            else
+                return false
+            end
+        end
+        
+    end
+
     def inputRun()
         length = @inputStack.length
         @inputStack[(length-1)]

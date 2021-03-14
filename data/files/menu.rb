@@ -23,8 +23,8 @@ class Menu
         @items = Array.new
         @inventory = $scene_manager.feature["party"].inventory
         if @inventory.size >= 1
-            @items = @inventory.each_with_index.map{|e,index| Option.new(e.name,->(){
-            $scene_manager.feature["party"].use_item(index,@party[0])})}
+            @items = @inventory.each_with_index.map{|e,index| Option.new(e.name,
+            ->(){$scene_manager.feature["party"].use_item(index,@party[0])})}
         else
             @items = [Option.new("No Items",->(){})]
         end
@@ -32,8 +32,8 @@ class Menu
         @options = [Option.new("Party",->(){}),
             Option.new("Items",->(){
                 @showItems = true
-                @itemsBox.hidden(false)
                 activateItems() }),
+                
             Option.new("Save",->(){}),
             Option.new("Exit Game",->(){})]
         @itemsBox = OptionsBox.new("itemsBox",5,0,3,8,@items,"")
@@ -42,9 +42,7 @@ class Menu
         
     end
     def activateItems()
-        if (Gosu.milliseconds / 50 % 3 == 0)
-            @input.addToStack("itemsBox")
-        end
+        @input.addToStack(@itemsBox.stackName)
     end
 
     def update()
@@ -57,7 +55,7 @@ class Menu
             if @showItems == true
                 @input.removeFromStack(@itemsBox.stackName)
                 @showItems = false
-                @itemsBox.hidden(true)
+                #@itemsBox.hidden(true)
             else
                 @input.removeFromStack(@optionsBox.stackName)
                 @input.addToStack("map")
@@ -77,7 +75,7 @@ class Menu
             @items = [Option.new("No Items",->(){})]
         end
         #Draw Map Backing
-        @currentMap.draw
+        @currentMap.map.draw
         @currentMap.events.each {|e|e.draw()}
         @player.draw
 

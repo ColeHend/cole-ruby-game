@@ -24,14 +24,11 @@ class Map02 < Map
         $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
         $scene_manager.registerEvent(2,"john1",
             Event.new($scene_manager.object["Event201"], EventTrigger::ACTION_KEY, true, ->(){
-                @talkin = true
-                $scene_manager.input.addToStack(@followDialog.stackName)
-                $scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
-                $scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
+                #@talkin = true
+                #$scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
                 @events[0].set_move("followPlayer",2)
                 @events[1].set_move("random",1)
-                $scene_manager.feature["party"].use_item(0,$scene_manager.feature["party"].party[0])
                 puts("_____________Inventory_________________")
                 $scene_manager.feature["party"].inventory.each{|e| puts(e.name)}
                 puts("_______________________________________")
@@ -49,7 +46,11 @@ class Map02 < Map
         #@map.draw()
         #$scene_manager.eventMap[2].each {|e|e.draw()}
         if @talkin
-            @followDialog.draw_box(->(){@talkin = false})
+            @followDialog.draw_box(->(){
+                @talkin = false
+                $scene_manager.input.removeFromStack(@followDialog.stackName)
+                $scene_manager.input.addToStack("map")
+        })
         end
     end
 
