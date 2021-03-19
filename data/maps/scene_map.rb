@@ -38,16 +38,16 @@ class SceneMap
         end
         @player.update()#update player 
         @currentMap.update()#update map
-        @currentMap.events.each {|e|@currentMap.map.collision[e.x][e.y] = 1}#update events collision
+        #@currentMap.events.each {|e|@currentMap.map.collision[e.x][e.y] = 1}#update events collision
         stackLength = ($scene_manager.input.inputStack.length-1)
         if $scene_manager.input.inputStack[stackLength] == "map"
             @currentMap.events.each {|e|    #updates events
-                e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT),@currentMap.map.collision)
+                e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT))
             } 
-            @player.move(@input, @currentMap.map.collision,@currentMap.map.theMap)
+            @player.move(@input, @currentMap.map.theMap)
         end
-        @camera_x = [[(@player.x*32) - 800 / 2, 0].max, @mWidth * 32 - 800].min
-        @camera_y = [[(@player.y*32) - 600 / 2, 0].max, @mHeight * 32 - 600].min
+        @camera_x = [[(@player.x) - 800 / 2, 0].max, @mWidth * 32 - 800].min
+        @camera_y = [[(@player.y) - 600 / 2, 0].max, @mHeight * 32 - 600].min
     end
     def draw()
         

@@ -1,14 +1,22 @@
 require_relative "../files/animate.rb"
 module MoveCollision
-    def move_event(collisionArray,moveType,distance,mWidth,mHeight,objectToMove = self, facing = "down")
-        @collisionArray = collisionArray
+    def move_event(moveType,distance,objectToMove = self, facing = "down")
+        #@collisionArray = collisionArray
         @objectToMove = objectToMove
-        @x = @objectToMove.x / 32
-        @y = @objectToMove.y / 32
+        @x = @objectToMove.x 
+        @y = @objectToMove.y 
+        @w = @objectToMove.w
+        @h = @objectToMove.h
         @delayStart = 950
         @facing = facing
         @animate = true
         @currentMap =  $scene_manager.scene["map"].currentMap.map
+        @currentEventX = Array.new
+        @currentEventY = Array.new
+        @currentMap.events.each {|event|
+            @currentEventX.push(event.x)
+            @currentEventY.push(event.y)
+        }
         @mWidth = @currentMap.width
         @mHeight = @currentMap.height
         def check_surrounding(direction)
@@ -19,36 +27,36 @@ module MoveCollision
             case direction
             when "up"
                 if @y != 0 
-                    return @collisionArray[@x][toTop]
+                    #return @collisionArray[@x][toTop]
                 else
                     return 1
                 end
             when "down"
-                if @y != @mHeight
-                    return @collisionArray[@x][toBottom]
+                if @y != (@mHeight*32 - 16)
+                   # return @collisionArray[@x][toBottom]
                 else
                     return 1
                 end
             when "left"
                 if @x != 0
-                    return @collisionArray[toLeft][@y]
+                    #return @collisionArray[toLeft][@y]
                 else
                     return 1
                 end
             when "right"
-                if @x <= @mWidth
-                    return @collisionArray[toRight][@y]
+                if @x <= (@mWidth * 32)
+                   # return @collisionArray[toRight][@y]
                 else
                     return 1
                 end
             end
         end
         def willCollide(direction,mWidth,mHeight,surroundingCheck)
-            if @x == (mWidth  - 2) && direction ==  "right"
+            if @x == (mWidth * 32  - 2) && direction ==  "right"
                 return true
             elsif @y == 0 && direction == "up"
                 return true
-            elsif @y == (mHeight - 1) && direction ==  "down"
+            elsif @y == (mHeight * 32 - 1) && direction ==  "down"
                 return true
             elsif @x == 0 && direction == "left"
                 return true
@@ -64,30 +72,37 @@ module MoveCollision
                 return false
             end
         end
-        def objectCollision(sight,dir,checkX,checkY)
-            x = $scene_manager.scene["player"].x or checkX
-            y = $scene_manager.scene["player"].y or checkY
-            @range = sight
-            if @range < (y - @y).abs && (x - @x).abs > @range #Within Total Sight
+        def objectCollision(sight,dir,checkObject)
+            player = $scene_manager.scene["player"].player
+            x = checkObject.x
+            y = checkObject.y
+            objectW = checkObject.w
+            objectH = checkObject.h
+            @range = 8
+            @rangeW = @w + 8
+            @rangeH = @h + 8
+            
                 case dir
                 when "up"
-                    if y <= @y
-                        return true
+                    if @range > (y - @y).abs && (x - @x).abs < @range #up
+                        if (y+objectH) <= @y && x == @x
+                            return true
+                        end
                     end
                 when "down"
-                    if y >= @y
+                    if y >= (@y+@h) && x == @x
                         return true
                     end
                 when "left"
-                    if x <= @x
-                        return true
+                    if (x+objectW) <= @x && y == @y
+                        return true 
                     end
                 when "right"
-                    if x >= @x
+                    if x >= (@x+@w) && y == @y
                         return true
                     end
                 end
-            end
+            
         end
         
         upCheck = check_surrounding("up")
@@ -100,8 +115,8 @@ module MoveCollision
                 if optional
                     @facing = "up"
                     if !willCollide("up",@mWidth,@mHeight,upCheck)
-                        draw_character(@objectToMove, "up",2)
-                        @objectToMove.y = (@objectToMove.y - 32)
+                        draw_character(@objectToMove, "up",5)
+                        @objectToMove.y = (@objectToMove.y - 4)
                     else
                         @objectToMove.set_animation(12)
                     end
@@ -112,8 +127,8 @@ module MoveCollision
             for a in (1..distance) do
                 @facing = "down"
                 if !willCollide("down",@mWidth,@mHeight,downCheck)
-                    draw_character(@objectToMove, "down",2) 
-                    @objectToMove.y = (@objectToMove.y + 32)
+                    draw_character(@objectToMove, "down",5) 
+                    @objectToMove.y = (@objectToMove.y + 4)
                 else
                     @objectToMove.set_animation(0)
                 end
@@ -123,8 +138,8 @@ module MoveCollision
             for a in (1..distance) do
                 @facing = "right"
                 if !willCollide("right",@mWidth,@mHeight,rightCheck)
-                    draw_character(@objectToMove, "right",2) 
-                    @objectToMove.x = ( @objectToMove.x + 32)
+                    draw_character(@objectToMove, "right",5) 
+                    @objectToMove.x = ( @objectToMove.x + 4)
                 else
                     @objectToMove.set_animation(8)
                 end
@@ -134,8 +149,8 @@ module MoveCollision
             for a in (1..distance) do
                 @facing = "left"
                 if !willCollide("left",@mWidth,@mHeight,leftCheck)
-                    draw_character(@objectToMove, "left",2)
-                    @objectToMove.x = (@objectToMove.x - 32)
+                    draw_character(@objectToMove, "left",5)
+                    @objectToMove.x = (@objectToMove.x - 4)
                 else
                     @objectToMove.set_animation(4)
                 end

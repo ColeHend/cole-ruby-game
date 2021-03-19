@@ -2,7 +2,7 @@ class Mapper
     attr_accessor :width, :height, :events, :collision, :tileset, :theMap
     def initialize(tileset,width,height,file) #(t_w, t_h, t_x_count, t_y_count, scr_w = 800, scr_h = 600, isometric = false, limit_cam = true)
         @tileset = GameObject.new(0,0,0,0,"CastleTown",nil,8,23)
-        @collision = Array.new(width){Array.new(height,0)}
+        #@collision = Array.new(width){Array.new(height,0)}
         @events = []
         @width = width
         @height = height
@@ -38,7 +38,7 @@ class Mapper
 
     def update()
       @player = $scene_manager.scene["player"]
-      @collision[@player.x][@player.y] = "player"
+      #@collision[@player.x][@player.y] = "player"
     end
 
     def draw()

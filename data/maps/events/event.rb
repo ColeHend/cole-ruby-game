@@ -5,8 +5,8 @@ class Event
   attr_accessor :animate, :canMove, :moving, :collidable, :x,:y,:dir, :type, :distance, :stats
   include MoveCollision, Animate
   def initialize(object, eventTrigger, collidable, event,stats)
-    @x = object.x / 32
-    @y = object.y / 32
+    @x = object.x 
+    @y = object.y
     @z = 5
     @dir = 8
     @stats = stats
@@ -42,13 +42,13 @@ class Event
     @moveType = kind
     @distance = dist
   end
-  def update(playerX, playerY, actionKeyTriggered,collisionArray)
+  def update(playerX, playerY, actionKeyTriggered)
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
     @hpbar.update(@x,@y,10,10)
     if @canMove
-      move_event(collisionArray,@moveType,@distance,40,30,@eventObject,@facing)
+      move_event(@moveType,@distance,@eventObject,@facing)
     end
-    collisionArray[@x][@y] = @collidable
+    #collisionArray[@x][@y] = @collidable
 
     case @eventTrigger
     when EventTrigger::AUTOMATIC

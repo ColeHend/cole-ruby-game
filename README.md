@@ -4,10 +4,10 @@
  - events buggy
 
     Missing major features
-battle system
+ - battle system
  - object detection
  - npc ai
  - effects
-saving/loading
-sound
-effects
+ - saving/loading
+ - sound
+- effects

@@ -3,7 +3,7 @@ require_relative "../files/input_trigger.rb"
 require_relative "move_collision.rb"
 require_relative "events/hpbar.rb"
 class Player
-    attr_accessor :x, :y, :realX, :realY, :dir, :showPlayer, :collidable, :moving, :player
+    attr_accessor :x, :y, :dir, :showPlayer, :collidable, :moving, :player
     attr_reader :sprite
     include MoveCollision
     include Animate
@@ -12,8 +12,8 @@ class Player
         @player = $scene_manager.register_object("player",:player,3*32,3*32,32,48,4,4)
         @showPlayer = true
         @dir = 4
-        @x = (@player.x / 32)
-        @y = (@player.y / 32)
+        @x = (@player.x )
+        @y = (@player.y )
         @z = 5
         @party = $scene_manager.feature["party"]
         @hpbar = HPbar.new(@player.x,@player.y,@party.party[0].hp,@party.party[0].currentHP)
@@ -25,18 +25,18 @@ class Player
         @animateNum = 0
     end
 
-    def move(input,collisionArray,theMap)
+    def move(input,theMap)
         @input,@theMap = input,theMap
         @moving, @canMove = true, true
         update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
         if @input.keyDown(InputTrigger::UP)
-            move_event(collisionArray,"up",1,40,30,@player)
+            move_event("up",1,@player)
         elsif @input.keyDown(InputTrigger::DOWN)
-            move_event(collisionArray,"down",1,40,30,@player)
+            move_event("down",1,@player)
         elsif @input.keyDown(InputTrigger::LEFT)
-            move_event(collisionArray,"left",1,40,30,@player)
+            move_event("left",1,@player)
         elsif @input.keyDown(InputTrigger::RIGHT)
-            move_event(collisionArray,"right",1,40,30,@player)
+            move_event("right",1,@player)
         elsif @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")
