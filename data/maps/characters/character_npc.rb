@@ -1,31 +1,29 @@
 require_relative "character_base.rb"
-class PlayerCharacter < CharacterBase
+class NpcCharacter < CharacterBase
     attr_accessor :currentHP, :alive
-    def initialize(name,hp,str=10,dex=10,int=10,con=10,cha=10,wis=10)
+    def initialize(name, hp)
         self.name = name
         self.hp = hp
         @alive = true
         @currentHP = hp
-        @playerLevel = 1
+        @npcLevel = 1
         @exp = 0
-        @lvlUpExp = (1000*@playerLevel) 
+        @lvlUpExp = (1000*@npcLevel)
     end
-
     def level_up
         #stat increases and stuff
         @exp = (@exp-@lvlUpExp)
-        @playerLevel = (@playerLevel+1)
+        @npcLevel = (@npcLevel+1)
         self.hp = (self.hp+5)
-        @lvlUpExp = (1000*@playerLevel) 
+        @lvlUpExp = (1000*@npcLevel) 
     end
 
     def give_xp(expAmt)
         @exp += expAmt
         while @exp > @lvlUpExp
             level_up()
-            puts("XP  -> "+$scene_manager.feature["party"].party[0].exp.to_s)
-            puts("LVL -> "+$scene_manager.feature["party"].party[0].playerLevel.to_s)
+            #puts("XP  -> "+$scene_manager.feature["party"].party[0].exp.to_s)
+            #puts("LVL -> "+$scene_manager.feature["party"].party[0].npcLevel.to_s)
         end
     end
-
 end

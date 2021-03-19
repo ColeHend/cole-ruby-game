@@ -1,19 +1,21 @@
 require_relative "../../files/animate.rb"
 require_relative "../move_collision.rb"
+require_relative "hpbar.rb"
 class Event
-  attr_accessor :animate, :canMove, :moving, :collidable, :x,:y,:dir, :type, :distance
+  attr_accessor :animate, :canMove, :moving, :collidable, :x,:y,:dir, :type, :distance, :stats
   include MoveCollision, Animate
-  def initialize(object, eventTrigger, collidable, event)
+  def initialize(object, eventTrigger, collidable, event,stats)
     @x = object.x / 32
     @y = object.y / 32
     @z = 5
     @dir = 8
+    @stats = stats
     @eventObject = object
     @eventTrigger = eventTrigger
     @solid = collidable
     @moveType = "facePlayer"
-    @distance = 4
-    @forces = 5
+    @distance = 1
+    @hpbar = HPbar.new(@x,@y,10,10)
     if @solid
       @collidable = 1
     else
@@ -22,7 +24,7 @@ class Event
 
     @event = event
     @moving = false
-    @animate, @canMove = false, false
+    @animate, @canMove, @facing = false, true, "down"
 
   end
 
@@ -42,9 +44,10 @@ class Event
   end
   def update(playerX, playerY, actionKeyTriggered,collisionArray)
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
-    
-    
-    move_event(collisionArray,@moveType,@distance,40,30,@eventObject,@forces)
+    @hpbar.update(@x,@y,10,10)
+    if @canMove
+      move_event(collisionArray,@moveType,@distance,40,30,@eventObject,@facing)
+    end
     collisionArray[@x][@y] = @collidable
 
     case @eventTrigger
@@ -54,7 +57,10 @@ class Event
       end
     when EventTrigger::ACTION_KEY 
       if actionKeyTriggered && isInTriggerSpot(playerX, playerY)
-        @event.call
+        @canMove = false
+        @event.call do
+        @canMove = true
+        end
       end
     else
       throw "Event trigger not recognized"
@@ -78,6 +84,7 @@ class Event
 
   def draw()
     @eventObject.draw()
+    @hpbar.draw
     #draw_character(@sprite,@dir,@x,@y,@z,@animate,@canMove,@time,@frame,@moving)
   end
 end

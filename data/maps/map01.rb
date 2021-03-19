@@ -5,6 +5,7 @@ require_relative "events/event_trigger.rb"
 require_relative "../files/windowBase.rb"
 require_relative "../files/optionsBox.rb"
 require_relative "characters/character_player.rb"
+require_relative "characters/character_npc.rb"
 require "json"
 
 class Map01
@@ -16,9 +17,9 @@ class Map01
         @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
         @events = $scene_manager.eventMap[1]
-        @map = Mapper.new(@tileset,40,30,@mapfile)
-        @width = 40
-        @height = 30
+        @map = Mapper.new(@tileset,30,20,@mapfile)
+        @width = 30
+        @height = 20
         @curEvnt = false
         @sceneMap = $scene_manager.scene["map"]
         @theParty = $scene_manager.feature["party"]
@@ -59,10 +60,10 @@ class Map01
             Event.new($scene_manager.object["Event101"], EventTrigger::ACTION_KEY, true, ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
                 @talkin = true
-                $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Johnny",5))
-                $scene_manager.feature["party"].party[0].give_xp(300)
+                $scene_manager.feature["party"].addToParty(NpcCharacter.new("Johnny",5))
+                $scene_manager.feature["party"].party[0].level_up
                 
-        }))
+        },PlayerCharacter.new("Event101",10)))
         $scene_manager.event["Event101"].set_move("random",1)
 
         # Event 102
@@ -76,7 +77,7 @@ class Map01
                 else
                     #@optionBox.hidden = true
                 end
-        }))
+        },NpcCharacter.new("Event102",10)))
         #$scene_manager.event["Event102"].set_move("random",1)
         
     end

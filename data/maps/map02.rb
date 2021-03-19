@@ -5,6 +5,7 @@ require_relative "events/event_trigger.rb"
 require_relative "../files/windowBase.rb"
 require_relative "../files/dialogBox.rb"
 require_relative "characters/inventory.rb"
+require_relative "characters/character_npc.rb"
 require "json"
 class Map02 < Map
     attr_reader :mapfile, :map , :events, :width, :height
@@ -22,23 +23,24 @@ class Map02 < Map
         #Events
         $scene_manager.register_object("Event201","shadowGuy",6*32,5*32,32,48,4,4)
         $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
-        $scene_manager.registerEvent(2,"john1",
+        $scene_manager.registerEvent(2,"Event201",
             Event.new($scene_manager.object["Event201"], EventTrigger::ACTION_KEY, true, ->(){
                 #@talkin = true
                 #$scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
-                @events[0].set_move("followPlayer",2)
+                @events[0].set_move("followPlayer",6)
                 @events[1].set_move("random",1)
                 puts("_____________Inventory_________________")
                 $scene_manager.feature["party"].inventory.each{|e| puts(e.name)}
                 puts("_______________________________________")
-        }))
+        },PlayerCharacter.new("Event201",10)
+        ))
 
-        $scene_manager.registerEvent(2,"john2",
+        $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
                 $scene_manager.scene["map"].change_map("map1")
-            })
-        )
+            },PlayerCharacter.new("Event202",10)
+            ))
         
     end
 

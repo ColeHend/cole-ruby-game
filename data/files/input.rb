@@ -37,7 +37,7 @@ class Input
     end
 
     def keyHeld(key)
-        if KB.key_held?(key) or KB.key_pressed?(key)
+        if $window.button_down?(key)
             return true
         end
     end

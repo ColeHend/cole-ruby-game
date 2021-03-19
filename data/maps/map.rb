@@ -9,47 +9,39 @@ class Mapper
         @theMap = Map.new(32, 32, width, height, 800, 600, false, true)
         @mapfile = file
         @player = $scene_manager.scene["player"]
+        draw_tile_loop()
     end
 
-    def draw_tile(tile,x,y,passable)
-      @collision[x][y] = passable
-      #@tileset[tile].draw(xPos*32,yPos*32,z)
+    def draw_tile(tile,y,x,passable)
+      #@collision[x][y] = 0
       @tileset.set_animation(tile)
       @tileset.x = x*32
       @tileset.y = y*32
       @tileset.draw()
-    end
-    def draw_multi_tile(tile,startX,startY,endX,endY,collision)
-      for a in (startX ... endX)
-        for b in (startY ... endY)
-        draw_tile(tile,a,b,collision)
-        end
-      end
+      
     end
 
     def draw_tile_loop()
-      drawNum = 0
-      if @mapfile != nil
-        while drawNum< @mapfile['drawLoop'].length
-          tile = @mapfile['drawLoop'][drawNum]['tile']
-          startX = @mapfile['drawLoop'][drawNum]['startX']
-          startY = @mapfile['drawLoop'][drawNum]['startY']
-          endX = @mapfile['drawLoop'][drawNum]['endX']
-          endY = @mapfile['drawLoop'][drawNum]['endY']
-          z = @mapfile['drawLoop'][drawNum]['z']
-          collidable = @mapfile['drawLoop'][drawNum]['collidable']
-          draw_multi_tile(tile,startX,startY,endX,endY,collidable)
-          drawNum += 1
+      mapArrayY = @mapfile['draw']
+      @theMapRecord = Gosu.record(@width*32,@height*32) do |x, y|
+        if @mapfile != nil
+          mapArrayY.each_with_index {|mapArrayX, yIndex|
+            mapArrayX.each_with_index {|tile, xIndex|
+            #if tile != nil
+              draw_tile(tile[0],yIndex,xIndex,0)
+            #end
+            }
+          }
         end
       end
     end
 
-      def update()
-        @player = $scene_manager.scene["player"]
-        @collision[@player.x][@player.y] = 1
-      end
-      def draw()
-        
-        draw_tile_loop()
-      end
+    def update()
+      @player = $scene_manager.scene["player"]
+      @collision[@player.x][@player.y] = "player"
+    end
+
+    def draw()
+      @theMapRecord.draw(0,0,0)
+    end
 end

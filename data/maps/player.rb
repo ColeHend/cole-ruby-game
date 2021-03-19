@@ -1,6 +1,7 @@
 require_relative "../files/animate.rb"
 require_relative "../files/input_trigger.rb"
 require_relative "move_collision.rb"
+require_relative "events/hpbar.rb"
 class Player
     attr_accessor :x, :y, :realX, :realY, :dir, :showPlayer, :collidable, :moving, :player
     attr_reader :sprite
@@ -14,11 +15,11 @@ class Player
         @x = (@player.x / 32)
         @y = (@player.y / 32)
         @z = 5
+        @party = $scene_manager.feature["party"]
+        @hpbar = HPbar.new(@player.x,@player.y,@party.party[0].hp,@party.party[0].currentHP)
         @animate = false
         @canMove = false
         @moving = false
-        @time = 100
-        @frame = 4
         @collidable = 1
         
         @animateNum = 0
@@ -29,13 +30,13 @@ class Player
         @moving, @canMove = true, true
         update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
         if @input.keyDown(InputTrigger::UP)
-            move_event(collisionArray,"up",5,40,30,@player,@forces)
+            move_event(collisionArray,"up",1,40,30,@player)
         elsif @input.keyDown(InputTrigger::DOWN)
-            move_event(collisionArray,"down",5,40,30,@player,@forces)
+            move_event(collisionArray,"down",1,40,30,@player)
         elsif @input.keyDown(InputTrigger::LEFT)
-            move_event(collisionArray,"left",5,40,30,@player,@forces)
+            move_event(collisionArray,"left",1,40,30,@player)
         elsif @input.keyDown(InputTrigger::RIGHT)
-            move_event(collisionArray,"right",5,40,30,@player,@forces)
+            move_event(collisionArray,"right",1,40,30,@player)
         elsif @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")
@@ -59,7 +60,7 @@ class Player
 
 
     def update
-        
+        @hpbar.update(@player.x,@player.y,@party.party[0].hp,@party.party[0].currentHP)
         
     end
     
@@ -69,6 +70,7 @@ class Player
         if @showPlayer == true
             
             @player.draw()
+            @hpbar.draw
         end
     end
 end
