@@ -5,6 +5,7 @@ module MoveCollision
     end
     def move_event(moveType,distance,objectToMove = self, facing = "down")
         #@collisionArray = collisionArray
+        @randomNum = rand(4)
         @objectToMove = objectToMove
         @x = @objectToMove.x 
         @y = @objectToMove.y 
@@ -23,9 +24,9 @@ module MoveCollision
         #def checkDir(dir)direction,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
         #end
         
-        def checkDir(dir="down",evtReturn = false)
+        def checkDir(dir,rangeBoost=0,evtReturn = false)
             @events.each {|event|
-            @range = 26
+            @range = 26 + rangeBoost
             x = event.x
             y = event.y
             objectW = event.w
@@ -35,7 +36,7 @@ module MoveCollision
             #puts("^overlap?")
             case dir
                 when "up"
-                    if @range >= ((y+objectH) - @y).abs && (((x) - @x)).abs <= (@range) #up
+                    if @range > ((y+objectH) - @y).abs && (((x) - @x)).abs < (@range) #up
                         if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x+4)...(x+objectW)),((@x)...(@x+@w))) === true)
                             if evtReturn == true
                                 return event
@@ -45,7 +46,7 @@ module MoveCollision
                         end
                     end
                 when "down"
-                    if @range >= (y - (@y + @h)).abs && ((x) - @x).abs <= (@range) #down
+                    if @range > (y - (@y + @h)).abs && ((x) - @x).abs < (@range) #down
                         if (overlap?(((y+16)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x+4)...(x+objectW)),((@x)...(@x+@w))) === true)
                             if evtReturn == true
                                 return event
@@ -139,11 +140,28 @@ module MoveCollision
             #else
                # return true
             #end
-        #}
-            
-            
         end
         
+        def eventRun(dir)
+            case dir
+            when "up"
+                if KB.key_pressed?(InputTrigger::SELECT)
+                    checkDir("up")
+                end
+            when "down"
+                if KB.key_pressed?(InputTrigger::SELECT)
+                    checkDir("down")
+                end
+            when "right"
+                if KB.key_pressed?(InputTrigger::SELECT)
+                    checkDir("right")
+                end
+            when "left"
+                if KB.key_pressed?(InputTrigger::SELECT)
+                    checkDir("left")
+                end
+            end
+        end
         upCheck = check_surrounding("up",(self))
         downCheck = check_surrounding("down",self) 
         leftCheck = check_surrounding("left",self)
@@ -199,92 +217,91 @@ module MoveCollision
             end
         }
         
-        moveRandom = ->(){
+        moveRandom = ->(randomDir){
             @delayStop = Gosu.milliseconds
             if (@delayStop - @delayStart < 1000)
                 @animate = true
-                randomDir = rand(4)
+                
                 case randomDir
                 when 0
-                    @objectToMove.set_animation(0)
+                    #@objectToMove.set_animation(0)
                 when 1
-                    moveRight.call(1)
+                    moveRight.call(3)
                 when 2
-                    moveUp.call(1)
+                    moveUp.call(3)
                 when 3
-                    moveLeft.call(1)
+                    moveLeft.call(3)
                 when 4
-                    moveDown.call(1)
+                    moveDown.call(3)
                 end
-            else
-                @objectToMove.set_animation(0)
             end
         }
-        facePlayer = ->(sight=6){
+        facePlayer = ->(sight=300){
            x = $scene_manager.scene["player"].x
            y = $scene_manager.scene["player"].y
-           @range = sight
+           @range = 400
            if (x - @x).abs <= @range && (y - @y).abs <= @range
-            if (y - @y) < 0  && (x - @x) > 0
-               if (x-@x).abs < (y-@y).abs
+            if (y - @y) <= 0  && (x - @x) >= 0
+               if (x-@x).abs <= (y-@y).abs
                 @objectToMove.set_animation(12)
                else @objectToMove.set_animation(8)
                end
-            elsif  (y - @y) > 0 && (x - @x) < 0
-               if (x-@x).abs < (y-@y).abs
+            elsif  (y - @y) >= 0 && (x - @x) <= 0
+               if (x-@x).abs <= (y-@y).abs
                 @objectToMove.set_animation(0)
                else @objectToMove.set_animation(4)
                end
             end
            end
         }
-        faceFollowPlayer = ->(followDist=3,sight=6,randDir = 1){
+        faceFollowPlayer = ->(followDist=3,sight=6*32,randDir = 1){
             x = $scene_manager.scene["player"].x
             y = $scene_manager.scene["player"].y
             lockedOn = false 
+            @range = 400
             if @range > (y - @y).abs && (x - @x).abs < @range
-                @delayStop = Gosu.milliseconds
-                if (@delayStop - @delayStart < 10000)
-                    randDir = rand(4)
-                end
+           #     @delayStop = Gosu.milliseconds
+           #     if (@delayStop - @delayStart < 10000)
+           #         randDir = rand(4)
+           #     end
 
-                case randDir
-                when 0
-                    draw_character(@objectToMove, "upStop",2)
-                    @facing = "up"
-                when 1
-                    draw_character(@objectToMove, "downStop",2)
-                    @facing = "down"
-                when 2
-                    draw_character(@objectToMove, "leftStop",2)
-                    @facing = "left"
-                when 3
-                    draw_character(@objectToMove, "rightStop",2)
-                    @facing = "right"
-                end
-            end
+           #     case randDir
+           #     when 0
+           #         draw_character(@objectToMove, "upStop",2)
+           #         @facing = "up"
+           #     when 1
+           #         draw_character(@objectToMove, "downStop",2)
+           #         @facing = "down"
+           #     when 2
+           #         draw_character(@objectToMove, "leftStop",2)
+           #         @facing = "left"
+           #     when 3
+           #         draw_character(@objectToMove, "rightStop",2)
+           #         @facing = "right"
+           #     end
+           # end
 
             case @facing
             when "up"
-                if lookingForPlayer(sight,"up")
+                if checkDir("up",sight)
                     if (y - @y).abs >= (x - @x).abs # player X Closer Then Y
-                        if objectCollision("up") != true
+                        if objectCollision("up") != true && y > @y
                             moveUp.call(1)
                         else
                             if x <= @x # player to the left
                                 if objectCollision("left") != true
                                     moveLeft.call(1)
                                 else
-                                    if objectCollision("right") != true
-                                        moveRight.call(1)
+                                    if objectCollision("up") != true
+                                        moveUp.call(1)
                                     end
                                 end
                             elsif x > @x #player to the right
                                 if objectCollision("right") != true
                                     moveRight.call(1)
                                 else
-                                    if objectCollision("left") != true
-                                        moveLeft.call(1)
+                                    if objectCollision("up") != true
+                                        moveUp.call(1)
                                     end
                                 end
                             end
@@ -310,25 +327,25 @@ module MoveCollision
                     end
                 end
             when "down"
-                if lookingForPlayer(sight,"down")
+                if checkDir("down",sight)
                     if (y - @y).abs > (x - @x).abs # player X Closer Then Y
-                        if objectCollision("down") != true
+                        if objectCollision("down") != true && y > @y
                             moveDown.call(1)
                         else
                             if x <= @x # player to the left
                                 if objectCollision("left") != true
                                     moveLeft.call(1)
                                 else
-                                    if objectCollision("right") != true
-                                        moveRight.call(1)
+                                    if objectCollision("down") != true
+                                        moveDown.call(1)
                                     end
                                 end
                             elsif x > @x #player to the right
                                 if objectCollision("right") != true
                                     moveRight.call(1)
                                 else
-                                    if objectCollision("left") != true
-                                        moveLeft.call(1)
+                                    if objectCollision("down") != true
+                                        moveDown.call(1)
                                     end
                                 end
                             end
@@ -354,14 +371,15 @@ module MoveCollision
                     end
                 end
             when "left"
-                if lookingForPlayer(sight,"left")
+                if checkDir("left",sight)
 
                 end
             when "right"
-                if lookingForPlayer(sight,"right")
+                if checkDir("right",sight)
 
                 end
             end
+        end
         }
         followPlayer = ->(sight=2,betweenMove=100){
             @delayStop = Gosu.milliseconds
@@ -462,10 +480,12 @@ module MoveCollision
             moveLeft.call(distance)
         when "right" 
             moveRight.call(distance)
+        when "eventRun"
+            eventRun(@facing)
         when "random"
             @delayStart = Gosu.milliseconds
             if (Gosu.milliseconds / 175 % 16 == 0)
-                moveRandom.call()
+                moveRandom.call(@randomNum)
             end
         when "facePlayer"
             @animate = false
@@ -473,14 +493,9 @@ module MoveCollision
         when "followPlayer"
             @delayStart = Gosu.milliseconds
             followPlayer.call(distance)
-        when "evtUp"
-            checkDir("up")
-        when "evtDown"
-            checkDir("down")
-        when "evtRight"
-            checkDir("right")
-        when "evtLeft"
-            checkDir("left")
+        when "faceFollowPlayer"
+            @delayStart = Gosu.milliseconds
+            faceFollowPlayer.call()
         else
             @animate = false 
         end

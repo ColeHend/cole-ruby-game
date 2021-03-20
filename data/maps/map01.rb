@@ -96,7 +96,8 @@ class Map01
         end
     end
     def update
-        $scene_manager.event["Event102"].set_move("facePlayer",400)
+        $scene_manager.event["Event101"].set_move("random",1)
+        $scene_manager.event["Event102"].set_move("faceFollowPlayer",400)
         #$scene_manager.eventMap[1]
         @map.update()
         if @showChoices

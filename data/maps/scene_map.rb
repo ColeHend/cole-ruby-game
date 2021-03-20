@@ -15,8 +15,8 @@ class SceneMap
         @deathTotal = 0
         @input = $scene_manager.input # need to add to input stack
         @stackSpot = $scene_manager.input.inputStack.length 
-        @mWidth = 40  # @mWidth = @currentMap.map.width
-        @mHeight = 30   # @mHeight = @currentMap.map.height
+        @mWidth = @currentMap.width  # @mWidth = @currentMap.map.width
+        @mHeight = @currentMap.height   # @mHeight = @currentMap.map.height
         @camera_x = @camera_y = 0
     end 
     def change_map(map)
