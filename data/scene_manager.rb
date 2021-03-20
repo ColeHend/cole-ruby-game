@@ -1,11 +1,11 @@
 require_relative "files/input.rb"
 class SceneManager
-    attr_accessor :scene, :currentScene, :feature, :images, :events, :eventMap, :object
+    attr_accessor :scene, :currentScene, :feature, :images, :event, :eventMap, :object
     attr_reader :input
     def initialize()    
         @scene = Hash.new
         @feature = Hash.new
-        @events = Hash.new
+        @event = Hash.new
         @eventMap = Array.new(20){Array.new()}
         @object = Hash.new
         @images = Hash.new()
@@ -27,9 +27,9 @@ class SceneManager
         @feature[featureName] = featureClass
     end
 
-    def registerEvent(mapNumber=1,eventName,event)
-        @events[eventName] = event
-        @eventMap[mapNumber].push(event)
+    def registerEvent(mapNumber=1,eventName,entireEvent)
+        @event[eventName] = entireEvent
+        @eventMap[mapNumber].push(entireEvent)
     end
 
     def switch_scene(sceneName)

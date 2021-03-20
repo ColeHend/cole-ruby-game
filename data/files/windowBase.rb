@@ -14,25 +14,25 @@ module WindowBase
                     #@windowSkin.animate([4],8)
                     @windowSkin.x = (x*32)
                     @windowSkin.y = (y*32)
-                    @windowSkin.draw#(nil, 1, 1, 0xff, 0xffffff, nil, nil, 67, false)
+                    @windowSkin.draw(nil, 1, 1, 0xff, 0xffffff, nil, nil, 8, false)
                 elsif a == width && b == 0
                     @windowSkin.set_animation(5)
                     #@windowSkin.animate([5],8)
                     @windowSkin.x = ((x+a)*32)
                     @windowSkin.y = ((y+b)*32)
-                    @windowSkin.draw()
+                    @windowSkin.draw(nil, 1, 1, 0xff, 0xffffff, nil, nil, 8, false)
                 elsif a == width && b == height
                     @windowSkin.set_animation(11)
                     #@windowSkin.animate([11],8)
                     @windowSkin.x = ((x+a)*32)
                     @windowSkin.y = ((y+b)*32)
-                    @windowSkin.draw()
+                    @windowSkin.draw(nil, 1, 1, 0xff, 0xffffff, nil, nil, 8, false)
                 elsif a == 0 && b == height
                     @windowSkin.set_animation(10)
                     #@windowSkin.animate([10],8)
                     @windowSkin.x = ((x+a)*32)
                     @windowSkin.y = ((y+b)*32)
-                    @windowSkin.draw()
+                    @windowSkin.draw(nil, 1, 1, 0xff, 0xffffff, nil, nil, 8, false)
                 end
             end
         end

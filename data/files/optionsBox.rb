@@ -6,7 +6,7 @@ class OptionsBox
     include WindowBase
     def initialize(stackName,x=400,y=225,width=70,height=70,choice,done)
         @stackName = stackName
-        @input = $scene_manager.input #need to add to input stack
+        @input = $scene_manager.input #
         @input.addToStack(stackName)
         @inputStackSpot = @input.inputStack.length
         @hidden = false
@@ -30,9 +30,9 @@ class OptionsBox
         @player = $scene_manager.scene["player"]
         #$can_move = !@drawDialog
     end
-        def hidden(visible)
-            @hidden = visible
-        end
+
+    
+    
     def doInput(key)
         stackLength = ($scene_manager.input.inputStack.length-1)
         if $scene_manager.input.inputStack[stackLength] == @stackName
@@ -51,7 +51,7 @@ class OptionsBox
                 end
             when "select"
                     @choice[@currentOp].call()
-                    @currentOp = 0
+                    #@currentOp = 0
                     @colors = Array.new(25,@notCurrentColor)
                     @colors[@currentOp] = @currentColor
                     
@@ -72,13 +72,17 @@ class OptionsBox
             #@hidden = !@hidden
             puts("optionsBox select")
         end
+        @choiceNames = @choices.map{|e|e.text_image}
+        @choice =  @choices.map{|e|e.function}
+        @choiceAmount = @choiceNames.length
     end
         
-      
+    def hidden(visible)
+        @hidden = visible
+    end  
       
     def draw
         if !@hidden
-            #$window.draw_rect(@x, @y, @width, @height, @white, z = 5)
             create_window(@x,@y,@width,@height)
             @choiceY = (@y*32) + 15
             for a in (0...@choiceAmount)

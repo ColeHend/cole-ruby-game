@@ -20,49 +20,95 @@ class Menu
         @partyLVL = @party.map{|e|Gosu::Image.from_text("Level: "+e.playerLevel.to_s, 18)}
         @partyXP = @party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
         #Items
-        @items = Array.new
+        @currentItemOp = 0 
+        @notCurrentColor = @white
+        @currentColor = @brightGreen
+        @colors = Array.new(40,@notCurrentColor)
+        @colors[0] = @currentColor
+
         @inventory = $scene_manager.feature["party"].inventory
+        #@items = $scene_manager.feature["party"].items
+        
         if @inventory.size >= 1
-            @items = @inventory.each_with_index.map{|e,index| Option.new(e.name,->(){
-            $scene_manager.feature["party"].use_item(index,@party[0])})}
+            @items = @inventory.each_with_index.map{|e,index| 
+            Option.new(e.name,->(){
+            $scene_manager.feature["party"].use_item(index,@party[0])
+            })}
         else
-            @items = [Option.new("No Items",->(){})]
+                @items = [Option.new("No Items",->(){})]
         end
+        @itemNames = @items.map{|e|e.text_image}
+        @itemChoice =  @items.map{|e|e.function}
+        @itemAmount = @inventory.length
+
+        
         #Options and Boxes
         @options = [Option.new("Party",->(){}),
-            Option.new("Items",->(){
-                @showItems = true
-                @itemsBox.hidden(false)
-                activateItems() }),
+            Option.new("Items",->(){@input.addToStack("itemsBox")
+                @showItems = true }),
+                
             Option.new("Save",->(){}),
             Option.new("Exit Game",->(){})]
-        @itemsBox = OptionsBox.new("itemsBox",5,0,3,8,@items,"")
         @optionsBox = OptionsBox.new("options",0,0,3,8,@options,"")
+        @itemsBox = OptionsBox.new("itemsBox",5,0,3,8,@items,"")
         
-        
-    end
-    def activateItems()
-        if (Gosu.milliseconds / 50 % 3 == 0)
-            @input.addToStack("itemsBox")
-        end
     end
 
     def update()
         @optionsBox.update
+        
         if @showItems == true
+            @inventory = $scene_manager.feature["party"].inventory
             @itemsBox.update
+            stackLength = ($scene_manager.input.inputStack.length-1)
+        if $scene_manager.input.inputStack[stackLength] == "itemsBox"
+            @itemNames = @items.map{|e|e.text_image}
+                @itemChoice =  @items.map{|e|e.function}
+                @itemAmount = @inventory.length
+                if @inventory.size >= 1
+                    @items = @inventory.each_with_index.map{|e,index| 
+                    Option.new(e.name,->(){
+                    $scene_manager.feature["party"].use_item(index,@party[0])
+                    })}
+                else
+                        @items = [Option.new("No Items",->(){})]
+                end
+            if @input.keyPressed(InputTrigger::UP) then #down
+                if @currentItemOp != 0
+                    @colors[@currentItemOp] = @notCurrentColor
+                    @currentItemOp -= 1
+                    @colors[@currentItemOp] = @currentColor
+                end 
+            elsif @input.keyPressed(InputTrigger::DOWN) then #up
+                if @itemAmount != (@currentItemOp+1)
+                    @colors[@currentItemOp] = @notCurrentColor
+                    @currentItemOp += 1
+                    @colors[@currentItemOp] = @currentColor
+                end
+            elsif @input.keyPressed(InputTrigger::SELECT) then #select
+                @itemChoice[@currentItemOp].call()
+                
+                #@currentItemOp = 0
+                @colors = Array.new(25,@notCurrentColor)
+                @colors[@currentItemOp] = @currentColor
+
+            end         
+        end
+            
         end
         
         if KB.key_pressed?(InputTrigger::ESCAPE)
             if @showItems == true
                 @input.removeFromStack(@itemsBox.stackName)
                 @showItems = false
-                @itemsBox.hidden(true)
+                #@itemsBox.hidden(true)
+                
             else
                 @input.removeFromStack(@optionsBox.stackName)
                 @input.addToStack("map")
                 $scene_manager.switch_scene("map")
             end
+        
         end
     end
 
@@ -70,14 +116,21 @@ class Menu
         @player = $scene_manager.scene["player"]
         @currentMap =  $scene_manager.scene["map"].currentMap
         @mWidth, @mHeight = @currentMap.width, @currentMap.height
+
         if @inventory.size >= 1
-            @items = @inventory.each_with_index.map{|e,index| Option.new(e.name,->(){
-            $scene_manager.feature["party"].use_item(index,@party[0])})}
+            @items = @inventory.each_with_index.map{|e,index| 
+            Option.new(e.name,->(){
+            $scene_manager.feature["party"].use_item(index,@party[0])
+            })}
         else
-            @items = [Option.new("No Items",->(){})]
+                @items = [Option.new("No Items",->(){})]
         end
+        @itemNames = @items.map{|e|e.text_image}
+        @itemChoice =  @items.map{|e|e.function}
+        @itemAmount = @inventory.length
+
         #Draw Map Backing
-        @currentMap.draw
+        @currentMap.map.draw
         @currentMap.events.each {|e|e.draw()}
         @player.draw
 
@@ -97,8 +150,14 @@ class Menu
         #Draw Windows And Boxes
         create_window(10,0,10,10)    
         @optionsBox.draw
+
         if @showItems == true
-            @itemsBox.draw
+            #@itemsBox.draw
+            create_window(5,0,3,8)
+            @itemY = (0*32) + 15
+            for a in (0...@itemAmount)
+                @itemNames[a].draw((5*32)+10, @itemY+(20*a), 8,scale_x = 1, scale_y = 1, color = @colors[a])
+            end
         end
         
     end

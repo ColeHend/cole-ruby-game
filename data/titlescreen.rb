@@ -9,10 +9,12 @@ class TitleScreen
         @choice = [Option.new("New Game",->(){
             $scene_manager = SceneManager.new()
             $scene_manager.register("title",TitleScreen.new())
-            $scene_manager.register("map",SceneMap.new())
-            $scene_manager.register("player",Player.new())
+            $scene_manager.register("gameover",Gameover.new())
             $scene_manager.registerFeature("party",PlayerParty.new)
             $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10))
+            $scene_manager.register("player",Player.new())
+            $scene_manager.register("map",SceneMap.new())
+            
             $scene_manager.register_object("fancyWindowSkin","fancyWindowSkin",0,0,0,0,6,4)
             $scene_manager.register_object("earthboundWindowSkin","earthboundWindowSkin",0,0,0,0,6,4)
             $scene_manager.register_object("blackWindowSkin","blackWindowSkin",0,0,0,0,6,4)
