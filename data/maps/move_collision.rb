@@ -71,8 +71,8 @@ module MoveCollision
             
                 
                 event = nil
-                puts(checkDir(event,"up"))
-                puts("^checkdir(up)")
+                #puts(checkDir(event,"up"))
+                #puts("^checkdir(up)")
                 case direction
                 when "up"
                     if @y <= 32 && @facing == "up"
@@ -150,8 +150,8 @@ module MoveCollision
             end
         }
         moveDown = ->(distance=1,optional=true){
-            puts(objectCollision("down"))
-            puts("^collision down")
+            #puts(objectCollision("down"))
+            #puts("^collision down")
             for a in (1..distance) do
                 @facing = "down"
                 if objectCollision("down") != true
