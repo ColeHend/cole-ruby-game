@@ -57,13 +57,7 @@ class Event
       if isInTriggerSpot(playerX, playerY)
         @event.call
       end
-    when EventTrigger::ACTION_KEY 
-      if actionKeyTriggered && isInTriggerSpot(playerX, playerY)
-        @canMove = false
-        @event.call do
-        @canMove = true
-        end
-      end
+    when EventTrigger::ACTION_KEY
     else
       throw "Event trigger not recognized"
     end

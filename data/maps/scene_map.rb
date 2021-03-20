@@ -55,7 +55,7 @@ class SceneMap
         Gosu.translate(-@camera_x, -@camera_y) do
             @currentMap.map.draw#draw map
             @player.draw #draw player
-            @currentMap.events.each {|e|e.draw()} #draw events
+            @currentMap.events.each {|e|e.draw()} # events
             
         end
         @currentMap.draw

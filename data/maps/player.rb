@@ -9,7 +9,7 @@ class Player
     include Animate
     def initialize()
         #@sprite = Gosu::Image.load_tiles("data/img/greenCoat.bmp", 32, 48)
-        @player = $scene_manager.register_object("player",:player,5*32,3*32,32,48,4,4)
+        @player = $scene_manager.register_object("player",:player,3*32,3*32,32,48,4,4)
         @showPlayer = true
         @dir = 4
         @x = (@player.x )

@@ -1,5 +1,8 @@
 require_relative "../files/animate.rb"
 module MoveCollision
+    def overlap?(r1,r2)
+        !(r1.first > r2.last || r1.last < r2.first)
+    end
     def move_event(moveType,distance,objectToMove = self, facing = "down")
         #@collisionArray = collisionArray
         @objectToMove = objectToMove
@@ -11,22 +14,18 @@ module MoveCollision
         @facing = facing
         @animate = true
         
-        @currentEventX = Array.new
-        @currentEventY = Array.new
         @currentMap =  $scene_manager.scene["map"].currentMap
         @events = @currentMap.events
         @currentMap = (@currentMap.map)
         @mWidth = @currentMap.width
         @mHeight = @currentMap.height
 
-        def willCollide(direction,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
-        end
-        def overlap?(r1,r2)
-            !(r1.first > r2.last || r1.last < r2.first)
-        end
-        def checkDir(eventer,dir)
+        #def checkDir(dir)direction,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
+        #end
+        
+        def checkDir(dir="down",evtReturn = false)
             @events.each {|event|
-            @range = 25
+            @range = 26
             x = event.x
             y = event.y
             objectW = event.w
@@ -36,31 +35,47 @@ module MoveCollision
             #puts("^overlap?")
             case dir
                 when "up"
-                    if @range > ((y+objectH) - @y).abs && (x - @x).abs < (@range - 16) #up
-                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true)
-                            return true
+                    if @range >= ((y+objectH) - @y).abs && (((x) - @x)).abs <= (@range) #up
+                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x+4)...(x+objectW)),((@x)...(@x+@w))) === true)
+                            if evtReturn == true
+                                return event
+                            else
+                                return true
+                            end
                         end
                     end
                 when "down"
-                    if @range > (y - (@y + @h)).abs && (x - @x).abs < (@range - 16) #down
-                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true)
-                            return true
+                    if @range >= (y - (@y + @h)).abs && ((x) - @x).abs <= (@range) #down
+                        if (overlap?(((y+16)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x+4)...(x+objectW)),((@x)...(@x+@w))) === true)
+                            if evtReturn == true
+                                return event
+                            else
+                                return true
+                            end
                         end
                     end
                 when "left"
-                    if (@range / 2) > (y - @y).abs && ((x+objectW) - @x).abs < (@range - 24 ) #up
-                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true)
-                            return true 
+                    if (@range ) >= ((y+objectW/2) - @y).abs && ((x+objectW) - @x).abs <= (@range) #up
+                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),((@y)...(@y+@h))) === true)
+                            if evtReturn == true
+                                return event
+                            else
+                                return true
+                            end 
                         end
                     end
                 when "right"
-                    if (@range / 2) > (y - @y).abs && (x - (@x + @w)).abs < (@range - 24) #up
+                    if (@range ) >= ((y+objectW/2) - @y).abs && (x - (@x + @w)).abs <= (@range) #up
                         if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true)
-                            return true
+                            if evtReturn == true
+                                return event
+                            else
+                                return true
+                            end
                         end
                     end
             end
-        }
+            }
         end
 
         def check_surrounding(direction,player)
@@ -70,14 +85,13 @@ module MoveCollision
             #@h = player.h
             
                 
-                event = nil
-                #puts(checkDir(event,"up"))
+                #puts(checkDir("up"))
                 #puts("^checkdir(up)")
                 case direction
                 when "up"
                     if @y <= 32 && @facing == "up"
                         return true
-                    elsif checkDir(event,"up") == true#true collide
+                    elsif checkDir("up") == true#true collide
                         return true
                     else
                         return false
@@ -85,7 +99,7 @@ module MoveCollision
                 when "down"
                     if @y == (@mHeight * 32 - 16) && @facing == "down"
                         return true
-                    elsif checkDir(event,"down") == true#true collide
+                    elsif checkDir("down") == true#true collide
                         return true
                     else
                         return false
@@ -93,7 +107,7 @@ module MoveCollision
                 when "left" 
                     if @x == 0 && @facing == "left"
                         return true
-                    elsif checkDir(event,"left") == true#true collide
+                    elsif checkDir("left") == true#true collide
                         return true
                     else
                         return false
@@ -101,7 +115,7 @@ module MoveCollision
                 when "right" 
                     if @x >= (@mWidth * 32) && @facing == "right"
                         return true
-                    elsif checkDir(event,"right") == true#true collide
+                    elsif checkDir("right") == true#true collide
                         return true
                     else
                         return false
@@ -119,7 +133,7 @@ module MoveCollision
             
             
              check_surrounding(dir,player)
-                #if !checkDir(player,dir)
+                #if checkDir(dir)
                   #  return false
                 #end
             #else
@@ -254,22 +268,22 @@ module MoveCollision
             when "up"
                 if lookingForPlayer(sight,"up")
                     if (y - @y).abs >= (x - @x).abs # player X Closer Then Y
-                        if !willCollide("up",@mWidth,@mHeight,upCheck)
+                        if objectCollision("up") != true
                             moveUp.call(1)
                         else
                             if x <= @x # player to the left
-                                if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                if objectCollision("left") != true
                                     moveLeft.call(1)
                                 else
-                                    if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                    if objectCollision("right") != true
                                         moveRight.call(1)
                                     end
                                 end
                             elsif x > @x #player to the right
-                                if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                if objectCollision("right") != true
                                     moveRight.call(1)
                                 else
-                                    if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                    if objectCollision("left") != true
                                         moveLeft.call(1)
                                     end
                                 end
@@ -277,18 +291,18 @@ module MoveCollision
                         end
                     else
                         if x > @x
-                            if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                            if objectCollision("right") != true
                                 moveRight.call(1)
                             else
-                                if !willCollide("up",@mWidth,@mHeight,upCheck)
+                                if objectCollision("up") != true
                                     moveUp.call(1)
                                 end
                             end
                         else
-                            if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                            if objectCollision("left") != true
                                 moveLeft.call(1)
                             else
-                                if !willCollide("up",@mWidth,@mHeight,upCheck)
+                                if objectCollision("up") != true
                                     moveUp.call(1)
                                 end
                             end
@@ -298,22 +312,22 @@ module MoveCollision
             when "down"
                 if lookingForPlayer(sight,"down")
                     if (y - @y).abs > (x - @x).abs # player X Closer Then Y
-                        if !willCollide("down",@mWidth,@mHeight,downCheck)
+                        if objectCollision("down") != true
                             moveDown.call(1)
                         else
                             if x <= @x # player to the left
-                                if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                if objectCollision("left") != true
                                     moveLeft.call(1)
                                 else
-                                    if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                    if objectCollision("right") != true
                                         moveRight.call(1)
                                     end
                                 end
                             elsif x > @x #player to the right
-                                if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                if objectCollision("right") != true
                                     moveRight.call(1)
                                 else
-                                    if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                    if objectCollision("left") != true
                                         moveLeft.call(1)
                                     end
                                 end
@@ -321,18 +335,18 @@ module MoveCollision
                         end
                     else
                         if x > @x
-                            if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                            if objectCollision("right") != true
                                 moveRight.call(1)
                             else
-                                if !willCollide("down",@mWidth,@mHeight,downCheck)
+                                if objectCollision("down") != true
                                     moveUp.call(1)
                                 end
                             end
                         else
-                            if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                            if objectCollision("left") != true
                                 moveLeft.call(1)
                             else
-                                if !willCollide("down",@mWidth,@mHeight,downCheck)
+                                if objectCollision("down") != true
                                     moveUp.call(1)
                                 end
                             end
@@ -357,37 +371,37 @@ module MoveCollision
            @range = sight
             if (x - @x).abs > (y - @y).abs && (x - @x).abs > @range  #Range
                     if x < @x && @facing == "left" #player to left
-                        if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                        if objectCollision("left") != true
                             moveLeft.call(1)
-                        elsif willCollide("left",@mWidth,@mHeight,leftCheck)
+                        elsif objectCollision("left") != true
                             if y > @y # player below
-                                if !willCollide("down",@mWidth,@mHeight,downCheck)
+                                if objectCollision("down") != true
                                 moveDown.call(1)
-                                elsif !willCollide("up",@mWidth,@mHeight,upCheck)
+                                elsif objectCollision("up") != true
                                 moveUp.call(1)
                                 end
                             elsif y < @y #player above
-                                if !willCollide("up",@mWidth,@mHeight,upCheck)
+                                if objectCollision("up") != true
                                 moveUp.call(1)
-                                elsif !willCollide("down",@mWidth,@mHeight,downCheck)
+                                elsif objectCollision("down") != true
                                 moveDown.call(1)
                                 end
                             end
                         end
                     elsif x>@x && @facing == "right" #player to right
-                        if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                        if objectCollision("right") != true
                             moveRight.call(1)
-                        elsif willCollide("right",@mWidth,@mHeight,rightCheck)
+                        elsif objectCollision("right") != true
                             if y > @y # player below
-                                if !willCollide("down",@mWidth,@mHeight,downCheck)
+                                if objectCollision("down") != true
                                 moveDown.call(1)
-                                elsif !willCollide("up",@mWidth,@mHeight,upCheck)
+                                elsif objectCollision("up") != true
                                 moveUp.call(1)
                                 end
                             elsif y < @y #player above
-                                if !willCollide("up",@mWidth,@mHeight,upCheck)
+                                if objectCollision("up") != true
                                 moveUp.call(1)
-                                elsif !willCollide("down",@mWidth,@mHeight,downCheck)
+                                elsif objectCollision("down") != true
                                 moveDown.call(1)
                                 end
                             end
@@ -395,37 +409,37 @@ module MoveCollision
                     end
                 elsif (x - @x).abs < (y - @y).abs && (y - @y).abs > @range   #Range
                     if y > @y && @facing == "down" #player to below
-                        if !willCollide("down",@mWidth,@mHeight,downCheck)
+                        if objectCollision("down") != true
                             moveDown.call(1)
-                        elsif willCollide("down",@mWidth,@mHeight,downCheck)
+                        elsif objectCollision("down") != true
                             if x > @x # player right
-                                if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                if objectCollision("right") != true
                                 moveRight.call(1)
-                                elsif !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                elsif objectCollision("left") != true
                                 moveLeft.call(1)
                                 end
                             else #player left
-                                if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                if objectCollision("left") != true
                                 moveLeft.call(1)
-                                elsif !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                elsif objectCollision("right") != true
                                 moveRight.call(1)
                                 end
                             end
                         end
                     elsif y < @y && @facing == "up" #player to above
-                        if !willCollide("up",@mWidth,@mHeight,upCheck)
+                        if objectCollision("up") != true
                             moveUp.call(1)
-                        elsif willCollide("up",@mWidth,@mHeight,upCheck)
+                        elsif objectCollision("up") != true
                             if x > @x # player right
-                                if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                if objectCollision("right") != true
                                 moveRight.call(1)
-                                elsif !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                elsif objectCollision("left") != true
                                 moveLeft.call(1)
                                 end
                             else #player left
-                                if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                                if objectCollision("left") != true
                                 moveLeft.call(1)
-                                elsif !willCollide("right",@mWidth,@mHeight,rightCheck)
+                                elsif objectCollision("right") != true
                                 moveRight.call(1)
                                 end
                             end
@@ -459,6 +473,14 @@ module MoveCollision
         when "followPlayer"
             @delayStart = Gosu.milliseconds
             followPlayer.call(distance)
+        when "evtUp"
+            checkDir("up")
+        when "evtDown"
+            checkDir("down")
+        when "evtRight"
+            checkDir("right")
+        when "evtLeft"
+            checkDir("left")
         else
             @animate = false 
         end
