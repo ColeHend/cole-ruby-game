@@ -55,7 +55,7 @@ class Map01
 
         #   -----Events-----
         # Event 101
-        $scene_manager.register_object("Event101","greenMan",7*32,10*32,32,48,4,4)
+        $scene_manager.register_object("Event101","greenMan",7*32,10*32,30,46,4,4)
         $scene_manager.registerEvent(1,"Event101",
             Event.new($scene_manager.object["Event101"], EventTrigger::ACTION_KEY, true, ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
@@ -78,7 +78,7 @@ class Map01
                     #@optionBox.hidden = true
                 end
         },NpcCharacter.new("Event102",10)))
-        #$scene_manager.event["Event102"].set_move("random",1)
+        $scene_manager.event["Event102"].set_move("facePlayer",1)
         
     end
     def draw

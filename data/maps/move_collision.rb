@@ -10,111 +10,137 @@ module MoveCollision
         @delayStart = 950
         @facing = facing
         @animate = true
-        @currentMap =  $scene_manager.scene["map"].currentMap.map
+        
         @currentEventX = Array.new
         @currentEventY = Array.new
-        @currentMap.events.each {|event|
-            @currentEventX.push(event.x)
-            @currentEventY.push(event.y)
-        }
+        @currentMap =  $scene_manager.scene["map"].currentMap
+        @events = @currentMap.events
+        @currentMap = (@currentMap.map)
         @mWidth = @currentMap.width
         @mHeight = @currentMap.height
-        def check_surrounding(direction)
-            toLeft = (@x - 1)
-            toRight = (@x + 1)
-            toTop =  (@y - 1)
-            toBottom = (@y + 1)
-            case direction
-            when "up"
-                if @y != 0 
-                    #return @collisionArray[@x][toTop]
-                else
-                    return 1
-                end
-            when "down"
-                if @y != (@mHeight*32 - 16)
-                   # return @collisionArray[@x][toBottom]
-                else
-                    return 1
-                end
-            when "left"
-                if @x != 0
-                    #return @collisionArray[toLeft][@y]
-                else
-                    return 1
-                end
-            when "right"
-                if @x <= (@mWidth * 32)
-                   # return @collisionArray[toRight][@y]
-                else
-                    return 1
-                end
-            end
+
+        def willCollide(direction,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
         end
-        def willCollide(direction,mWidth,mHeight,surroundingCheck)
-            if @x == (mWidth * 32  - 2) && direction ==  "right"
-                return true
-            elsif @y == 0 && direction == "up"
-                return true
-            elsif @y == (mHeight * 32 - 1) && direction ==  "down"
-                return true
-            elsif @x == 0 && direction == "left"
-                return true
-            elsif surroundingCheck == 0
-                return false
-            elsif surroundingCheck == 1 
-                return true
-            elsif surroundingCheck == 2
-                return true
-            elsif surroundingCheck == "player"
-                return true
-            else
-                return false
-            end
+        def overlap?(r1,r2)
+            !(r1.first > r2.last || r1.last < r2.first)
         end
-        def objectCollision(sight,dir,checkObject)
-            player = $scene_manager.scene["player"].player
-            x = checkObject.x
-            y = checkObject.y
-            objectW = checkObject.w
-            objectH = checkObject.h
-            @range = 8
-            @rangeW = @w + 8
-            @rangeH = @h + 8
-            
-                case dir
+        def checkDir(eventer,dir)
+            @events.each {|event|
+            @range = 25
+            x = event.x
+            y = event.y
+            objectW = event.w
+            objectH = event.h
+            #puts(overlap?((x...(x+objectW)),(@x...(@x+@w))))
+            #puts((x...(x+objectW)))
+            #puts("^overlap?")
+            case dir
                 when "up"
-                    if @range > (y - @y).abs && (x - @x).abs < @range #up
-                        if (y+objectH) <= @y && x == @x
+                    if @range > ((y+objectH) - @y).abs && (x - @x).abs < (@range - 16) #up
+                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true)
                             return true
                         end
                     end
                 when "down"
-                    if y >= (@y+@h) && x == @x
-                        return true
+                    if @range > (y - (@y + @h)).abs && (x - @x).abs < (@range - 16) #down
+                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true)
+                            return true
+                        end
                     end
                 when "left"
-                    if (x+objectW) <= @x && y == @y
-                        return true 
+                    if (@range / 2) > (y - @y).abs && ((x+objectW) - @x).abs < (@range - 24 ) #up
+                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true)
+                            return true 
+                        end
                     end
                 when "right"
-                    if x >= (@x+@w) && y == @y
+                    if (@range / 2) > (y - @y).abs && (x - (@x + @w)).abs < (@range - 24) #up
+                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true)
+                            return true
+                        end
+                    end
+            end
+        }
+        end
+
+        def check_surrounding(direction,player)
+            #@x = player.x
+            #@y = player.y 
+            #@w = playerw
+            #@h = player.h
+            
+                
+                event = nil
+                puts(checkDir(event,"up"))
+                puts("^checkdir(up)")
+                case direction
+                when "up"
+                    if @y <= 32 && @facing == "up"
                         return true
+                    elsif checkDir(event,"up") == true#true collide
+                        return true
+                    else
+                        return false
+                    end
+                when "down"
+                    if @y == (@mHeight * 32 - 16) && @facing == "down"
+                        return true
+                    elsif checkDir(event,"down") == true#true collide
+                        return true
+                    else
+                        return false
+                    end
+                when "left" 
+                    if @x == 0 && @facing == "left"
+                        return true
+                    elsif checkDir(event,"left") == true#true collide
+                        return true
+                    else
+                        return false
+                    end
+                when "right" 
+                    if @x >= (@mWidth * 32) && @facing == "right"
+                        return true
+                    elsif checkDir(event,"right") == true#true collide
+                        return true
+                    else
+                        return false
                     end
                 end
             
+            end
+
+        def objectCollision(dir)
+            player = $scene_manager.scene["player"].player
+            #puts(check_surrounding(dir,player))
+            #puts("^checked")
+            @currentMap =  $scene_manager.scene["map"].currentMap.map
+            #@currentMap.events.each {|event|
+            
+            
+             check_surrounding(dir,player)
+                #if !checkDir(player,dir)
+                  #  return false
+                #end
+            #else
+               # return true
+            #end
+        #}
+            
+            
         end
         
-        upCheck = check_surrounding("up")
-        downCheck = check_surrounding("down")
-        leftCheck = check_surrounding("left")
-        rightCheck = check_surrounding("right")
+        upCheck = check_surrounding("up",(self))
+        downCheck = check_surrounding("down",self) 
+        leftCheck = check_surrounding("left",self)
+        rightCheck = check_surrounding("right",(self))
 
         moveUp = ->(distance=1,optional=true){ 
             for a in (1..distance) do
                 if optional
                     @facing = "up"
-                    if !willCollide("up",@mWidth,@mHeight,upCheck)
+                    #puts(objectCollision("up"))
+                    if objectCollision("up") != true
                         draw_character(@objectToMove, "up",5)
                         @objectToMove.y = (@objectToMove.y - 4)
                     else
@@ -124,9 +150,11 @@ module MoveCollision
             end
         }
         moveDown = ->(distance=1,optional=true){
+            puts(objectCollision("down"))
+            puts("^collision down")
             for a in (1..distance) do
                 @facing = "down"
-                if !willCollide("down",@mWidth,@mHeight,downCheck)
+                if objectCollision("down") != true
                     draw_character(@objectToMove, "down",5) 
                     @objectToMove.y = (@objectToMove.y + 4)
                 else
@@ -137,7 +165,7 @@ module MoveCollision
         moveRight = ->(distance=1){
             for a in (1..distance) do
                 @facing = "right"
-                if !willCollide("right",@mWidth,@mHeight,rightCheck)
+                if objectCollision("right") != true
                     draw_character(@objectToMove, "right",5) 
                     @objectToMove.x = ( @objectToMove.x + 4)
                 else
@@ -148,7 +176,7 @@ module MoveCollision
         moveLeft = ->(distance=1){ 
             for a in (1..distance) do
                 @facing = "left"
-                if !willCollide("left",@mWidth,@mHeight,leftCheck)
+                if objectCollision("left") != true
                     draw_character(@objectToMove, "left",5)
                     @objectToMove.x = (@objectToMove.x - 4)
                 else

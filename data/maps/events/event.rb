@@ -2,11 +2,13 @@ require_relative "../../files/animate.rb"
 require_relative "../move_collision.rb"
 require_relative "hpbar.rb"
 class Event
-  attr_accessor :animate, :canMove, :moving, :collidable, :x,:y,:dir, :type, :distance, :stats
+  attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :type, :distance, :stats
   include MoveCollision, Animate
   def initialize(object, eventTrigger, collidable, event,stats)
     @x = object.x 
     @y = object.y
+    @w = object.w
+    @h = object.h
     @z = 5
     @dir = 8
     @stats = stats

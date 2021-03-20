@@ -9,7 +9,7 @@ class Player
     include Animate
     def initialize()
         #@sprite = Gosu::Image.load_tiles("data/img/greenCoat.bmp", 32, 48)
-        @player = $scene_manager.register_object("player",:player,3*32,3*32,32,48,4,4)
+        @player = $scene_manager.register_object("player",:player,5*32,3*32,32,48,4,4)
         @showPlayer = true
         @dir = 4
         @x = (@player.x )
@@ -30,13 +30,13 @@ class Player
         @moving, @canMove = true, true
         update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
         if @input.keyDown(InputTrigger::UP)
-            move_event("up",1,@player)
+            move_event("up",1,@player,"up")
         elsif @input.keyDown(InputTrigger::DOWN)
-            move_event("down",1,@player)
+            move_event("down",1,@player,"down")
         elsif @input.keyDown(InputTrigger::LEFT)
-            move_event("left",1,@player)
+            move_event("left",1,@player,"left")
         elsif @input.keyDown(InputTrigger::RIGHT)
-            move_event("right",1,@player)
+            move_event("right",1,@player,"right")
         elsif @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")
@@ -60,6 +60,9 @@ class Player
 
 
     def update
+        @player = $scene_manager.object["player"]
+        @x = (@player.x)
+        @y = (@player.y)
         @hpbar.update(@player.x,@player.y,@party.party[0].hp,@party.party[0].currentHP)
         
     end
