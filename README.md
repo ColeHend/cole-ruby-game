@@ -1,13 +1,10 @@
         Bugs
- - movement animation and delay needs adjustment
- - Items/Menu needs to be overhauled
- - events buggy
+ - Items are a bit wonky      
+ - needs further testing for more bugs
 
     Missing major features
  - battle system
- - object detection
  - npc ai
  - effects
  - saving/loading
  - sound
-- effects

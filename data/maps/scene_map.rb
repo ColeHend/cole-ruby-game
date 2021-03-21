@@ -12,7 +12,7 @@ class SceneMap
         @player = $scene_manager.scene["player"]
         @party = $scene_manager.feature["party"]
         @deathCap = @party.maxPartySize
-        @deathTotal = 0
+        @deathTotal = @party.deathTotal
         @input = $scene_manager.input # need to add to input stack
         @stackSpot = $scene_manager.input.inputStack.length 
         @mWidth = @currentMap.width  # @mWidth = @currentMap.map.width
@@ -27,6 +27,7 @@ class SceneMap
         @currentMap.willCollide(collisionArray,@player.x,@player.y,key)
     end
     def update()
+        
         @party.party.each {|e| 
             if e.currentHP <= 0 && e.alive == true
                 @deathTotal += 1
@@ -54,8 +55,17 @@ class SceneMap
         @player = $scene_manager.scene["player"]
         Gosu.translate(-@camera_x, -@camera_y) do
             @currentMap.map.draw#draw map
-            @player.draw #draw player
-            @currentMap.events.each {|e|e.draw()} # events
+            
+            @currentMap.events.each {|e|
+                if @player.y >= e.y
+                    e.draw()
+                    @player.draw #draw player
+                elsif @player.y < e.y
+                    @player.draw #draw player
+                    e.draw()
+                end
+            
+            } # events
             
         end
         @currentMap.draw

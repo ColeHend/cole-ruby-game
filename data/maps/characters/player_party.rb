@@ -1,12 +1,14 @@
 require_relative 'inventory.rb'
 class PlayerParty
     attr_reader  :name
-    attr_accessor :gold, :party, :inventory, :items, :maxPartySize
+    attr_accessor :gold, :party, :inventory, :items, :maxPartySize, :deathCap, :deathTotal
     def initialize
         @party = Array.new()
         @maxPartySize = 1
         @gold = 24
         @inventory = Inventory.new()
+        @deathCap = @maxPartySize
+        @deathTotal = 0
     end
 
     def get_items

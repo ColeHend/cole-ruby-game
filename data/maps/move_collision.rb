@@ -11,7 +11,7 @@ module MoveCollision
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
     end
-    def move_event(direction, objectToMove = self)
+    def move_event(vector, objectToMove = self)
         #@collisionArray = collisionArray
         @randomNum = rand(4)
         @objectToMove = objectToMove
@@ -30,12 +30,12 @@ module MoveCollision
         @mHeight = @currentMap.height
 
 
-        #def checkDir(dir)direction,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
+        #def checkDir(dir)vector,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
         #end
         
         def checkDir(dir,rangeBoost=0,evtReturn = false)
             @events.each {|event|
-            @range = 26 + rangeBoost
+            @range = 33 + rangeBoost
             x = event.x
             y = event.y
             objectW = event.w
@@ -46,8 +46,8 @@ module MoveCollision
             #puts("^overlap?")
             case dir
                 when "up"
-                    if @range > ((y+objectH) - @y).abs && (((x) - @x)).abs < (@range) #up
-                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x+4)...(x+objectW)),((@x)...(@x+@w))) === true)
+                    if (@range+6) >= (y+(objectH) - (@y + @h)).abs && ((x) - @x).abs <= (@range-16) #up
+                        if (overlap?(((y)...(y+objectH+8)),(@y...(@y+@h))) === true) && (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true)
                             if evtReturn == true
                                 return event
                             else
@@ -56,8 +56,8 @@ module MoveCollision
                         end
                     end
                 when "down"
-                    if @range > (y - (@y + @h)).abs && ((x) - @x).abs < (@range) #down
-                        if (overlap?(((y+16)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x+4)...(x+objectW)),((@x)...(@x+@w))) === true)
+                    if @range >= (y+(16) - (@y + @h)).abs && ((x) - @x).abs <= (@range-16) #down
+                        if (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true) && (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true)
                             if evtReturn == true
                                 return event
                             else
@@ -66,8 +66,8 @@ module MoveCollision
                         end
                     end
                 when "left"
-                    if (@range ) >= ((y+objectW/2) - @y).abs && ((x+objectW) - @x).abs <= (@range) #up
-                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),((@y)...(@y+@h))) === true)
+                    if (@range-2 ) >= ((y) - @y).abs && ((x+objectW) - @x).abs <= (@range) #up
+                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH+8)),((@y)...(@y+@h))) === true)
                             if evtReturn == true
                                 return event
                             else
@@ -76,8 +76,8 @@ module MoveCollision
                         end
                     end
                 when "right"
-                    if (@range ) >= ((y+objectW/2) - @y).abs && (x - (@x + @w)).abs <= (@range) #up
-                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH)),(@y...(@y+@h))) === true)
+                    if (@range-2 ) >= ((y) - @y).abs && (x - (@x + @w)).abs <= (@range) #up
+                        if (overlap?(((x)...(x+objectW)),((@x)...(@x+@w))) === true) && (overlap?(((y)...(y+objectH+8)),(@y...(@y+@h))) === true)
                             if evtReturn == true
                                 return event
                             else
@@ -176,59 +176,69 @@ module MoveCollision
         downCheck = check_surrounding("down",self) 
         leftCheck = check_surrounding("left",self)
         rightCheck = check_surrounding("right",(self))
-
-        move = -> (direction) {
+        
+        event = ->(activateType="SELECT"){
+            # returns the event in that direction if present
+            upEventCheck = checkDir("up",0,true)
+            downEventCheck = checkDir("down",0,true)
+            leftEventCheck = checkDir("left",0,true)
+            rightEventCheck = checkDir("right",0,true)
+            #check if input and colliding
+            if activateType == "SELECT"
+                if KB.key_pressed?(InputTrigger::SELECT)
+                    if checkDir("up") == true
+                        upEventCheck.activate_event
+                    elsif checkDir("down") == true
+                        downEventCheck.activate_event
+                    elsif checkDir("left") == true
+                        leftEventCheck.activate_event
+                    elsif checkDir("right") == true
+                        rightEventCheck.activate_event
+                    end
+                end
+            elsif activateType == "TOUCH"
+                if checkDir("up") == true
+                    upEventCheck.activate_event
+                elsif checkDir("down") == true
+                    downEventCheck.activate_event
+                elsif checkDir("left") == true
+                    leftEventCheck.activate_event
+                elsif checkDir("right") == true
+                    rightEventCheck.activate_event
+                end
+            end
+        }
+        move = -> (vector) {
             
-            newXPos = @objectToMove.x + (direction.x * 4)
-            newYPos = @objectToMove.y + (direction.y * 4)
+            newXPos = @objectToMove.x + (vector.x * 4)
+            newYPos = @objectToMove.y + (vector.y * 4)
             
-            if direction.y > 0
+            if vector.y > 0
                 if objectCollision("down") != true
                     @objectToMove.x = newXPos
                     @objectToMove.y = newYPos
                     draw_character(@objectToMove, "down",5)
                 end
-            elsif direction.y < 0
+            elsif vector.y < 0
                 if objectCollision("up") != true
                     @objectToMove.x = newXPos
                     @objectToMove.y = newYPos
                     draw_character(@objectToMove, "up",5)
                 end
-            elsif direction.x > 0
+            elsif vector.x > 0
                 if objectCollision("right") != true
                     @objectToMove.x = newXPos
                     @objectToMove.y = newYPos
                     draw_character(@objectToMove, "right",5)
                 end
-            elsif direction.x < 0
+            elsif vector.x < 0
                 if objectCollision("left") != true
                     @objectToMove.x = newXPos
                     @objectToMove.y = newYPos
                     draw_character(@objectToMove, "left",5)
                 end
             end
-
-            # if !colides.call(newXPos, newYPos)
-            
-        # end
-
         }
-        
-        moveUp = ->(distance=1,optional=true){ 
-            for a in (1..distance) do
-                if optional
-                    @facing = "up"
-                    #puts(objectCollision("up"))
-                    if objectCollision("up") != true
-                        draw_character(@objectToMove, "up",5)
-                        @objectToMove.y = (@objectToMove.y - 4)
-                    else
-                        @objectToMove.set_animation(12)
-                    end
-                end
-            end
-        }
-        
         
         moveRandom = ->(randomDir){
             @delayStop = Gosu.milliseconds
@@ -481,7 +491,8 @@ module MoveCollision
             end
         #end
          }
-         move.call(direction)
+         move.call(vector)
+         event.call()
          moveType = "none"
         case moveType
         when "none"

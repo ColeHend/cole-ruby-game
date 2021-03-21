@@ -20,6 +20,10 @@ class Menu
     def initialize()
         @input = $scene_manager.input
         
+        @player = $scene_manager.scene["player"]
+        @party = $scene_manager.feature["party"]
+        @deathCap = @party.maxPartySize
+        @deathTotal = @party.deathTotal
         @party = $scene_manager.feature["party"].party
         @showItems = false
         # Colors
@@ -64,6 +68,15 @@ class Menu
     end
 
     def update()
+        @party.each {|e| 
+            if e.currentHP <= 0 && e.alive == true
+                @deathTotal += 1
+                e.alive = false
+            end
+        }
+        if @deathTotal >= @deathCap
+            $scene_manager.switch_scene("gameover")
+        end
         @optionsBox.update
         
         if @showItems == true

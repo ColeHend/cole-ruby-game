@@ -41,10 +41,10 @@ class Player
             moveX = 1
         end
         
+        
         dir = Vector2.new(moveX, moveY)
 
         move_event(dir, @player)
-
         if @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")

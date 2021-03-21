@@ -7,13 +7,15 @@ class Inventory
         @armor   = Hash.new
         @updateMenu = nil
 
+        
+        add_poison()
+        add_poison()
+        add_poison()
+        add_poison()
+        add_poison()
+        
         add_potion()
         add_potion() 
-
-        add_poison()
-        add_poison()
-        add_poison()
-        add_poison()
 
     end 
     def register_update_function(updateFunk)
