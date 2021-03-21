@@ -1,5 +1,5 @@
 require_relative "../../files/animate.rb"
-require_relative "../move_collision.rb"
+require_relative "move_collision.rb"
 require_relative "../scene_map.rb"
 require_relative "../map.rb"
 require_relative "../map01.rb"

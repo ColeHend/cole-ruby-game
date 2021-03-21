@@ -1,5 +1,5 @@
 require_relative "../../files/animate.rb"
-require_relative "../move_collision.rb"
+require_relative "move_collision.rb"
 require_relative "movement_control.rb"
 require_relative "hpbar.rb"
 class Event
