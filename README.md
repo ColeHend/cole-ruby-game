@@ -1,5 +1,6 @@
         Bugs
- - Items are a bit wonky      
+ - Items are a bit wonky
+ - Few Events are broken      
  - needs further testing for more bugs
 
     Missing major features
