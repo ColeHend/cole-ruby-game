@@ -4,9 +4,26 @@ require_relative "optionsBox.rb"
 require_relative "windowBase.rb"
 class Menu
     include WindowBase
+
+    def updateMenu()
+        if (@inventory.items.length > 0)
+            @items = @inventory.items.each_with_index.map{|e,index| 
+                Option.new(e.name,->(){
+                    $scene_manager.feature["party"].use_item(e,@party[0])
+                })
+            }
+        else
+            @items = [Option.new("No Items",->(){})]
+        end
+    end
+
     def initialize()
         @input = $scene_manager.input
         
+        @player = $scene_manager.scene["player"]
+        @party = $scene_manager.feature["party"]
+        @deathCap = @party.maxPartySize
+        @deathTotal = @party.deathTotal
         @party = $scene_manager.feature["party"].party
         @showItems = false
         # Colors
@@ -28,18 +45,14 @@ class Menu
 
         @inventory = $scene_manager.feature["party"].inventory
         #@items = $scene_manager.feature["party"].items
-        
-        if @inventory.size >= 1
-            @items = @inventory.each_with_index.map{|e,index| 
-            Option.new(e.name,->(){
-            $scene_manager.feature["party"].use_item(index,@party[0])
-            })}
-        else
-                @items = [Option.new("No Items",->(){})]
-        end
+        @inventory.register_update_function(->(){
+            updateMenu()
+        })
+        updateMenu()
+
         @itemNames = @items.map{|e|e.text_image}
         @itemChoice =  @items.map{|e|e.function}
-        @itemAmount = @inventory.length
+        @itemAmount = @items.length
 
         
         #Options and Boxes
@@ -55,6 +68,15 @@ class Menu
     end
 
     def update()
+        @party.each {|e| 
+            if e.currentHP <= 0 && e.alive == true
+                @deathTotal += 1
+                e.alive = false
+            end
+        }
+        if @deathTotal >= @deathCap
+            $scene_manager.switch_scene("gameover")
+        end
         @optionsBox.update
         
         if @showItems == true
@@ -64,12 +86,12 @@ class Menu
         if $scene_manager.input.inputStack[stackLength] == "itemsBox"
             @itemNames = @items.map{|e|e.text_image}
                 @itemChoice =  @items.map{|e|e.function}
-                @itemAmount = @inventory.length
-                if @inventory.size >= 1
-                    @items = @inventory.each_with_index.map{|e,index| 
-                    Option.new(e.name,->(){
-                    $scene_manager.feature["party"].use_item(index,@party[0])
-                    })}
+                @itemAmount = @items.length
+                if @items.size >= 1
+                    # @items = @inventory.each_with_index.map{|e,index| 
+                    # Option.new(e.name,->(){
+                    # $scene_manager.feature["party"].use_item(index,@party[0])
+                    # })}
                 else
                         @items = [Option.new("No Items",->(){})]
                 end
@@ -117,17 +139,17 @@ class Menu
         @currentMap =  $scene_manager.scene["map"].currentMap
         @mWidth, @mHeight = @currentMap.width, @currentMap.height
 
-        if @inventory.size >= 1
-            @items = @inventory.each_with_index.map{|e,index| 
-            Option.new(e.name,->(){
-            $scene_manager.feature["party"].use_item(index,@party[0])
-            })}
-        else
-                @items = [Option.new("No Items",->(){})]
-        end
+        # if @items.size >= 1
+        #     @items = @inventory.each_with_index.map{|e,index| 
+        #         Option.new(e.name,->(){
+        #         $scene_manager.feature["party"].use_item(index,@party[0])
+        #     })}
+        # else
+        #         @items = [Option.new("No Items",->(){})]
+        # end
         @itemNames = @items.map{|e|e.text_image}
         @itemChoice =  @items.map{|e|e.function}
-        @itemAmount = @inventory.length
+        @itemAmount = @items.length
 
         #Draw Map Backing
         @currentMap.map.draw

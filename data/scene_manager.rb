@@ -10,6 +10,7 @@ class SceneManager
         @object = Hash.new
         @images = Hash.new()
         @input = Input.new()
+        
     end
     def register(sceneName,sceneObject)
         @scene[sceneName] = sceneObject

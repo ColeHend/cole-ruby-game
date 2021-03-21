@@ -12,11 +12,11 @@ class SceneMap
         @player = $scene_manager.scene["player"]
         @party = $scene_manager.feature["party"]
         @deathCap = @party.maxPartySize
-        @deathTotal = 0
+        @deathTotal = @party.deathTotal
         @input = $scene_manager.input # need to add to input stack
         @stackSpot = $scene_manager.input.inputStack.length 
-        @mWidth = 40  # @mWidth = @currentMap.map.width
-        @mHeight = 30   # @mHeight = @currentMap.map.height
+        @mWidth = @currentMap.width  # @mWidth = @currentMap.map.width
+        @mHeight = @currentMap.height   # @mHeight = @currentMap.map.height
         @camera_x = @camera_y = 0
     end 
     def change_map(map)
@@ -27,6 +27,7 @@ class SceneMap
         @currentMap.willCollide(collisionArray,@player.x,@player.y,key)
     end
     def update()
+        
         @party.party.each {|e| 
             if e.currentHP <= 0 && e.alive == true
                 @deathTotal += 1
@@ -46,16 +47,25 @@ class SceneMap
             } 
             @player.move(@input, @currentMap.map.theMap)
         end
-        @camera_x = [[(@player.x) - 800 / 2, 0].max, @mWidth * 32 - 800].min
-        @camera_y = [[(@player.y) - 600 / 2, 0].max, @mHeight * 32 - 600].min
+        @camera_x = [[(@player.x) - 800 / 2, 0].max, ((@mWidth * 32) + 32) - 800].min
+        @camera_y = [[(@player.y) - 600 / 2, 0].max, ((@mHeight * 32) + 32) - 600].min
     end
     def draw()
         
         @player = $scene_manager.scene["player"]
         Gosu.translate(-@camera_x, -@camera_y) do
             @currentMap.map.draw#draw map
-            @player.draw #draw player
-            @currentMap.events.each {|e|e.draw()} #draw events
+            
+            @currentMap.events.each {|e|
+                if @player.y >= e.y
+                    e.draw()
+                    @player.draw #draw player
+                elsif @player.y < e.y
+                    @player.draw #draw player
+                    e.draw()
+                end
+            
+            } # events
             
         end
         @currentMap.draw

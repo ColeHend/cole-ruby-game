@@ -2,7 +2,7 @@ require_relative "../../files/animate.rb"
 require_relative "../move_collision.rb"
 require_relative "hpbar.rb"
 class Event
-  attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :type, :distance, :stats
+  attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :type, :distance, :stats, :activateType
   include MoveCollision, Animate
   def initialize(object, eventTrigger, collidable, event,stats)
     @x = object.x 
@@ -16,6 +16,7 @@ class Event
     @eventTrigger = eventTrigger
     @solid = collidable
     @moveType = "facePlayer"
+    @activateType = "SELECT" # SELECT or TOUCH options
     @distance = 1
     @hpbar = HPbar.new(@x,@y,10,10)
     if @solid
@@ -39,31 +40,34 @@ class Event
     @canMove = !@canMove
     @moving = !@moving
   end
+
   def set_move(kind,dist)
     canMove()
     @moveType = kind
     @distance = dist
   end
+
+  def activate_event
+    @event.call
+  end
+
   def update(playerX, playerY, actionKeyTriggered)
+    @player = $scene_manager.scene["player"]
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
     @hpbar.update(@x,@y,10,10)
     if @canMove
-      move_event(@moveType,@distance,@eventObject,@facing)
+      #move_event(@moveType,@distance,@eventObject,@facing)
+      #move_event("eventRun",@distance,@player.player)
     end
     #collisionArray[@x][@y] = @collidable
-
+    
+    
     case @eventTrigger
     when EventTrigger::AUTOMATIC
       if isInTriggerSpot(playerX, playerY)
         @event.call
       end
-    when EventTrigger::ACTION_KEY 
-      if actionKeyTriggered && isInTriggerSpot(playerX, playerY)
-        @canMove = false
-        @event.call do
-        @canMove = true
-        end
-      end
+    when EventTrigger::ACTION_KEY
     else
       throw "Event trigger not recognized"
     end

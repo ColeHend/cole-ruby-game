@@ -64,10 +64,10 @@ class Map01
                 $scene_manager.feature["party"].party[0].level_up
                 
         },PlayerCharacter.new("Event101",10)))
-        $scene_manager.event["Event101"].set_move("random",1)
+        $scene_manager.event["Event101"].set_move("random",400)
 
         # Event 102
-        $scene_manager.register_object("Event102","ghost",5*32,5*32,32,48,4,4)
+        $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event102",
             Event.new($scene_manager.object["Event102"], EventTrigger::ACTION_KEY, true, ->(){
                 if !@showChoices 
@@ -78,7 +78,7 @@ class Map01
                     #@optionBox.hidden = true
                 end
         },NpcCharacter.new("Event102",10)))
-        $scene_manager.event["Event102"].set_move("facePlayer",1)
+        
         
     end
     def draw
@@ -96,6 +96,8 @@ class Map01
         end
     end
     def update
+        $scene_manager.event["Event101"].set_move("random",1)
+        $scene_manager.event["Event102"].set_move("faceFollowPlayer",400)
         #$scene_manager.eventMap[1]
         @map.update()
         if @showChoices
