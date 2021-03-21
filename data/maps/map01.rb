@@ -13,10 +13,11 @@ class Map01
     include WindowBase
     def initialize()
         # Initilize variables
+        @events = $scene_manager.eventMap[1]
         @talkin = false
         @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
-        @events = $scene_manager.eventMap[1]
+        
         @map = Mapper.new(@tileset,30,20,@mapfile)
         @width = 30
         @height = 20
@@ -64,7 +65,6 @@ class Map01
                 $scene_manager.feature["party"].party[0].level_up
                 
         },PlayerCharacter.new("Event101",10)))
-        $scene_manager.event["Event101"].set_move("random",400)
 
         # Event 102
         $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
@@ -96,8 +96,8 @@ class Map01
         end
     end
     def update
-        $scene_manager.event["Event101"].set_move("random",1)
-        $scene_manager.event["Event102"].set_move("faceFollowPlayer",400)
+        $scene_manager.event["Event101"].set_move("random")
+        $scene_manager.event["Event102"].set_move("faceFollowPlayer")
         #$scene_manager.eventMap[1]
         @map.update()
         if @showChoices

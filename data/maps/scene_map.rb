@@ -1,9 +1,11 @@
 Dir[File.join(__dir__, 'maps', '*.rb')].each { |file| require file }
 Dir[File.join(__dir__, 'files', '*.rb')].each { |file| require file }
+Dir[File.join(__dir__,'maps', 'events', '*.rb')].each { |file| require file }
 require_relative '../gameover.rb'
 class SceneMap
     attr_accessor :currentMap, :mapHash
     def initialize()
+        @currentMap = Hash.new()
         @mapHash = Hash.new()
         @mapHash["map1"] = Map01.new()
         @mapHash["map2"] = Map02.new()

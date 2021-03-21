@@ -1,12 +1,15 @@
 require_relative "../files/animate.rb"
 require_relative "../files/input_trigger.rb"
-require_relative "move_collision.rb"
+require_relative "./events/movement_control.rb"
 require_relative "events/hpbar.rb"
+#Dir[File.join(__dir__,'events', '*.rb')].each { |file| require_relative file }
+Dir[File.join(__dir__, '*.rb')].each { |file| require file }
+include Control_movement
+include Animate
 class Player
     attr_accessor :x, :y, :dir, :showPlayer, :collidable, :moving, :player
     attr_reader :sprite
-    include MoveCollision
-    include Animate
+    
     def initialize()
         #@sprite = Gosu::Image.load_tiles("data/img/greenCoat.bmp", 32, 48)
         @player = $scene_manager.register_object("player",:player,3*32,3*32,32,48,4,4)
@@ -31,20 +34,18 @@ class Player
         update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
         moveX = 0
         moveY = 0
+        vector = Vector2.new(moveX, moveY)
         if @input.keyDown(InputTrigger::UP)
-            moveY = -1
+            Move(vector,@player,"up",speed=1)
         elsif @input.keyDown(InputTrigger::DOWN)
-            moveY = 1
+            Move(vector,@player,"down",speed=1)
         elsif @input.keyDown(InputTrigger::LEFT)
-            moveX = -1
+            Move(vector,@player,"left",speed=1)
         elsif @input.keyDown(InputTrigger::RIGHT)
-            moveX = 1
+            Move(vector,@player,"right",speed=1)
         end
         
-        
-        dir = Vector2.new(moveX, moveY)
-
-        move_event(dir, @player)
+        triggerEvent(@player)
         if @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")

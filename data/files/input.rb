@@ -71,7 +71,39 @@ class Input
             
         end
     end
-
+    def eventMove(moveType,vector,object)
+        moveType = "none"
+        case moveType
+        when "none"
+        when "up"
+            moveUp.call(distance)
+        when "down"
+            moveDown.call(distance)
+        when "left"
+            moveLeft.call(distance)
+        when "right" 
+            moveRight.call(distance)
+        else 
+        end
+    end
+    def eventPath(type)
+        case type
+            when "random"
+                @delayStart = Gosu.milliseconds
+                if (Gosu.milliseconds / 175 % 16 == 0)
+                    moveRandom.call(@randomNum)
+                end
+            when "facePlayer"
+                @animate = false
+                facePlayer.call(distance)
+            when "followPlayer"
+                @delayStart = Gosu.milliseconds
+                followPlayer.call(distance)
+            when "faceFollowPlayer"
+                @delayStart = Gosu.milliseconds
+                faceFollowPlayer.call()
+        end
+    end
     def update
     end
 end
