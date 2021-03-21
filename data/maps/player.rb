@@ -29,15 +29,23 @@ class Player
         @input,@theMap = input,theMap
         @moving, @canMove = true, true
         update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
+        moveX = 0
+        moveY = 0
         if @input.keyDown(InputTrigger::UP)
-            move_event("up",1,@player,"up")
+            moveY = -1
         elsif @input.keyDown(InputTrigger::DOWN)
-            move_event("down",1,@player,"down")
+            moveY = 1
         elsif @input.keyDown(InputTrigger::LEFT)
-            move_event("left",1,@player,"left")
+            moveX = -1
         elsif @input.keyDown(InputTrigger::RIGHT)
-            move_event("right",1,@player,"right")
-        elsif @input.keyDown(InputTrigger::ESCAPE)
+            moveX = 1
+        end
+        
+        dir = Vector2.new(moveX, moveY)
+
+        move_event(dir, @player)
+
+        if @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")
         elsif @input.keyReleased(InputTrigger::UP)

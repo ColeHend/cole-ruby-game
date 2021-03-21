@@ -1,9 +1,17 @@
 require_relative "../files/animate.rb"
 module MoveCollision
+    class Vector2
+        attr_accessor :x, :y
+        def initialize(x, y)
+            @x = x
+            @y = y
+        end
+    end
+
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
     end
-    def move_event(moveType,distance,objectToMove = self, facing = "down")
+    def move_event(direction, objectToMove = self)
         #@collisionArray = collisionArray
         @randomNum = rand(4)
         @objectToMove = objectToMove
@@ -12,7 +20,7 @@ module MoveCollision
         @w = @objectToMove.w
         @h = @objectToMove.h
         @delayStart = 950
-        @facing = facing
+        @facing = ""
         @animate = true
         
         @currentMap =  $scene_manager.scene["map"].currentMap
@@ -20,6 +28,7 @@ module MoveCollision
         @currentMap = (@currentMap.map)
         @mWidth = @currentMap.width
         @mHeight = @currentMap.height
+
 
         #def checkDir(dir)direction,mWidth,mHeight,surroundingCheck) #need to change events movement ai from this
         #end
@@ -31,6 +40,7 @@ module MoveCollision
             y = event.y
             objectW = event.w
             objectH = event.h
+            localObjectX = @x +x
             #puts(overlap?((x...(x+objectW)),(@x...(@x+@w))))
             #puts((x...(x+objectW)))
             #puts("^overlap?")
@@ -90,7 +100,7 @@ module MoveCollision
                 #puts("^checkdir(up)")
                 case direction
                 when "up"
-                    if @y <= 32 && @facing == "up"
+                    if @y <= 32 #&& @facing == "up"
                         return true
                     elsif checkDir("up") == true#true collide
                         return true
@@ -98,7 +108,7 @@ module MoveCollision
                         return false
                     end
                 when "down"
-                    if @y == (@mHeight * 32 - 16) && @facing == "down"
+                    if @y == (@mHeight * 32-16)# && @facing == "down"
                         return true
                     elsif checkDir("down") == true#true collide
                         return true
@@ -106,7 +116,7 @@ module MoveCollision
                         return false
                     end
                 when "left" 
-                    if @x == 0 && @facing == "left"
+                    if @x == 0 #&& @facing == "left"
                         return true
                     elsif checkDir("left") == true#true collide
                         return true
@@ -114,7 +124,7 @@ module MoveCollision
                         return false
                     end
                 when "right" 
-                    if @x >= (@mWidth * 32) && @facing == "right"
+                    if @x >= (@mWidth * 32) #&& @facing == "right"
                         return true
                     elsif checkDir("right") == true#true collide
                         return true
@@ -167,6 +177,43 @@ module MoveCollision
         leftCheck = check_surrounding("left",self)
         rightCheck = check_surrounding("right",(self))
 
+        move = -> (direction) {
+            
+            newXPos = @objectToMove.x + (direction.x * 4)
+            newYPos = @objectToMove.y + (direction.y * 4)
+            
+            if direction.y > 0
+                if objectCollision("down") != true
+                    @objectToMove.x = newXPos
+                    @objectToMove.y = newYPos
+                    draw_character(@objectToMove, "down",5)
+                end
+            elsif direction.y < 0
+                if objectCollision("up") != true
+                    @objectToMove.x = newXPos
+                    @objectToMove.y = newYPos
+                    draw_character(@objectToMove, "up",5)
+                end
+            elsif direction.x > 0
+                if objectCollision("right") != true
+                    @objectToMove.x = newXPos
+                    @objectToMove.y = newYPos
+                    draw_character(@objectToMove, "right",5)
+                end
+            elsif direction.x < 0
+                if objectCollision("left") != true
+                    @objectToMove.x = newXPos
+                    @objectToMove.y = newYPos
+                    draw_character(@objectToMove, "left",5)
+                end
+            end
+
+            # if !colides.call(newXPos, newYPos)
+            
+        # end
+
+        }
+        
         moveUp = ->(distance=1,optional=true){ 
             for a in (1..distance) do
                 if optional
@@ -181,41 +228,7 @@ module MoveCollision
                 end
             end
         }
-        moveDown = ->(distance=1,optional=true){
-            #puts(objectCollision("down"))
-            #puts("^collision down")
-            for a in (1..distance) do
-                @facing = "down"
-                if objectCollision("down") != true
-                    draw_character(@objectToMove, "down",5) 
-                    @objectToMove.y = (@objectToMove.y + 4)
-                else
-                    @objectToMove.set_animation(0)
-                end
-            end
-        }
-        moveRight = ->(distance=1){
-            for a in (1..distance) do
-                @facing = "right"
-                if objectCollision("right") != true
-                    draw_character(@objectToMove, "right",5) 
-                    @objectToMove.x = ( @objectToMove.x + 4)
-                else
-                    @objectToMove.set_animation(8)
-                end
-            end
-        }
-        moveLeft = ->(distance=1){ 
-            for a in (1..distance) do
-                @facing = "left"
-                if objectCollision("left") != true
-                    draw_character(@objectToMove, "left",5)
-                    @objectToMove.x = (@objectToMove.x - 4)
-                else
-                    @objectToMove.set_animation(4)
-                end
-            end
-        }
+        
         
         moveRandom = ->(randomDir){
             @delayStop = Gosu.milliseconds
@@ -468,7 +481,8 @@ module MoveCollision
             end
         #end
          }
-
+         move.call(direction)
+         moveType = "none"
         case moveType
         when "none"
             @animate = false 

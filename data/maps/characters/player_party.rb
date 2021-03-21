@@ -6,20 +6,17 @@ class PlayerParty
         @party = Array.new()
         @maxPartySize = 1
         @gold = 24
-        @inventory = Array.new()
-        @items = Array.new
-        @inventory.push(Inventory.new.items["poison"])
-        @inventory.push(Inventory.new.items["potion"])
+        @inventory = Inventory.new()
     end
 
     def get_items
     end
     
      def use_item(spot,person)
-        puts(spot)
         puts(person)
-        @inventory[spot].function.call(person)
-        @inventory.delete_at(spot)
+        spot.function.call(person)
+        # @inventory.items[spot.name].function.call(person)
+        # @inventory.items.delete(spot.name)
      end
 
     def addToParty(character)

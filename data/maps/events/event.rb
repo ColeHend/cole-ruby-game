@@ -49,7 +49,7 @@ class Event
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
     @hpbar.update(@x,@y,10,10)
     if @canMove
-      move_event(@moveType,@distance,@eventObject,@facing)
+      #move_event(@moveType,@distance,@eventObject,@facing)
       #move_event("eventRun",@distance,@player.player)
     end
     #collisionArray[@x][@y] = @collidable
