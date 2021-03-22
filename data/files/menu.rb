@@ -58,9 +58,12 @@ class Menu
         @options = [Option.new("Party",->(){}),
             Option.new("Items",->(){@input.addToStack("itemsBox")
                 @showItems = true }),
-                
             Option.new("Save",->(){}),
-            Option.new("Exit Game",->(){})]
+            Option.new("Exit Game",->(){
+                @input.removeFromStack(@optionsBox.stackName)
+                $scene_manager.input.addToStack("optionsBox")
+                $scene_manager.switch_scene("title")
+            })]
         @optionsBox = OptionsBox.new("options",0,0,3,8,@options,"")
         @itemsBox = OptionsBox.new("itemsBox",5,0,3,8,@items,"")
         #@optionsBox.exitable = false
