@@ -26,7 +26,7 @@ class Map01
 
         #Event choices and Windows
         @diffDialog = DialogBox.new(0,10,20,5,"ev0Dialog","Here's Johnny!! Have fun on map 2 with 300 more XP.")
-        
+        @showChoices = false
         @showSkinChoices = false
         @windowSkinChoice = [
             Option.new("FancySkin",->(){$scene_manager.images["windowSkin"] = $scene_manager.images["fancyWindowSkin"] }),
@@ -69,7 +69,7 @@ class Map01
         $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event102",
             Event.new($scene_manager.object["Event102"], EventTrigger::ACTION_KEY, true, ->(){
-                if !@showChoices 
+                if @showChoices == false
                     #$scene_manager.input.removeFromStack(@optionsBox.stackName)
                     $scene_manager.input.addToStack(@optionsBox.stackName)
                     @showChoices = true
@@ -100,9 +100,7 @@ class Map01
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true
-            @optionsBox.update(->(){
-                @showChoices = false
-            })
+            @optionsBox.update()
         end
             
         if @showSkinChoices

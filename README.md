@@ -1,7 +1,7 @@
         Bugs
  - Items are a bit wonky
  - Few Events are broken      
- - needs further testing for more bugs
+ - option box input stack 
 
     Missing major features
  - battle system
@@ -9,3 +9,4 @@
  - effects
  - saving/loading
  - sound
+ - tileset class controlling tile based events
