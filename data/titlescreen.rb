@@ -10,7 +10,7 @@ class TitleScreen
             $scene_manager.register("title",TitleScreen.new())
             $scene_manager.register("gameover",Gameover.new())
             $scene_manager.registerFeature("party",PlayerParty.new)
-            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10))
+            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10.0))
             $scene_manager.register("player",Player.new())
             $scene_manager.register("map",SceneMap.new())
             

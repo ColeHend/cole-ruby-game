@@ -29,8 +29,6 @@ module Animate  # @sprite[@dir].draw(@x*32,@y*32,@z)
         when "upStop"
             @object.set_animation(12)
         end
-        
-
     end
    
 end

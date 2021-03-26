@@ -38,7 +38,7 @@ class Map02 < Map
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
                 puts("welcome to back to map 1!")
-                $scene_manager.scene["map"].change_map("map1")
+                $scene_manager.scene["map"].change_map("map01")
             },PlayerCharacter.new("Event202",10)
             ))
         

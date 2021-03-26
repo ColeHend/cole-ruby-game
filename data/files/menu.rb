@@ -157,10 +157,10 @@ class Menu
         @partyXP = @party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
         
         for a in (0...@party.length)
-            @partyNames[a].draw((10*32)+(74*a), 20, 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyLVL[a].draw((10*32)+(74*a), 45, 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyXP[a].draw((10*32)+(74*a), 70, 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyHP[a].draw((10*32)+(74*a), 95, 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyNames[a].draw((10*32), 20+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyLVL[a].draw((10*32), 45+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyXP[a].draw((10*32), 70+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyHP[a].draw((10*32), 95+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
         end
 
         #Draw Windows And Boxes
