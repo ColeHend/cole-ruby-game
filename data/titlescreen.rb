@@ -1,4 +1,3 @@
-#require_relative "maps/characters/player_party.rb"
 class TitleScreen
     def initialize()
         @gameName = Gosu::Image.from_text("The Game", 30)
@@ -25,6 +24,7 @@ class TitleScreen
             #$scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
             $scene_manager.register("menu",Menu.new())
             $scene_manager.input.addToStack("map")
+            
             $scene_manager.switch_scene("map")
         }),
             Option.new("Load Game",->(){}),

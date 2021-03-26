@@ -172,6 +172,7 @@ module Control_movement
     end   
     
     def triggerEvent(targetObject,activateType="SELECT")
+        # targetObject is likely the player
         # returns the event in that direction if present
         upEventCheck = checkDir(targetObject,"up",0,true)
         downEventCheck = checkDir(targetObject,"down",0,true)

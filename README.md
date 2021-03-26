@@ -1,7 +1,7 @@
         Bugs
  - Items are a bit wonky
- - Few Events are broken      
- - option box input stack 
+ - Few Events are brokenish      
+ - option box input stack handling
 
     Missing major features
  - battle system

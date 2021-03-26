@@ -41,6 +41,8 @@ class Map02 < Map
             },PlayerCharacter.new("Event202",10)
             ))
         
+            
+            
     end
 
     def draw()

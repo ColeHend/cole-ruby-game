@@ -2,6 +2,7 @@ require_relative "input_trigger.rb"
 require_relative "option.rb"
 require_relative "optionsBox.rb"
 require_relative "windowBase.rb"
+require_relative "save_game.rb"
 class Menu
     include WindowBase
 
@@ -58,7 +59,7 @@ class Menu
         @options = [Option.new("Party",->(){}),
             Option.new("Items",->(){@input.addToStack("itemsBox")
                 @showItems = true }),
-            Option.new("Save",->(){}),
+            Option.new("Save",->(){SaveGame.new()}),
             Option.new("Exit Game",->(){
                 @input.removeFromStack(@optionsBox.stackName)
                 $scene_manager.input.addToStack("optionsBox")
