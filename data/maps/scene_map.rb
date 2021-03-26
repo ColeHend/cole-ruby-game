@@ -7,9 +7,9 @@ class SceneMap
     def initialize()
         @currentMap = Hash.new()
         @mapHash = Hash.new()
-        @mapHash["map1"] = Map01.new()
-        @mapHash["map2"] = Map02.new()
-        startMap = @mapHash["map1"]
+        @mapHash["map01"] = Map01.new()
+        @mapHash["map02"] = Map02.new()
+        startMap = @mapHash["map01"]
         @currentMap = startMap
         @player = $scene_manager.scene["player"]
         @party = $scene_manager.feature["party"]

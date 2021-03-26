@@ -27,7 +27,7 @@ class TitleScreen
             
             $scene_manager.switch_scene("map")
         }),
-            Option.new("Load Game",->(){}),
+            Option.new("Load",->(){SaveGame.new().loadSave(1)}),
             Option.new("Exit",->(){$window.close()})]
         @optionsBox = OptionsBox.new("optionsBox",8,8,3,2,@choice,"")
         #@optionsBox.currentColor = Gosu::Color.argb(0xff_2ca81e)

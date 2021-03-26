@@ -8,10 +8,11 @@ require_relative "characters/inventory.rb"
 require_relative "characters/character_npc.rb"
 require "json"
 class Map02 < Map
-    attr_reader :mapfile, :map , :events, :width, :height
+    attr_reader :name, :mapfile, :map , :events, :width, :height
     include WindowBase
     def initialize()
         #Variable Init
+        @name = "map02"
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
         @tileset = $scene_manager.images["CastleTownTileset"]
         @width, @height = 30, 20

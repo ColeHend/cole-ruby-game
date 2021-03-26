@@ -9,10 +9,11 @@ require_relative "characters/character_npc.rb"
 require "json"
 
 class Map01
-    attr_reader :map, :mapfile, :events, :width, :height
+    attr_reader :name, :map, :mapfile, :events, :width, :height
     include WindowBase
     def initialize()
         # Initilize variables
+        @name = "map01"
         @talkin = false
         @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
@@ -91,7 +92,7 @@ class Map01
             @diffDialog.draw_box(->(){@talkin = false
                 $scene_manager.input.removeFromStack(@diffDialog.stackName)
                 $scene_manager.input.addToStack("map")
-                $scene_manager.scene["map"].change_map("map2")})
+                $scene_manager.scene["map"].change_map("map02")})
         end
     end
     def update
