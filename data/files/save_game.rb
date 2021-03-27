@@ -55,8 +55,8 @@ class SaveGame
                 @saveFile["party"].map do |value| # Adds the entire Party
                     value.map do |name,person|
                         personAdd = PlayerCharacter.new(name,person[0])
+                        personAdd.give_xp(person[2])
                         personAdd.currentHP = person[1]
-                        personAdd.exp = person[2]
                         $scene_manager.feature["party"].addToParty(personAdd)
                     end
                      

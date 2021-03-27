@@ -1,5 +1,5 @@
         Bugs
- - Items are a bit wonky
+ - Items crash if used several times
  - Few Events are brokenish      
  - option box input stack handling
  - Save/Load needs fine tuning
@@ -7,6 +7,6 @@
     Missing major features
  - battle system
  - npc ai
- - effects
+ - effects (broken completly but implemented)
  - sound
  - tileset class controlling tile based events

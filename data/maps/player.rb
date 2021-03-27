@@ -25,7 +25,6 @@ class Player
         @hpbar = HPbar.new(@player.x,@player.y,@party.party[0].hp,@party.party[0].currentHP)
         @animate = false
         @canMove = false
-        @attacking = false
         @moving = false
         @collidable = 1
         
@@ -65,7 +64,7 @@ class Player
             @facing = "right"
         end
         if @input.keyPressed(InputTrigger::ATTACK)
-            player_attack do @attacking = false end
+            player_attack 
         end
         triggerEvent(@player)
         if @input.keyDown(InputTrigger::ESCAPE)
@@ -103,9 +102,7 @@ class Player
         @currentMap =  $scene_manager.scene["map"].currentMap.map.theMap
         @player = $scene_manager.object["player"]
         if @showPlayer == true
-            if @attacking == true
-                @skillAnimation.draw
-            end
+            @skillAnimation.draw
             @player.draw()
             @hpbar.draw
             

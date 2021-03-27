@@ -13,7 +13,7 @@ class PlayerCharacter < CharacterBase
 
     def level_up
         #stat increases and stuff
-        @exp = (@lvlUpExp-@exp)
+        @exp = (@exp-@lvlUpExp)
         @playerLevel = (@playerLevel+1)
         self.hp = (self.hp+5)
         @lvlUpExp = (1000*@playerLevel) 
@@ -21,10 +21,8 @@ class PlayerCharacter < CharacterBase
 
     def give_xp(expAmt)
         @exp += expAmt
-        while @exp > @lvlUpExp
+        while @exp >= @lvlUpExp
             level_up()
-            puts("XP  -> "+$scene_manager.feature["party"].party[0].exp.to_s)
-            puts("LVL -> "+$scene_manager.feature["party"].party[0].playerLevel.to_s)
         end
     end
 
