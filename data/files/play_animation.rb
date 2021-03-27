@@ -8,11 +8,10 @@ class PlayAnimation
         #@slash = 
     end
 
-    def play_animation(animation="slash",x,y)
+    def play_animation(animation="slash",x,y,flip)
+        @flip = flip or nil
         case animation
             when "slash"
-                #@slash.x = x
-                #@slash.y = y
                 @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4]))
             else 
                 puts("FAIL") 
@@ -22,7 +21,7 @@ class PlayAnimation
 
     def draw
         if @runEffects.length > 0
-            @runEffects.each {|effect|effect.draw}
+            @runEffects.each {|effect|effect.draw(nil,1,1,0xff,0xffffff,nil,@flip)}
         end
     end
 

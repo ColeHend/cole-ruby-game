@@ -1,3 +1,10 @@
+      Current Controls
+- Move : Arrow Keys
+- Run : Z
+- Sneak : X
+- Action : Spacebar
+- Melee Attack: F
+
         Bugs
  - Items crash if used several times
  - Few Events are brokenish      

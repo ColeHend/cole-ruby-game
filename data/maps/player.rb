@@ -34,13 +34,13 @@ class Player
         @attacking = true
         case @facing
         when "left"
-            @skillAnimation.play_animation("slash",@player.x-5*32,@player.y-32)
+            @skillAnimation.play_animation("slash",@player.x-4*32,@player.y-2*32,nil)
         when "right"
-            @skillAnimation.play_animation("slash",@player.x-3*32,@player.y-32)
+            @skillAnimation.play_animation("slash",@player.x-1.8*32,@player.y-2.1*32,:horiz)
         when "up"
-            @skillAnimation.play_animation("slash",@player.x-4*32,@player.y-2*32)
+            @skillAnimation.play_animation("slash",@player.x-3*32,@player.y-3*32,nil)
         when "down"
-            @skillAnimation.play_animation("slash",@player.x-4*32,@player.y)
+            @skillAnimation.play_animation("slash",@player.x-3*32,@player.y-2*32,:vert)
         end
     end
     def move(input,theMap)
