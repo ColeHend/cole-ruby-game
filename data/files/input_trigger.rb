@@ -6,4 +6,6 @@ module InputTrigger
     SELECT = Gosu::KbSpace
     ESCAPE = Gosu::KbEscape
     ATTACK = Gosu::KbF
+    RUN = Gosu::KbZ
+    SNEAK = Gosu::KbX
 end

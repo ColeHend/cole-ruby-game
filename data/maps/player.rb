@@ -49,18 +49,29 @@ class Player
         update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
         moveX = 0
         moveY = 0
+        
         vector = Vector2.new(moveX, moveY)
+        if Gosu.button_down?(InputTrigger::RUN)
+            speed = 1.25
+            timing = 5
+        elsif Gosu.button_down?(InputTrigger::SNEAK)
+            speed = 0.5
+            timing = 10
+        else
+            speed = 0.75
+            timing = 7
+        end
         if @input.keyDown(InputTrigger::UP)
-            Move(vector,@player,"up",speed=1)
+            Move(vector,@player,"up",speed,timing)
             @facing = "up"
         elsif @input.keyDown(InputTrigger::DOWN)
-            Move(vector,@player,"down",speed=1)
+            Move(vector,@player,"down",speed,timing)
             @facing = "down"
         elsif @input.keyDown(InputTrigger::LEFT)
-            Move(vector,@player,"left",speed=1)
+            Move(vector,@player,"left",speed,timing)
             @facing = "left"
         elsif @input.keyDown(InputTrigger::RIGHT)
-            Move(vector,@player,"right",speed=1)
+            Move(vector,@player,"right",speed,timing)
             @facing = "right"
         end
         if @input.keyPressed(InputTrigger::ATTACK)

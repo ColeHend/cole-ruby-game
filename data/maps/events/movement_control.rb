@@ -16,19 +16,19 @@ module Control_movement
         end
     end
 
-    def Move(vector,objectToMove,direction,speed=1)
+    def Move(vector,objectToMove,direction,speed=1,timing = 6)
         vector.x = 0
         vector.y = 0
 
         case direction
             when "down"
-                vector.y = 1
+                vector.y = speed
             when "up"
-                vector.y = -1
+                vector.y = -speed
             when "right"
-                vector.x = 1
+                vector.x = speed
             when "left"
-                vector.x = -1
+                vector.x = -speed
             when "none"
                 vector.x = 0
                 vector.y = 0
@@ -36,26 +36,25 @@ module Control_movement
 
         newXPos = objectToMove.x + (vector.x * 4)
         newYPos = objectToMove.y + (vector.y * 4)
-
         if vector.y > 0
             if check_surrounding("down",objectToMove) != true
                 objectToMove.y = newYPos
-                draw_character(objectToMove, "down",5)
+                draw_character(objectToMove, "down",timing)
             end
         elsif vector.y < 0
             if check_surrounding("up",objectToMove) != true
                 objectToMove.y = newYPos
-                draw_character(objectToMove, "up",5)
+                draw_character(objectToMove, "up",timing)
             end
         elsif vector.x > 0
             if check_surrounding("right",objectToMove) != true
                 objectToMove.x = newXPos
-                draw_character(objectToMove, "right",5)
+                draw_character(objectToMove, "right",timing)
             end
         elsif vector.x < 0
             if check_surrounding("left",objectToMove) != true
                 objectToMove.x = newXPos
-                draw_character(objectToMove, "left",5)
+                draw_character(objectToMove, "left",timing)
             end
         end
         
@@ -73,37 +72,37 @@ module Control_movement
         if (playerX - objectX).abs > (playerY - objectY).abs && (playerX - objectX).abs <= range #Range
                 if playerX < objectX && @facing == "left" #player to left
                     if check_surrounding("left", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"left")
+                        Move(vectorToMove,objectToMove,"left",1)
                     elsif check_surrounding("left", objectToMove)  != true
                         if playerY > objectY # player below
                             if check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
+                            Move(vectorToMove,objectToMove,"down",1)
                             elsif check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
+                            Move(vectorToMove,objectToMove,"up",1)
                             end
                         elsif playerY < objectY #player above
                             if check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
+                            Move(vectorToMove,objectToMove,"up",1)
                             elsif check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
+                            Move(vectorToMove,objectToMove,"down",1)
                             end
                         end
                     end
                 elsif playerX>objectX && @facing == "right" #player to right
                     if check_surrounding("right", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"right")
+                        Move(vectorToMove,objectToMove,"right",1)
                     elsif check_surrounding("right", objectToMove)  != true
                         if playerY > objectY # player below
                             if check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
+                            Move(vectorToMove,objectToMove,"down",1)
                             elsif check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
+                            Move(vectorToMove,objectToMove,"up",1)
                             end
                         elsif playerY < objectY #player above
                             if check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
+                            Move(vectorToMove,objectToMove,"up",1)
                             elsif check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
+                            Move(vectorToMove,objectToMove,"down",1)
                             end
                         end
                     end
@@ -111,42 +110,42 @@ module Control_movement
         elsif (playerX - objectX).abs < (playerY - objectY).abs && (playerY - objectY).abs <= range  #Range
                 if playerY > objectY && @facing == "down" #player to below
                     if check_surrounding("down", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"down")
+                        Move(vectorToMove,objectToMove,"down",1)
                     elsif check_surrounding("down", objectToMove)  != true
                         if playerX > objectX # player right
                             if check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
+                            Move(vectorToMove,objectToMove,"right",1)
                             elsif check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
+                            Move(vectorToMove,objectToMove,"left",1)
                             end
                         else #player left
                             if check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
+                            Move(vectorToMove,objectToMove,"left",1)
                             elsif check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
+                            Move(vectorToMove,objectToMove,"right",1)
                             end
                         end
                     end
                 elsif playerY < objectY && @facing == "up" #player to above
                     if check_surrounding("up", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"up")
+                        Move(vectorToMove,objectToMove,"up",1)
                     elsif check_surrounding("up", objectToMove)  != true
                         if playerX > objectX # player right
                             if check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
+                            Move(vectorToMove,objectToMove,"right",1)
                             elsif check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
+                            Move(vectorToMove,objectToMove,"left",1)
                             end
                         else #player left
                             if check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
+                            Move(vectorToMove,objectToMove,"left",1)
                             elsif check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
+                            Move(vectorToMove,objectToMove,"right",1)
                             end
                         end
                     end
                 end
-        elsif (playerY - objectY).abs <= (@range) && (playerX - objectX).abs <= (@range)
+        elsif (playerY - objectY).abs <= (range) && (playerX - objectX).abs <= (range)
                # @animate = false
     
         end
@@ -156,17 +155,17 @@ module Control_movement
         @randomNum = rand(4)
         @delayStop = Gosu.milliseconds
         if (@delayStop - delayStart < 500)
-            case randomDir
+            case @randomNum
             when 0
                 Move(vectorToMove,objectToMove,"none")
             when 1
-                Move(vectorToMove,objectToMove,"right")
+                Move(vectorToMove,objectToMove,"right",1)
             when 2
-                Move(vectorToMove,objectToMove,"up")
+                Move(vectorToMove,objectToMove,"up",1)
             when 3
-                Move(vectorToMove,objectToMove,"left")
+                Move(vectorToMove,objectToMove,"left",1)
             when 4
-                Move(vectorToMove,objectToMove,"down")
+                Move(vectorToMove,objectToMove,"down",1)
             end
         end
     end   

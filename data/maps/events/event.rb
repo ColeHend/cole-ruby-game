@@ -17,7 +17,7 @@ class Event
     @eventObject = object
     @eventTrigger = eventTrigger
     @solid = collidable
-    @moveType = "facePlayer"
+    @moveType = "followPlayer"
     @activateType = "SELECT" # SELECT or TOUCH options
     @distance = 1
     @hpbar = HPbar.new(@x,@y,10,10)
@@ -50,7 +50,7 @@ class Event
     @player = $scene_manager.scene["player"]
     update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
     @hpbar.update(@x,@y,10,10)
-
+    set_move(@moveType)
   end
 
   def draw()
