@@ -21,7 +21,7 @@ class PlayAnimation
     end
 
     def draw
-        if @off == true
+        if @off == false
             @drawAnimation.draw
         end
     end
