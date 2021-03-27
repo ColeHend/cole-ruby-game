@@ -9,15 +9,15 @@ require_relative "characters/character_npc.rb"
 require "json"
 
 class Map01
-    attr_reader :map, :mapfile, :events, :width, :height
+    attr_reader :name, :map, :mapfile, :events, :width, :height
     include WindowBase
     def initialize()
         # Initilize variables
-        @events = $scene_manager.eventMap[1]
+        @name = "map01"
         @talkin = false
         @tileset = $scene_manager.images["CastleTownTileset"]
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
-        
+        @events = $scene_manager.eventMap[1]
         @map = Mapper.new(@tileset,30,20,@mapfile)
         @width = 30
         @height = 20
@@ -27,7 +27,7 @@ class Map01
 
         #Event choices and Windows
         @diffDialog = DialogBox.new(0,10,20,5,"ev0Dialog","Here's Johnny!! Have fun on map 2 with 300 more XP.")
-        
+        @showChoices = false
         @showSkinChoices = false
         @windowSkinChoice = [
             Option.new("FancySkin",->(){$scene_manager.images["windowSkin"] = $scene_manager.images["fancyWindowSkin"] }),
@@ -70,7 +70,7 @@ class Map01
         $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event102",
             Event.new($scene_manager.object["Event102"], EventTrigger::ACTION_KEY, true, ->(){
-                if !@showChoices 
+                if @showChoices == false
                     #$scene_manager.input.removeFromStack(@optionsBox.stackName)
                     $scene_manager.input.addToStack(@optionsBox.stackName)
                     @showChoices = true
@@ -92,17 +92,18 @@ class Map01
             @diffDialog.draw_box(->(){@talkin = false
                 $scene_manager.input.removeFromStack(@diffDialog.stackName)
                 $scene_manager.input.addToStack("map")
-                $scene_manager.scene["map"].change_map("map2")})
+                $scene_manager.scene["map"].change_map("map02")})
         end
     end
     def update
-        $scene_manager.event["Event101"].set_move("random")
-        $scene_manager.event["Event102"].set_move("faceFollowPlayer")
-        #$scene_manager.eventMap[1]
+        #$scene_manager.event["Event101"].set_move("random")
+        #$scene_manager.event["Event102"].set_move("followPlayer")
         @map.update()
-        if @showChoices
-            @optionsBox.update
+        #$scene_manager.eventMap[1]
+        if @showChoices == true
+            @optionsBox.update()
         end
+            
         if @showSkinChoices
             @windowSkinBox.update
         end

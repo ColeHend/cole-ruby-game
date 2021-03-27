@@ -5,4 +5,5 @@ module InputTrigger
     RIGHT = Gosu::KbRight
     SELECT = Gosu::KbSpace
     ESCAPE = Gosu::KbEscape
+    ATTACK = Gosu::KbF
 end

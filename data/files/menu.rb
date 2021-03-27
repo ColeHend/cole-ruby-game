@@ -2,6 +2,7 @@ require_relative "input_trigger.rb"
 require_relative "option.rb"
 require_relative "optionsBox.rb"
 require_relative "windowBase.rb"
+require_relative "save_game.rb"
 class Menu
     include WindowBase
 
@@ -58,9 +59,12 @@ class Menu
         @options = [Option.new("Party",->(){}),
             Option.new("Items",->(){@input.addToStack("itemsBox")
                 @showItems = true }),
-                
-            Option.new("Save",->(){}),
-            Option.new("Exit Game",->(){})]
+            Option.new("Save",->(){SaveGame.new().writeSave(1)}),
+            Option.new("Exit Game",->(){
+                @input.removeFromStack(@optionsBox.stackName)
+                $scene_manager.input.addToStack("optionsBox")
+                $scene_manager.switch_scene("title")
+            })]
         @optionsBox = OptionsBox.new("options",0,0,3,8,@options,"")
         @itemsBox = OptionsBox.new("itemsBox",5,0,3,8,@items,"")
         #@optionsBox.exitable = false
@@ -153,10 +157,10 @@ class Menu
         @partyXP = @party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
         
         for a in (0...@party.length)
-            @partyNames[a].draw((10*32)+(74*a), 20, 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyLVL[a].draw((10*32)+(74*a), 45, 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyXP[a].draw((10*32)+(74*a), 70, 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyHP[a].draw((10*32)+(74*a), 95, 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyNames[a].draw((10*32), 20+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyLVL[a].draw((10*32), 45+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyXP[a].draw((10*32), 70+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyHP[a].draw((10*32), 95+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
         end
 
         #Draw Windows And Boxes

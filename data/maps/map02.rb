@@ -8,15 +8,17 @@ require_relative "characters/inventory.rb"
 require_relative "characters/character_npc.rb"
 require "json"
 class Map02 < Map
-    attr_reader :mapfile, :map , :events, :width, :height
+    attr_reader :name, :mapfile, :map , :events, :width, :height
     include WindowBase
     def initialize()
         #Variable Init
+        @name = "map02"
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
         @tileset = $scene_manager.images["CastleTownTileset"]
-        @map = Mapper.new(@tileset,40,30,@mapfile)
+        @width, @height = 30, 20
+        @map = Mapper.new(@tileset,@width,@height,@mapfile)
         @events = $scene_manager.eventMap[2]
-        @width, @height = 40, 30
+        
         @followDialog = DialogBox.new(0,10,20,5,"ev0SetMove","I LOVE YOU!! I'm going to follow you. Have 5000 XP.")
         @talkin = false
 
@@ -28,20 +30,20 @@ class Map02 < Map
                 #@talkin = true
                 #$scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
-                @events[0].set_move("followPlayer",6)
-                @events[1].set_move("random",1)
-                puts("_____________Inventory_________________")
-                $scene_manager.feature["party"].inventory.each{|e| puts(e.name)}
-                puts("_______________________________________")
+                @events[0].set_move("followPlayer")
+                @events[1].set_move("random")
         },PlayerCharacter.new("Event201",10)
         ))
 
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
-                $scene_manager.scene["map"].change_map("map1")
+                puts("welcome to back to map 1!")
+                $scene_manager.scene["map"].change_map("map01")
             },PlayerCharacter.new("Event202",10)
             ))
         
+            
+            
     end
 
     def draw()

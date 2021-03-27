@@ -1,4 +1,3 @@
-#require_relative "maps/characters/player_party.rb"
 class TitleScreen
     def initialize()
         @gameName = Gosu::Image.from_text("The Game", 30)
@@ -11,7 +10,7 @@ class TitleScreen
             $scene_manager.register("title",TitleScreen.new())
             $scene_manager.register("gameover",Gameover.new())
             $scene_manager.registerFeature("party",PlayerParty.new)
-            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10))
+            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10.0))
             $scene_manager.register("player",Player.new())
             $scene_manager.register("map",SceneMap.new())
             
@@ -25,9 +24,10 @@ class TitleScreen
             #$scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
             $scene_manager.register("menu",Menu.new())
             $scene_manager.input.addToStack("map")
+            
             $scene_manager.switch_scene("map")
         }),
-            Option.new("Load Game",->(){}),
+            Option.new("Load",->(){SaveGame.new().loadSave(1)}),
             Option.new("Exit",->(){$window.close()})]
         @optionsBox = OptionsBox.new("optionsBox",8,8,3,2,@choice,"")
         #@optionsBox.currentColor = Gosu::Color.argb(0xff_2ca81e)

@@ -4,7 +4,7 @@ class PlayerParty
     attr_accessor :gold, :party, :inventory, :items, :maxPartySize, :deathCap, :deathTotal
     def initialize
         @party = Array.new()
-        @maxPartySize = 1
+        @maxPartySize = 2
         @gold = 24
         @inventory = Inventory.new()
         @deathCap = @maxPartySize

@@ -1,5 +1,5 @@
 require_relative "../../files/animate.rb"
-require_relative "../move_collision.rb"
+require_relative "move_collision.rb"
 require_relative "../scene_map.rb"
 require_relative "../map.rb"
 require_relative "../map01.rb"
@@ -72,37 +72,37 @@ module Control_movement
 
         if (playerX - objectX).abs > (playerY - objectY).abs && (playerX - objectX).abs <= range #Range
                 if playerX < objectX && @facing == "left" #player to left
-                    if check_surrounding("left") != true
+                    if check_surrounding("left", objectToMove)  != true
                         Move(vectorToMove,objectToMove,"left")
-                    elsif check_surrounding("left") != true
+                    elsif check_surrounding("left", objectToMove)  != true
                         if playerY > objectY # player below
-                            if check_surrounding("down") != true
+                            if check_surrounding("down", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"down")
-                            elsif check_surrounding("up") != true
+                            elsif check_surrounding("up", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"up")
                             end
                         elsif playerY < objectY #player above
-                            if check_surrounding("up") != true
+                            if check_surrounding("up", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"up")
-                            elsif check_surrounding("down") != true
+                            elsif check_surrounding("down", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"down")
                             end
                         end
                     end
                 elsif playerX>objectX && @facing == "right" #player to right
-                    if check_surrounding("right") != true
+                    if check_surrounding("right", objectToMove)  != true
                         Move(vectorToMove,objectToMove,"right")
-                    elsif check_surrounding("right") != true
+                    elsif check_surrounding("right", objectToMove)  != true
                         if playerY > objectY # player below
-                            if check_surrounding("down") != true
+                            if check_surrounding("down", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"down")
-                            elsif check_surrounding("up") != true
+                            elsif check_surrounding("up", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"up")
                             end
                         elsif playerY < objectY #player above
-                            if check_surrounding("up") != true
+                            if check_surrounding("up", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"up")
-                            elsif check_surrounding("down") != true
+                            elsif check_surrounding("down", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"down")
                             end
                         end
@@ -110,37 +110,37 @@ module Control_movement
                 end
         elsif (playerX - objectX).abs < (playerY - objectY).abs && (playerY - objectY).abs <= range  #Range
                 if playerY > objectY && @facing == "down" #player to below
-                    if check_surrounding("down") != true
+                    if check_surrounding("down", objectToMove)  != true
                         Move(vectorToMove,objectToMove,"down")
-                    elsif check_surrounding("down") != true
+                    elsif check_surrounding("down", objectToMove)  != true
                         if playerX > objectX # player right
-                            if check_surrounding("right") != true
+                            if check_surrounding("right", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"right")
-                            elsif check_surrounding("left") != true
+                            elsif check_surrounding("left", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"left")
                             end
                         else #player left
-                            if check_surrounding("left") != true
+                            if check_surrounding("left", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"left")
-                            elsif check_surrounding("right") != true
+                            elsif check_surrounding("right", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"right")
                             end
                         end
                     end
                 elsif playerY < objectY && @facing == "up" #player to above
-                    if check_surrounding("up") != true
+                    if check_surrounding("up", objectToMove)  != true
                         Move(vectorToMove,objectToMove,"up")
-                    elsif check_surrounding("up") != true
+                    elsif check_surrounding("up", objectToMove)  != true
                         if playerX > objectX # player right
-                            if check_surrounding("right") != true
+                            if check_surrounding("right", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"right")
-                            elsif check_surrounding("left") != true
+                            elsif check_surrounding("left", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"left")
                             end
                         else #player left
-                            if check_surrounding("left") != true
+                            if check_surrounding("left", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"left")
-                            elsif check_surrounding("right") != true
+                            elsif check_surrounding("right", objectToMove)  != true
                             Move(vectorToMove,objectToMove,"right")
                             end
                         end
@@ -172,6 +172,7 @@ module Control_movement
     end   
     
     def triggerEvent(targetObject,activateType="SELECT")
+        # targetObject is likely the player
         # returns the event in that direction if present
         upEventCheck = checkDir(targetObject,"up",0,true)
         downEventCheck = checkDir(targetObject,"down",0,true)

@@ -1,8 +1,8 @@
-require_relative "../files/animate.rb"
-require_relative "scene_map.rb"
-require_relative "map.rb"
-require_relative "map01.rb"
-require_relative "map02.rb"
+require_relative "../../files/animate.rb"
+require_relative "../scene_map.rb"
+require_relative "../map.rb"
+require_relative "../map01.rb"
+require_relative "../map02.rb"
 #Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 module MoveCollision
     
