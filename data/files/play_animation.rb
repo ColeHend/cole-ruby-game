@@ -2,18 +2,18 @@ class PlayAnimation
     def initialize()
         @drawAnimation = nil
         @off = true
+        # V. new effect options
+        #(x, y = nil, img = nil, sprite_cols = nil, sprite_rows = nil, interval = 10, indices = nil, lifetime = nil, sound = nil, sound_ext = '.wav', sound_volume = 1)
+        @runEffects = Array.new()
+        #@slash = 
     end
 
     def play_animation(animation="slash",x,y)
         case animation
             when "slash"
-                @off = false
-                weapons04 = GameObject.new(x, y, 0, 0, "Weapon04", nil, 5, 5)
-                @drawAnimation = weapons04
-                @drawAnimation.animate([0,1,2,3,4],2) do
-                    @off = true
-                    puts("calleed")
-                end
+                #@slash.x = x
+                #@slash.y = y
+                @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4]))
             else 
                 puts("FAIL") 
                 
@@ -21,11 +21,20 @@ class PlayAnimation
     end
 
     def draw
-        if @off == false
-            @drawAnimation.draw
+        if @runEffects.length > 0
+            @runEffects.each {|effect|effect.draw}
         end
     end
 
     def update
+        if @runEffects.length > 0
+            @runEffects.each_with_index {|effect,index|
+                if effect.dead
+                    @runEffects.delete_at(index)
+                else
+                    effect.update
+                end
+            }
+        end
     end
 end

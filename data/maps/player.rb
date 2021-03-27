@@ -53,25 +53,25 @@ class Player
         vector = Vector2.new(moveX, moveY)
         if Gosu.button_down?(InputTrigger::RUN)
             speed = 1.25
-            timing = 5
+            animationTime = 5
         elsif Gosu.button_down?(InputTrigger::SNEAK)
-            speed = 0.5
-            timing = 10
+            speed = 0.25
+            animationTime = 10
         else
             speed = 0.75
-            timing = 7
+            animationTime = 7
         end
         if @input.keyDown(InputTrigger::UP)
-            Move(vector,@player,"up",speed,timing)
+            Move(vector,@player,"up",speed,animationTime)
             @facing = "up"
         elsif @input.keyDown(InputTrigger::DOWN)
-            Move(vector,@player,"down",speed,timing)
+            Move(vector,@player,"down",speed,animationTime)
             @facing = "down"
         elsif @input.keyDown(InputTrigger::LEFT)
-            Move(vector,@player,"left",speed,timing)
+            Move(vector,@player,"left",speed,animationTime)
             @facing = "left"
         elsif @input.keyDown(InputTrigger::RIGHT)
-            Move(vector,@player,"right",speed,timing)
+            Move(vector,@player,"right",speed,animationTime)
             @facing = "right"
         end
         if @input.keyPressed(InputTrigger::ATTACK)

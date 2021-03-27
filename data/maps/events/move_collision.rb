@@ -83,7 +83,7 @@ module MoveCollision
                     return false
                 end
             when "down"
-                if objectY == (mHeight * 32-16)
+                if objectY >= (mHeight * 32-16)
                     return true
                 elsif checkDir(targetObject,"down") == true#true collide
                     return true
@@ -91,7 +91,7 @@ module MoveCollision
                     return false
                 end
             when "left" 
-                if objectX == 0 
+                if objectX <= 1 
                     return true
                 elsif checkDir(targetObject,"left") == true#true collide
                     return true
