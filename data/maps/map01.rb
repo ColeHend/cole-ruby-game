@@ -64,7 +64,7 @@ class Map01
                 $scene_manager.feature["party"].addToParty(NpcCharacter.new("Johnny",5))
                 $scene_manager.feature["party"].party[0].level_up
                 
-        },PlayerCharacter.new("Event101",10)))
+        },PlayerCharacter.new("Event101",10.0)))
 
         # Event 102
         $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
@@ -77,7 +77,7 @@ class Map01
                 else
                     #@optionBox.hidden = true
                 end
-        },NpcCharacter.new("Event102",10)))
+        },PlayerCharacter.new("Event102",10.0)))
         
         
     end

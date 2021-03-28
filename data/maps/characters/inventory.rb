@@ -1,4 +1,6 @@
 require_relative "item.rb"
+require_relative "weapon.rb"
+require_relative "armor.rb"
 class Inventory
     attr_reader :items, :weapons, :armor
     def initialize
