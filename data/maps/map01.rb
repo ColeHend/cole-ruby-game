@@ -5,6 +5,7 @@ require_relative "events/event_trigger.rb"
 require_relative "../files/windowBase.rb"
 require_relative "../files/optionsBox.rb"
 require_relative "characters/character_player.rb"
+require_relative "characters/enemy_bestiary.rb"
 require_relative "characters/character_npc.rb"
 require "json"
 
@@ -24,6 +25,7 @@ class Map01
         @curEvnt = false
         @sceneMap = $scene_manager.scene["map"]
         @theParty = $scene_manager.feature["party"]
+        @bestiary = Bestiary.new()
 
         #Event choices and Windows
         @diffDialog = DialogBox.new(0,10,20,5,"ev0Dialog","Here's Johnny!! Have fun on map 2 with 300 more XP.")
@@ -55,6 +57,26 @@ class Map01
         #@optionBox.hidden(true) 
 
         #   -----Events-----
+        #------------------------WarpSquare--------------------------------
+        teleport1 = $scene_manager.registerEvent(1,"Teleport101",
+            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+                $scene_manager.scene["map"].change_map("map02")
+                $scene_manager.object["player"].y += 32
+                
+        },@bestiary.enemy("god")))
+        puts(teleport1)
+        teleport1[0].activateType = "TOUCH"
+        teleport1[0].x = 12*32
+        teleport1[0].y = 16
+        teleport2 = $scene_manager.registerEvent(1,"Teleport102",
+            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+                $scene_manager.scene["map"].change_map("map02")
+                $scene_manager.object["player"].y += 32
+        },@bestiary.enemy("god")))
+        teleport2[0].activateType = "TOUCH"
+        teleport2[0].x = 13*32
+        teleport2[0].y = 16
+        #-----------------------------------------------------------------
         # Event 101
         $scene_manager.register_object("Event101","greenMan",7*32,10*32,30,46,4,4)
         $scene_manager.registerEvent(1,"Event101",
@@ -64,7 +86,7 @@ class Map01
                 $scene_manager.feature["party"].addToParty(NpcCharacter.new("Johnny",5))
                 $scene_manager.feature["party"].party[0].level_up
                 
-        },PlayerCharacter.new("Event101",10.0)))
+        },@bestiary.enemy("goblin")))
 
         # Event 102
         $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
@@ -77,8 +99,7 @@ class Map01
                 else
                     #@optionBox.hidden = true
                 end
-        },PlayerCharacter.new("Event102",10.0)))
-        
+        },@bestiary.enemy("ghost")))
         
     end
     def draw
@@ -96,8 +117,11 @@ class Map01
         end
     end
     def update
-        #$scene_manager.event["Event101"].set_move("random")
-        #$scene_manager.event["Event102"].set_move("followPlayer")
+        $scene_manager.eventMap[1].each {|e|
+        if e.eventObject != nil
+            e.set_move("followPlayer",13*32)
+        end
+        }
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true

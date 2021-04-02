@@ -3,6 +3,7 @@ require_relative "../files/play_animation.rb"
 require_relative "../files/input_trigger.rb"
 require_relative "./events/movement_control.rb"
 require_relative "abs/fight_center.rb"
+require_relative "characters/magic/magic_attack.rb"
 Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 include Control_movement
 include Animate
@@ -17,6 +18,7 @@ class PlayerControl
         @input = $scene_manager.input
         @facing = "down"
         @fightControl = FightCenter.new
+        @magicAttack = MagicBook.new(@playerBattle.int)
     end
     def player_attack
         if @input.keyPressed(InputTrigger::ATTACK)
@@ -34,6 +36,8 @@ class PlayerControl
                 @skillAnimation.play_animation("slash",@playerObj.x-3*32,@playerObj.y-2*32,:vert)
                 @fightControl.meleeAttack(@playerObj,@playerBattle,@facing,32)
             end
+        elsif @input.keyPressed(InputTrigger::SPELL)
+            @magicAttack.ranged_shot(@playerObj,@facing,"firebolt")
         end
     end
     def move_input
@@ -91,12 +95,14 @@ class PlayerControl
         @x = (@playerObj.x)
         @y = (@playerObj.y)
         @skillAnimation.update
+        @magicAttack.update
         move_input
         player_attack
     end
 
     def draw
         @skillAnimation.draw
+        @magicAttack.draw
     end
 
 

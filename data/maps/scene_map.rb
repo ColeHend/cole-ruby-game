@@ -48,12 +48,15 @@ class SceneMap
             @currentMap.events.each_with_index {|e,index|    #updates events
                 e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT))
                 if e.battle.currentHP <= 0
-                    deadEvents.push(index)
+                    deadEvents.push([index,(e.battle.exp * 0.05)])
                 end
             } 
             if deadEvents.length > 0
                 deadEvents.each {|e|
-                @currentMap.events.delete_at(e)
+                    @party.party.each {|pers|
+                        pers.give_xp(e[1])
+                    }
+                    @currentMap.events.delete_at(e[0])
                 }
             end
         end

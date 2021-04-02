@@ -2,6 +2,7 @@ require_relative "map.rb"
 require_relative "scene_map.rb"
 require_relative "events/event.rb"
 require_relative "events/event_trigger.rb"
+require_relative "characters/enemy_bestiary.rb"
 require_relative "../files/windowBase.rb"
 require_relative "../files/dialogBox.rb"
 require_relative "characters/inventory.rb"
@@ -21,8 +22,27 @@ class Map02 < Map
         
         @followDialog = DialogBox.new(0,10,20,5,"ev0SetMove","I LOVE YOU!! I'm going to follow you. Have 5000 XP.")
         @talkin = false
-
+        @bestiary = Bestiary.new()
         #Events
+        #------------------------WarpSquare--------------------------------
+        teleport1 = $scene_manager.registerEvent(2,"Teleport201",
+            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+                $scene_manager.scene["map"].change_map("map01")
+                $scene_manager.object["player"].y += 32
+                
+        },@bestiary.enemy("god")))
+        teleport1[0].activateType = "TOUCH"
+        teleport1[0].x = 12*32
+        teleport1[0].y = 16
+        teleport2 = $scene_manager.registerEvent(2,"Teleport202",
+            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+                $scene_manager.scene["map"].change_map("map01")
+                $scene_manager.object["player"].y += 32
+        },@bestiary.enemy("god")))
+        teleport2[0].activateType = "TOUCH"
+        teleport2[0].x = 13*32
+        teleport2[0].y = 16
+        #-----------------------------------------------------------------
         $scene_manager.register_object("Event201","shadowGuy",6*32,5*32,32,48,4,4)
         $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
         $scene_manager.registerEvent(2,"Event201",
@@ -32,14 +52,12 @@ class Map02 < Map
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
                 @events[0].set_move("followPlayer")
                 @events[1].set_move("random")
-        },PlayerCharacter.new("Event201",10)
+        },@bestiary.enemy("goblin")
         ))
 
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
-                puts("welcome to back to map 1!")
-                $scene_manager.scene["map"].change_map("map01")
-            },PlayerCharacter.new("Event202",10)
+            },@bestiary.enemy("ghost")
             ))
         
             
@@ -48,7 +66,7 @@ class Map02 < Map
 
     def draw()
         #@map.draw()
-        #$scene_manager.eventMap[2].each {|e|e.draw()}
+        
         if @talkin
             @followDialog.draw_box(->(){
                 @talkin = false
@@ -60,6 +78,7 @@ class Map02 < Map
 
     def update()
         @map.update()
+        $scene_manager.eventMap[2].each {|e|e.set_move("followPlayer",13*32)}
         #$scene_manager.eventMap[1].each {|e|@map.collision[e.x][e.y] = 1}
     end
 end

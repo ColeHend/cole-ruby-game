@@ -75,7 +75,7 @@ module MoveCollision
         objectY = targetObject.y
         case direction
             when "up"
-                if objectY <= 32 
+                if objectY <= 0 
                     return true
                 elsif checkDir(targetObject,"up") == true#true collide
                     return true
@@ -108,6 +108,38 @@ module MoveCollision
                 end
         end
             
+    end
+
+    def check_collision(targetObject,rangeBoost = 0,evtReturn = false)
+        if checkDir(targetObject,"up") == true
+            if evtReturn == true
+                event = checkDir(targetObject,"up",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        elsif checkDir(targetObject,"down") == true
+            if evtReturn == true
+                event = checkDir(targetObject,"down",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        elsif checkDir(targetObject,"left") == true
+            if evtReturn == true
+                event = checkDir(targetObject,"left",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        elsif checkDir(targetObject,"right") == true
+            if evtReturn == true
+                event = checkDir(targetObject,"right",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        end
     end
         
     

@@ -30,7 +30,7 @@ class Player
     end
     
     def draw
-        @currentMap =  $scene_manager.scene["map"].currentMap.map.theMap
+        @currentMap =  $scene_manager.scene["map"].currentMap.map
         @player = $scene_manager.object["player"]
         if @showPlayer == true
             @player.draw()

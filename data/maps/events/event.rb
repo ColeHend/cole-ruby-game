@@ -3,21 +3,30 @@ require_relative "move_collision.rb"
 require_relative "movement_control.rb"
 require_relative "hpbar.rb"
 class Event
-  attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :moveType, :distance, :battle, :activateType, :vector
+  attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :moveType, :distance, :battle, :activateType, :vector, :eventObject
   include MoveCollision, Animate, Control_movement
   def initialize(object, eventTrigger, collidable, event,battle)
-    @x = object.x 
-    @y = object.y
-    @w = object.w
-    @h = object.h
+    if object != nil
+      @x = object.x 
+      @y = object.y
+      @w = object.w
+      @h = object.h
+      
+    else
+      @x = 0 
+      @y = 0
+      @w = 32
+      @h = 32
+    end
+    @eventObject = object
     @vector = Vector2.new(0, 0)
     @z = 5
     @dir = 8
     @battle = battle
-    @eventObject = object
+    
     @eventTrigger = eventTrigger
     @solid = collidable
-    @moveType = "followPlayer"
+    @moveType = "none"
     @activateType = "SELECT" # SELECT or TOUCH options
     @distance = 1
     @hpbar = HPbar.new(@x,@y,@battle.hp,@battle.currentHP)
@@ -28,7 +37,7 @@ class Event
 
   end
 
-  def set_move(kind,dist=6*32)
+  def set_move(kind,dist=12*32)
     canMove()
     @moveType = kind
     @distance = dist
@@ -39,6 +48,7 @@ class Event
         RandomMove(@vector,@eventObject,randomDir,startTime)
       when "followPlayer"
         Follow(@vector, @eventObject,dist)
+      when "none"
     end
   end
 
@@ -57,8 +67,10 @@ class Event
 
   def draw()
     if @battle.currentHP > 0
-      @eventObject.draw()
-      @hpbar.draw
+      if @eventObject != nil
+        @eventObject.draw()
+        @hpbar.draw
+      end
     end
     #draw_character(@sprite,@dir,@x,@y,@z,@animate,@canMove,@time,@frame,@moving)
   end

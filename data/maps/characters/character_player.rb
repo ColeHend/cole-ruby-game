@@ -2,16 +2,16 @@ require_relative "character_base.rb"
 require_relative "weapon.rb"
 require_relative "armor.rb"
 class PlayerCharacter < CharacterBase
-    attr_accessor :currentHP, :alive, :exp, :playerLevel, :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands
-    attr_reader :totalArmor, :str, :dex, :int, :con,:hp
-    def initialize(name,hp,str=14,dex=12,int=12,con=12)
+    attr_accessor :currentHP, :alive, :exp, :playerLevel, :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor
+    attr_reader :str, :dex, :int, :con, :hp, :mRes, :deathExp
+    def initialize(name,hp,str=14,dex=12,int=12,con=12,mRes=1)
         self.name = name
         self.hp = hp
         @alive = true
         @currentHP = hp
         @playerLevel = 1
         @exp = 0
-        @str, @dex, @int, @con = str, dex, int, con
+        @str, @dex, @int, @con, @mRes = str, dex, int, con, mRes
         @lvlUpExp = (1000*@playerLevel)
         @weapon = Weapon.new("Sword",10)
         @shield = nil
@@ -22,10 +22,9 @@ class PlayerCharacter < CharacterBase
         @legs = nil
         @feet = nil
         @totalArmor = total_ac(0)
-        
     end
     def getMod(stat)
-        modifier = ((stat - 10)/2)
+        modifier = ((stat - 10))
         return modifier
     end
     

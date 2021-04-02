@@ -13,6 +13,8 @@ class PlayAnimation
         case animation
             when "slash"
                 @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4]))
+            when "fire"
+                @runEffects.push(Effect.new(x, y, "fire", 5, 2, 1, [0,1,2,3]))
             else 
                 puts("FAIL") 
                 

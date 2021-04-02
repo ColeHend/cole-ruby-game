@@ -7,7 +7,7 @@ class FightCenter
     end
 
     def damage_calc(wpnDMG,str=2,armor=10)
-        damage = ((wpnDMG*str)/armor)
+        damage = ((wpnDMG*str)/armor+2)
         return damage
     end
     def magicDamage_calc(mDMG,int,mRes)
@@ -21,10 +21,8 @@ class FightCenter
             defender = checkDir(attackerObj,"up",rangeBoost,true)
             defender = defender.battle
             damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
-            puts("-------------up-----------------")
+            puts("-------------#{defender.name}-----------------")
             puts("damage: #{damage}")
-            puts("wpnDmg: #{attacker.weapon.damage}")
-            puts("modif: #{attacker.getMod(attacker.str)}")
             puts("armor: #{defender.totalArmor}")
             puts("defenderBeforeHP: #{defender.currentHP}")
             defender.currentHP -= damage
@@ -57,10 +55,8 @@ class FightCenter
             defender = checkDir(attackerObj,"up",rangeBoost,true)
             defender = defender.battle
             damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-            puts("-------------up-----------------")
+            puts("-----magic--------#{defender.name}-----------------")
             puts("damage: #{damage}")
-            puts("wpnDmg: #{attacker.weapon.damage}")
-            puts("modif: #{attacker.getMod(attacker.int)}")
             puts("armor: #{defender.totalArmor}")
             puts("defenderBeforeHP: #{defender.currentHP}")
             defender.currentHP -= damage
@@ -85,6 +81,7 @@ class FightCenter
             damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
             defender.currentHP -= damage
         end
+    end
 
     def update
     end
