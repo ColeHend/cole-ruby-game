@@ -13,11 +13,12 @@ class Spellbook
             object = $scene_manager.register_object("firebolt","fireshotCharacter",0,0,32,32,4,4)
             spell = PlayerCharacter.new("firebolt",1)
             mDMG = 5
+            collisionDetect = MoveCollision.new
             #
             spell.totalArmor = 1
             animName = "fire"
             spellEff = ->(){
-                defender = check_collision(object,8,true)
+                defender = collisionDetect.check_collision(object,8,true)
                 if defender != nil
                     damage = FightCenter.new.magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)

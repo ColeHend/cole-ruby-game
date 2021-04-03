@@ -4,7 +4,7 @@ require_relative "movement_control.rb"
 require_relative "hpbar.rb"
 class Event
   attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :moveType, :distance, :battle, :activateType, :vector, :eventObject
-  include MoveCollision, Animate, Control_movement
+  include Animate, Control_movement
   def initialize(object, eventTrigger, collidable, event,battle)
     if object != nil
       @x = object.x 

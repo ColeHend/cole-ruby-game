@@ -4,8 +4,9 @@ require_relative "../map.rb"
 require_relative "../map01.rb"
 require_relative "../map02.rb"
 #Dir[File.join(__dir__, '*.rb')].each { |file| require file }
-module MoveCollision
-    
+class MoveCollision
+    def initialize()
+    end
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
     end

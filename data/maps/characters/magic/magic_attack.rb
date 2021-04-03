@@ -23,15 +23,17 @@ class MagicBook
     def make_shot(targetObject,spellEVT,facing,spellStability)
         range = 5*8
         u = 0
+        
             Thread.new{
+                collisionDetect = MoveCollision.new
                 until u > range do
                     
                     Move(spellEVT.vector,targetObject,facing,1,4)
                     
-                    if check_collision(targetObject) == true
+                    if collisionDetect.check_collision(targetObject) == true
                         spellEVT.activate_event
                         break
-                    elsif check_collision(targetObject) != true && u == range
+                    elsif collisionDetect.check_collision(targetObject) != true && u == range
                         spellEVT.activate_event
                         break
                     end
