@@ -71,10 +71,14 @@ module Control_movement
         objDetect = MoveCollision.new
         if (objectToFollow.x - objectToMove.x ).abs >= (objectToFollow.y - objectToMove.y).abs && (objectToFollow.x - objectToMove.x ).abs <= range # In Range X Dis Greater
             if objectToFollow.x < objectToMove.x
+                
                 if objDetect.check_surrounding("left", objectToMove)  == false
+                    
                     Move(vectorToMove,objectToMove,"left",1)
                 elsif objDetect.check_surrounding("left", objectToMove)  == true
+                    
                     if objDetect.check_surrounding("down", objectToMove)  == false
+                        puts(objectToMove)
                         Move(vectorToMove,objectToMove,"down",1)
                     elsif objDetect.check_surrounding("up", objectToMove)  == false
                         Move(vectorToMove,objectToMove,"up",1)
