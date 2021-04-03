@@ -41,13 +41,14 @@ class Event
     canMove()
     @moveType = kind
     @distance = dist
+    vector2 = Vector2.new(0, 0)
     case @moveType
       when "random"
         randomDir = rand(4)
         startTime = Gosu.milliseconds
         RandomMove(@vector,@eventObject,randomDir,startTime)
       when "followPlayer"
-        Follow(@vector, @eventObject,dist)
+        Follow(vector2, @eventObject,dist)
       when "none"
     end
   end

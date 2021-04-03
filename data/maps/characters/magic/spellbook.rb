@@ -10,11 +10,12 @@ class Spellbook
     def spell(spellName)
         case spellName
         when "firebolt"
-            object = GameObject.new(0, 0, 32, 32, :fireshotCharacter, nil, 4, 4)
+            object = $scene_manager.register_object("firebolt","fireshotCharacter",0,0,32,32,4,4)
             spell = PlayerCharacter.new("firebolt",1)
             mDMG = 5
             #
             spell.totalArmor = 1
+            animName = "fire"
             spellEff = ->(){
                 defender = check_collision(object,8,true)
                 if defender != nil
@@ -35,7 +36,7 @@ class Spellbook
                 end
                 spell.currentHP = 0
             }
-            array = [object,spell,spellEff]
+            array = [object,spell,spellEff,animName]
             return array
         end
     end

@@ -37,7 +37,7 @@ class PlayerControl
                 @fightControl.meleeAttack(@playerObj,@playerBattle,@facing,32)
             end
         elsif @input.keyPressed(InputTrigger::SPELL)
-            @magicAttack.ranged_shot(@playerObj,@facing,"firebolt")
+                @magicAttack.ranged_shot(@playerObj,@facing,"firebolt")
         end
     end
     def move_input
