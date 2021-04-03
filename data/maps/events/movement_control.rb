@@ -16,137 +16,140 @@ module Control_movement
         end
     end
 
-    def Move(vector,objectToMove,direction,speed=1)
+    def Move(vector,objectToMove,direction,speed=1,timing = 6)
         vector.x = 0
         vector.y = 0
 
         case direction
             when "down"
-                vector.y = 1
+                vector.y = speed
             when "up"
-                vector.y = -1
+                vector.y = -speed
             when "right"
-                vector.x = 1
+                vector.x = speed
             when "left"
-                vector.x = -1
+                vector.x = -speed
             when "none"
                 vector.x = 0
                 vector.y = 0
         end
 
+        
         newXPos = objectToMove.x + (vector.x * 4)
         newYPos = objectToMove.y + (vector.y * 4)
-
         if vector.y > 0
-            if check_surrounding("down",objectToMove) != true
+            if check_surrounding("down",objectToMove) == false
                 objectToMove.y = newYPos
-                draw_character(objectToMove, "down",5)
+                draw_character(objectToMove, "down",timing)
             end
         elsif vector.y < 0
-            if check_surrounding("up",objectToMove) != true
+            if check_surrounding("up",objectToMove) == false
                 objectToMove.y = newYPos
-                draw_character(objectToMove, "up",5)
+                draw_character(objectToMove, "up",timing)
             end
         elsif vector.x > 0
-            if check_surrounding("right",objectToMove) != true
+            if check_surrounding("right",objectToMove) == false
                 objectToMove.x = newXPos
-                draw_character(objectToMove, "right",5)
+                draw_character(objectToMove, "right",timing)
             end
         elsif vector.x < 0
-            if check_surrounding("left",objectToMove) != true
+            if check_surrounding("left",objectToMove) == false
                 objectToMove.x = newXPos
-                draw_character(objectToMove, "left",5)
+                draw_character(objectToMove, "left",timing)
             end
         end
         
     end
 
     def Follow(vectorToMove, objectToMove,range=6*32,objectToFollow=$scene_manager.scene["player"])
-        objectX = objectToMove.x 
-        objectY = objectToMove.y 
+        #puts(objectToFollow.x)
+        #puts("^follow |  v Move")
+        #puts(objectToMove.x)
         #@w = objectToMove.w
         #@h = objectToMove.h
-        playerX = objectToFollow.x
-        playerY = objectToFollow.y
         lockedOn = false
 
-        if (playerX - objectX).abs > (playerY - objectY).abs && (playerX - objectX).abs <= range #Range
-                if playerX < objectX && @facing == "left" #player to left
-                    if check_surrounding("left", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"left")
-                    elsif check_surrounding("left", objectToMove)  != true
-                        if playerY > objectY # player below
-                            if check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
-                            elsif check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
+        if (objectToFollow.x - objectToMove.x ).abs > (objectToFollow.y - objectToMove.y).abs && (objectToFollow.x - objectToMove.x ).abs <= range #Range
+                if objectToFollow.x < objectToMove.x  # && @facing == "left" #player to left
+                    if check_surrounding("left", objectToMove)  == true
+                        Move(vectorToMove,objectToMove,"left",1)
+                    elsif check_surrounding("left", objectToMove)  == true
+                        if objectToFollow.y > objectToMove.y # player below
+                            if check_surrounding("down", objectToMove)  == true
+                                puts("called")
+                                Move(vectorToMove,objectToMove,"down",1)
+                            elsif check_surrounding("up", objectToMove)  == true
+                                puts("called")
+                                Move(vectorToMove,objectToMove,"up",1)
                             end
-                        elsif playerY < objectY #player above
-                            if check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
-                            elsif check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
-                            end
-                        end
-                    end
-                elsif playerX>objectX && @facing == "right" #player to right
-                    if check_surrounding("right", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"right")
-                    elsif check_surrounding("right", objectToMove)  != true
-                        if playerY > objectY # player below
-                            if check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
-                            elsif check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
-                            end
-                        elsif playerY < objectY #player above
-                            if check_surrounding("up", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"up")
-                            elsif check_surrounding("down", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"down")
+                        elsif objectToFollow.y < objectToMove.y #player above
+                            if check_surrounding("up", objectToMove)  == true
+                                puts("called")
+                            Move(vectorToMove,objectToMove,"up",1)
+                            elsif check_surrounding("down", objectToMove)  == true
+                                puts("called")
+                            Move(vectorToMove,objectToMove,"down",1)
                             end
                         end
                     end
-                end
-        elsif (playerX - objectX).abs < (playerY - objectY).abs && (playerY - objectY).abs <= range  #Range
-                if playerY > objectY && @facing == "down" #player to below
-                    if check_surrounding("down", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"down")
-                    elsif check_surrounding("down", objectToMove)  != true
-                        if playerX > objectX # player right
-                            if check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
-                            elsif check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
+                elsif objectToFollow.x>objectToMove.x  # && @facing == "right" #player to right
+                    if check_surrounding("right", objectToMove)  == true
+                        Move(vectorToMove,objectToMove,"right",1)
+                    elsif check_surrounding("right", objectToMove)  == true
+                        if objectToFollow.y > objectToMove.y # player below
+                            if check_surrounding("down", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"down",1)
+                            elsif check_surrounding("up", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"up",1)
                             end
-                        else #player left
-                            if check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
-                            elsif check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
-                            end
-                        end
-                    end
-                elsif playerY < objectY && @facing == "up" #player to above
-                    if check_surrounding("up", objectToMove)  != true
-                        Move(vectorToMove,objectToMove,"up")
-                    elsif check_surrounding("up", objectToMove)  != true
-                        if playerX > objectX # player right
-                            if check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
-                            elsif check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
-                            end
-                        else #player left
-                            if check_surrounding("left", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"left")
-                            elsif check_surrounding("right", objectToMove)  != true
-                            Move(vectorToMove,objectToMove,"right")
+                        elsif objectToFollow.y < objectToMove.y #player above
+                            if check_surrounding("up", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"up",1)
+                            elsif check_surrounding("down", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"down",1)
                             end
                         end
                     end
                 end
-        elsif (playerY - objectY).abs <= (@range) && (playerX - objectX).abs <= (@range)
+        elsif (objectToFollow.x - objectToMove.x ).abs < (objectToFollow.y - objectToMove.y).abs && (objectToFollow.y - objectToMove.y).abs <= range  #Range
+                if objectToFollow.y > objectToMove.y # && @facing == "down" #player to below
+                    if check_surrounding("down", objectToMove)  == true
+                        Move(vectorToMove,objectToMove,"down",1)
+                    elsif check_surrounding("down", objectToMove)  == true
+                        if objectToFollow.x > objectToMove.x  # player right
+                            if check_surrounding("right", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"right",1)
+                            elsif check_surrounding("left", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"left",1)
+                            end
+                        else #player left
+                            if check_surrounding("left", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"left",1)
+                            elsif check_surrounding("right", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"right",1)
+                            end
+                        end
+                    end
+                elsif objectToFollow.y < objectToMove.y # && @facing == "up" #player to above
+                    if check_surrounding("up", objectToMove)  == true
+                        Move(vectorToMove,objectToMove,"up",1)
+                    elsif check_surrounding("up", objectToMove)  == false
+                        if objectToFollow.x > objectToMove.x  # player right
+                            if check_surrounding("right", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"right",1)
+                            elsif check_surrounding("left", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"left",1)
+                            end
+                        else #player left
+                            if check_surrounding("left", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"left",1)
+                            elsif check_surrounding("right", objectToMove)  == true
+                            Move(vectorToMove,objectToMove,"right",1)
+                            end
+                        end
+                    end
+                end
+        elsif (objectToFollow.y - objectToMove.y).abs <= (range) && (objectToFollow.x - objectToMove.x ).abs <= (range)
                # @animate = false
     
         end
@@ -156,17 +159,17 @@ module Control_movement
         @randomNum = rand(4)
         @delayStop = Gosu.milliseconds
         if (@delayStop - delayStart < 500)
-            case randomDir
+            case @randomNum
             when 0
                 Move(vectorToMove,objectToMove,"none")
             when 1
-                Move(vectorToMove,objectToMove,"right")
+                Move(vectorToMove,objectToMove,"right",1)
             when 2
-                Move(vectorToMove,objectToMove,"up")
+                Move(vectorToMove,objectToMove,"up",1)
             when 3
-                Move(vectorToMove,objectToMove,"left")
+                Move(vectorToMove,objectToMove,"left",1)
             when 4
-                Move(vectorToMove,objectToMove,"down")
+                Move(vectorToMove,objectToMove,"down",1)
             end
         end
     end   
@@ -179,6 +182,22 @@ module Control_movement
         leftEventCheck = checkDir(targetObject,"left",0,true)
         rightEventCheck = checkDir(targetObject,"right",0,true)
         #check if input and colliding
+        if checkDir(targetObject,"up") == true
+            activateType = upEventCheck
+            activateType = activateType.activateType
+        elsif checkDir(targetObject,"down") == true
+            activateType = downEventCheck
+            activateType = activateType.activateType
+        elsif checkDir(targetObject,"left") == true
+            activateType = leftEventCheck
+            activateType = activateType.activateType
+        elsif checkDir(targetObject,"right") == true
+            activateType = rightEventCheck
+            activateType = activateType.activateType
+        else
+            activateType = "SELECT"
+        end
+        
         if activateType == "SELECT"
             if KB.key_pressed?(InputTrigger::SELECT)
                 if checkDir(targetObject,"up") == true

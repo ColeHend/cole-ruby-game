@@ -19,7 +19,7 @@ class MyGame < GameWindow
     $scene_manager.register_image("CastleTownTileset","CastleTown",8,23)
     $scene_manager.images["windowSkin"] = $scene_manager.object["fancyWindowSkin"]
     
-    $scene_manager.register("player",Player.new())
+    #$scene_manager.register("player",Player.new())
     $scene_manager.switch_scene("title") 
   end
 

@@ -63,14 +63,10 @@ class OptionsBox
     def update
         if @input.keyPressed(InputTrigger::UP) then #down
             doInput("up") 
-            puts("optionsBox up")
         elsif @input.keyPressed(InputTrigger::DOWN) then #up
             doInput("down")
-            puts("optionsBox down")
         elsif @input.keyPressed(InputTrigger::SELECT) then #select
             doInput("select")
-            #@hidden = !@hidden
-            puts("optionsBox select")
         end
         @choiceNames = @choices.map{|e|e.text_image}
         @choice =  @choices.map{|e|e.function}

@@ -24,7 +24,7 @@ class PlayerParty
     def addToParty(character)
         if @party.length < @maxPartySize
             self.party.push(character)
-            @party.each(){|e|puts("New Party Member Name: "+e.name+"| HP: "+e.hp.to_s)}
+            #@party.each(){|e|puts("New Party Member Name: "+e.name+"| HP: "+e.hp.to_s)}
         end
     end
 

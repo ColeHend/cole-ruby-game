@@ -43,11 +43,22 @@ class SceneMap
         @currentMap.update()#update map
         #@currentMap.events.each {|e|@currentMap.map.collision[e.x][e.y] = 1}#update events collision
         stackLength = ($scene_manager.input.inputStack.length-1)
+        deadEvents = Array.new
         if $scene_manager.input.inputStack[stackLength] == "map"
-            @currentMap.events.each {|e|    #updates events
+            @currentMap.events.each_with_index {|e,index|    #updates events
                 e.update(@player.x, @player.y, KB.key_pressed?(InputTrigger::SELECT))
+                if e.battle.currentHP <= 0
+                    deadEvents.push([index,(e.battle.exp * 0.05)])
+                end
             } 
-            @player.move(@input, @currentMap.map.theMap)
+            if deadEvents.length > 0
+                deadEvents.each {|e|
+                    @party.party.each {|pers|
+                        pers.give_xp(e[1])
+                    }
+                    @currentMap.events.delete_at(e[0])
+                }
+            end
         end
         @camera_x = [[(@player.x) - 800 / 2, 0].max, ((@mWidth * 32) + 32) - 800].min
         @camera_y = [[(@player.y) - 600 / 2, 0].max, ((@mHeight * 32) + 32) - 600].min
@@ -56,18 +67,21 @@ class SceneMap
         
         @player = $scene_manager.scene["player"]
         Gosu.translate(-@camera_x, -@camera_y) do
-            @currentMap.map.draw#draw map
-            
-            @currentMap.events.each {|e|
-                if @player.y >= e.y
-                    e.draw()
-                    @player.draw #draw player
-                elsif @player.y < e.y
-                    @player.draw #draw player
-                    e.draw()
-                end
-            
-            } # events
+            @currentMap.map.draw
+            if @currentMap.events.length > 0
+                @currentMap.events.each {|e|
+                    if @player.y >= e.y
+                        e.draw()
+                        @player.draw 
+                    elsif @player.y < e.y
+                        @player.draw 
+                        e.draw()
+                    end
+                }
+            else
+                @player.draw
+            end
+             # events
             
         end
         @currentMap.draw
