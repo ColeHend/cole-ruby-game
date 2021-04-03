@@ -34,25 +34,26 @@ module Control_movement
                 vector.y = 0
         end
 
+        
         newXPos = objectToMove.x + (vector.x * 4)
         newYPos = objectToMove.y + (vector.y * 4)
         if vector.y > 0
-            if check_surrounding("down",objectToMove) != true
+            if check_surrounding("down",objectToMove) == false
                 objectToMove.y = newYPos
                 draw_character(objectToMove, "down",timing)
             end
         elsif vector.y < 0
-            if check_surrounding("up",objectToMove) != true
+            if check_surrounding("up",objectToMove) == false
                 objectToMove.y = newYPos
                 draw_character(objectToMove, "up",timing)
             end
         elsif vector.x > 0
-            if check_surrounding("right",objectToMove) != true
+            if check_surrounding("right",objectToMove) == false
                 objectToMove.x = newXPos
                 draw_character(objectToMove, "right",timing)
             end
         elsif vector.x < 0
-            if check_surrounding("left",objectToMove) != true
+            if check_surrounding("left",objectToMove) == false
                 objectToMove.x = newXPos
                 draw_character(objectToMove, "left",timing)
             end

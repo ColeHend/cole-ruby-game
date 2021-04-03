@@ -77,7 +77,7 @@ module MoveCollision
             when "up"
                 if objectY <= 0 
                     return true
-                elsif checkDir(targetObject,"up") == true#true collide
+                elsif checkDir(targetObject,"up",0) == true#true collide
                     return true
                 else
                     return false
@@ -85,7 +85,7 @@ module MoveCollision
             when "down"
                 if objectY >= (mHeight * 32-16)
                     return true
-                elsif checkDir(targetObject,"down") == true#true collide
+                elsif checkDir(targetObject,"down",0) == true#true collide
                     return true
                 else
                     return false
@@ -93,7 +93,7 @@ module MoveCollision
             when "left" 
                 if objectX <= 1 
                     return true
-                elsif checkDir(targetObject,"left") == true#true collide
+                elsif checkDir(targetObject,"left",0) == true#true collide
                     return true
                 else
                     return false
@@ -101,7 +101,7 @@ module MoveCollision
             when "right" 
                 if objectX >= (mWidth * 32) 
                     return true
-                elsif checkDir(targetObject,"right") == true#true collide
+                elsif checkDir(targetObject,"right",0) == true#true collide
                     return true
                 else
                     return false

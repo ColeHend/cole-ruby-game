@@ -10,7 +10,7 @@ class Spellbook
     def spell(spellName)
         case spellName
         when "firebolt"
-            object = GameObject.new(0, 0, 32, 32, "fireshotCharacter", nil, 4, 4)
+            object = GameObject.new(0, 0, 32, 32, :fireshotCharacter, nil, 4, 4)
             spell = PlayerCharacter.new("firebolt",1)
             mDMG = 5
             #
@@ -22,13 +22,13 @@ class Spellbook
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("firebolt hit!")
                     defender = defender.battle
-                    puts("-----magic--------#{defender.name}-----------------")
+                    puts("-----magic--------#{defender.name}----------")
                     puts("damage: #{damage}")
                     puts("mRes: #{defender.mRes}")
                     puts("defenderBeforeHP: #{defender.currentHP}")
                     defender.currentHP -= damage
                     puts("defenderAfterHP: #{defender.currentHP}")
-                    puts("-------------------------------")
+                    puts("------------------------------------")
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
                     puts("firebolt miss!")
