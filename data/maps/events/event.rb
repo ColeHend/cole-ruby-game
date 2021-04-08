@@ -59,11 +59,13 @@ class Event #$scene_manager.scene["player"].player
 
   def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
     @player = $scene_manager.scene["player"]
-    @eventObject
-    @x = self.x 
-    @y = self.y
-    @w = self.w
-    @h = self.h
+    @battle = battle
+    if @eventObject != nil
+      @x = @eventObject.x 
+      @y = @eventObject.y
+      @w = @eventObject.w
+      @h = @eventObject.h
+    end
     if @battle.currentHP > 0
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)
       set_move(@moveType)
@@ -71,11 +73,9 @@ class Event #$scene_manager.scene["player"].player
   end
 
   def draw()
-    if @battle.currentHP > 0
-      if @eventObject != nil
-        @eventObject.draw()
-        @hpbar.draw
-      end
+    if @battle.currentHP > 0 && @eventObject != nil
+      @eventObject.draw()
+      @hpbar.draw
     end
     #draw_character(@sprite,@dir,@x,@y,@z,@animate,@canMove,@time,@frame,@moving)
   end
