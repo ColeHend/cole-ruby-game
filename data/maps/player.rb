@@ -1,7 +1,7 @@
 require_relative "events/hpbar.rb"
 require_relative "player_control.rb"
 class Player
-    attr_accessor :x, :y, :w, :h, :showPlayer, :player, :facing, :activateType
+    attr_accessor :x, :y, :w, :h, :showPlayer, :player, :facing, :activateType, :battle
     attr_reader :sprite
     
     def initialize()
@@ -18,6 +18,7 @@ class Player
         @z = 5
         @facing = @playerControl.facing
         @party = $scene_manager.feature["party"]
+        @battle = @party.party[0]
         @hpbar = HPbar.new(@player.x,@player.y,@party.party[0].hp,@party.party[0].currentHP)
     end
     

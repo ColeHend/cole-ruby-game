@@ -18,6 +18,7 @@ class MagicBook
         @activeSpells = Array.new
         @spellList = Spellbook.new(@int)
         @animation = PlayAnimation.new()
+        @moveControl = Control_movement.new()
     end
     
     def make_shot(targetObject,spellEVT,facing,spellStability)
@@ -28,7 +29,7 @@ class MagicBook
                 collisionDetect = MoveCollision.new
                 until u > range do
                     
-                    Move(spellEVT.vector,targetObject,facing,1,4)
+                    @moveControl.Move(spellEVT.vector,targetObject,facing,1,4)
                     
                     if collisionDetect.check_collision(targetObject) == true
                         spellEVT.activate_event

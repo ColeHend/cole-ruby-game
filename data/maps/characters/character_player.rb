@@ -30,10 +30,12 @@ class PlayerCharacter < CharacterBase
     
     def level_up
         #stat increases and stuff
-        @exp = (@exp-@lvlUpExp)
         @playerLevel = (@playerLevel+1)
         self.hp = (self.hp+5)
         @lvlUpExp = (1000*@playerLevel) 
+        self.int = (self.int+1)
+        self.con = (self.con+1)
+        
     end
 
     def give_xp(expAmt)

@@ -5,7 +5,6 @@ require_relative "./events/movement_control.rb"
 require_relative "abs/fight_center.rb"
 require_relative "characters/magic/magic_attack.rb"
 Dir[File.join(__dir__, '*.rb')].each { |file| require file }
-include Control_movement
 include Animate
 class PlayerControl
     attr_accessor :facing
@@ -18,6 +17,7 @@ class PlayerControl
         @input = $scene_manager.input
         @facing = "down"
         @fightControl = FightCenter.new
+        @moveControl = Control_movement.new()
         @magicAttack = MagicBook.new(@playerBattle.int)
     end
     def player_attack
@@ -57,20 +57,20 @@ class PlayerControl
         end
 
         if @input.keyDown(InputTrigger::UP)
-            Move(vector,@playerObj,"up",speed,animationTime)
+            @moveControl.Move(vector,@playerObj,"up",speed,animationTime)
             @facing = "up"
         elsif @input.keyDown(InputTrigger::DOWN)
-            Move(vector,@playerObj,"down",speed,animationTime)
+            @moveControl.Move(vector,@playerObj,"down",speed,animationTime)
             @facing = "down"
         elsif @input.keyDown(InputTrigger::LEFT)
-            Move(vector,@playerObj,"left",speed,animationTime)
+            @moveControl.Move(vector,@playerObj,"left",speed,animationTime)
             @facing = "left"
         elsif @input.keyDown(InputTrigger::RIGHT)
-            Move(vector,@playerObj,"right",speed,animationTime)
+            @moveControl.Move(vector,@playerObj,"right",speed,animationTime)
             @facing = "right"
         end
 
-        triggerEvent(@playerObj)
+        @moveControl.triggerEvent(@playerObj)
         if @input.keyDown(InputTrigger::ESCAPE)
             @input.addToStack("options")
             $scene_manager.switch_scene("menu")

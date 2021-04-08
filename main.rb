@@ -8,6 +8,7 @@ class MyGame < GameWindow
   def initialize
     super 800, 600, false
     $window = self
+    $time = 0
     $scene_manager = SceneManager.new
     $scene_manager.register("title",TitleScreen.new())
     $scene_manager.register("gameover",Gameover.new())
@@ -24,6 +25,7 @@ class MyGame < GameWindow
   end
 
   def update
+    $time += 1
     self.caption = "Game FPS = " +(Gosu.fps()).to_s
     KB.update
     

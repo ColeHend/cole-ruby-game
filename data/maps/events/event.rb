@@ -4,7 +4,7 @@ require_relative "movement_control.rb"
 require_relative "hpbar.rb"
 class Event #$scene_manager.scene["player"].player
   attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :moveType, :distance, :battle, :activateType, :vector, :eventObject
-  include  Animate, Control_movement
+  #include  Animate, Control_movement
   def initialize(object, eventTrigger, collidable, event,battle)
     if object != nil
       @x = object.x 
@@ -18,6 +18,7 @@ class Event #$scene_manager.scene["player"].player
       @w = 32
       @h = 32
     end
+    @moveControl = Control_movement.new()
     @eventObject = object
     @vector = Vector2.new(0, 0)
     @z = 5
@@ -46,9 +47,9 @@ class Event #$scene_manager.scene["player"].player
       when "random"
         randomDir = rand(4)
         startTime = Gosu.milliseconds
-        RandomMove(@vector,@eventObject,randomDir,startTime)
+        @moveControl.RandomMove(@vector,@eventObject,randomDir,startTime)
       when "followPlayer"
-        Follow(vector2, @eventObject,dist)
+        @moveControl.Follow(vector2, @eventObject,dist)
       when "none"
     end
   end
@@ -58,6 +59,7 @@ class Event #$scene_manager.scene["player"].player
   end
 
   def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
+    @moveControl.update
     @player = $scene_manager.scene["player"]
     @battle = battle
     if @eventObject != nil
@@ -73,6 +75,7 @@ class Event #$scene_manager.scene["player"].player
   end
 
   def draw()
+    @moveControl.draw
     if @battle.currentHP > 0 && @eventObject != nil
       @eventObject.draw()
       @hpbar.draw
