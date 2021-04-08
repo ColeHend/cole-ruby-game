@@ -20,6 +20,7 @@ module Control_movement
         vector.x = 0
         vector.y = 0
         collisionDetect = MoveCollision.new
+        
         case direction
             when "down"
                 vector.y = speed
@@ -67,57 +68,60 @@ module Control_movement
         #puts(objectToMove.x)
         #@w = objectToMove.w
         #@h = objectToMove.h
-            lockedOn = false
+        lockedOn = false
+        detectDist = range
+        closestDist = 1*32
         objDetect = MoveCollision.new
-        if (objectToFollow.x - objectToMove.x ).abs >= (objectToFollow.y - objectToMove.y).abs && (objectToFollow.x - objectToMove.x ).abs <= range # In Range X Dis Greater
-            if objectToFollow.x < objectToMove.x
-                
-                if objDetect.check_surrounding("left", objectToMove)  == false
-                    
-                    Move(vectorToMove,objectToMove,"left",1)
-                elsif objDetect.check_surrounding("left", objectToMove)  == true
-                    
-                    if objDetect.check_surrounding("down", objectToMove)  == false
-                        puts(objectToMove)
-                        Move(vectorToMove,objectToMove,"down",1)
-                    elsif objDetect.check_surrounding("up", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"up",1)
+        speed = 0.25
+        if (objectToFollow.x - objectToMove.x ).abs < detectDist && (objectToFollow.y - objectToMove.y ).abs < detectDist
+            if (objectToFollow.x - objectToMove.x ).abs > closestDist && (objectToFollow.y - objectToMove.y ).abs > closestDist
+                if (objectToFollow.x - objectToMove.x ).abs >= (objectToFollow.y - objectToMove.y).abs && (objectToFollow.x - objectToMove.x ).abs <= range # In Range X Dis Greater
+                    if objectToFollow.x < objectToMove.x
+                        if objDetect.check_surrounding("left", objectToMove)  == false
+                            Move(vectorToMove,objectToMove,"left",speed)
+                        elsif objDetect.check_surrounding("left", objectToMove)  == true
+                            if objDetect.check_surrounding("down", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"down",speed)
+                            elsif objDetect.check_surrounding("up", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"up",speed)
+                            end
+                        end
+                    elsif objectToFollow.x>objectToMove.x
+                        if objDetect.check_surrounding("right", objectToMove)  == false
+                            Move(vectorToMove,objectToMove,"right",speed)
+                        elsif objDetect.check_surrounding("right", objectToMove)  == true
+                            if objDetect.check_surrounding("down", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"down",speed)
+                            elsif objDetect.check_surrounding("up", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"up",speed)
+                            end
+                        end
                     end
-                end
-            elsif objectToFollow.x>objectToMove.x
-                if objDetect.check_surrounding("right", objectToMove)  == false
-                    Move(vectorToMove,objectToMove,"right",1)
-                elsif objDetect.check_surrounding("right", objectToMove)  == true
-                    if objDetect.check_surrounding("down", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"down",1)
-                    elsif objDetect.check_surrounding("up", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"up",1)
+                elsif (objectToFollow.x - objectToMove.x ).abs < (objectToFollow.y - objectToMove.y).abs && (objectToFollow.y - objectToMove.y).abs <= range # In Range Y Dis Greater
+                    if objectToFollow.y > objectToMove.y
+                        if objDetect.check_surrounding("down", objectToMove)  == false
+                            Move(vectorToMove,objectToMove,"down",speed)
+                        elsif objDetect.check_surrounding("down", objectToMove)  == true
+                            if objDetect.check_surrounding("right", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"right",speed)
+                            elsif objDetect.check_surrounding("left", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"left",speed)
+                            end
+                        end
+                    elsif objectToFollow.y < objectToMove.y
+                        if objDetect.check_surrounding("up", objectToMove)  == false
+                            Move(vectorToMove,objectToMove,"up",speed)
+                        elsif objDetect.check_surrounding("up", objectToMove)  == true
+                            if objDetect.check_surrounding("right", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"right",speed)
+                            elsif objDetect.check_surrounding("left", objectToMove)  == false
+                                Move(vectorToMove,objectToMove,"left",speed)
+                            end
+                        end
                     end
+                elsif (objectToFollow.y - objectToMove.y).abs <= (range) && (objectToFollow.x - objectToMove.x ).abs <= (range) # In Range Else
                 end
             end
-        elsif (objectToFollow.x - objectToMove.x ).abs < (objectToFollow.y - objectToMove.y).abs && (objectToFollow.y - objectToMove.y).abs <= range # In Range Y Dis Greater
-            if objectToFollow.y > objectToMove.y
-                if objDetect.check_surrounding("down", objectToMove)  == false
-                    Move(vectorToMove,objectToMove,"down",1)
-                elsif objDetect.check_surrounding("down", objectToMove)  == true
-                    if objDetect.check_surrounding("right", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"right",1)
-                    elsif objDetect.check_surrounding("left", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"left",1)
-                    end
-                end
-            elsif objectToFollow.y < objectToMove.y
-                if objDetect.check_surrounding("up", objectToMove)  == false
-                    Move(vectorToMove,objectToMove,"up",1)
-                elsif objDetect.check_surrounding("up", objectToMove)  == true
-                    if objDetect.check_surrounding("right", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"right",1)
-                    elsif objDetect.check_surrounding("left", objectToMove)  == false
-                        Move(vectorToMove,objectToMove,"left",1)
-                    end
-                end
-            end
-        elsif (objectToFollow.y - objectToMove.y).abs <= (range) && (objectToFollow.x - objectToMove.x ).abs <= (range) # In Range Else
         end
 
     end

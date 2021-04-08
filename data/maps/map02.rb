@@ -78,7 +78,6 @@ class Map02 < Map
 
     def update()
         @map.update()
-        $scene_manager.eventMap[2].each {|e|e.set_move("followPlayer",13*32)}
-        #$scene_manager.eventMap[1].each {|e|@map.collision[e.x][e.y] = 1}
+        $scene_manager.event["Event201"].set_move("followPlayer",13*32)
     end
 end

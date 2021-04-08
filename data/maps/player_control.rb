@@ -92,6 +92,7 @@ class PlayerControl
 
     def update
         @playerObj = $scene_manager.object["player"]
+        $scene_manager.scene["map"].currentMap.events.each {|e| e.update()}#update events collision
         @x = (@playerObj.x)
         @y = (@playerObj.y)
         @skillAnimation.update

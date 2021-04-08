@@ -11,9 +11,7 @@ class MoveCollision
         !(r1.first > r2.last || r1.last < r2.first)
     end
 
-    def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
-        eventArray = $scene_manager.scene["map"].currentMap.events
-        eventArray.each {|event|
+    def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
         range = 33 + rangeBoost
         targetX = targetObject.x
         targetY = targetObject.y
@@ -25,7 +23,7 @@ class MoveCollision
         eventH = event.h
         case dir
             when "up"
-                if (range+6) >= (eventY+(eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #up
+                if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
                     if (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
                         if evtReturn == true
                             return event
@@ -65,6 +63,15 @@ class MoveCollision
                     end
                 end
         end
+    end
+
+    def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
+        #eventArray = $scene_manager.scene["map"].currentMap.events
+        #eventArray.push($scene_manager.scene["player"])
+        
+        $scene_manager.scene["map"].currentMap.events.each {|event|
+            collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
+        
         }
     end
 
@@ -74,38 +81,72 @@ class MoveCollision
         mHeight = 20
         objectX = targetObject.x
         objectY = targetObject.y
+        playerObj = $scene_manager.scene["player"].player
+        
         case direction
             when "up"
                 if objectY <= 0 
                     return true
-                elsif checkDir(targetObject,"up",0) == true#true collide
+                elsif checkDir(targetObject,"up",8) == true#check events
                     return true
                 else
-                    return false
+                    if targetObject != playerObj
+                        if collideCheck(targetObject,playerObj,direction,32,false) == true
+                            return true 
+                        else
+                            return false
+                        end
+                    else
+                        return false
+                    end
                 end
             when "down"
                 if objectY >= (mHeight * 32-16)
                     return true
-                elsif checkDir(targetObject,"down",0) == true#true collide
+                elsif checkDir(targetObject,"down",8) == true#true collide
                     return true
                 else
-                    return false
+                    if objectX != playerObj.x && objectY != playerObj.y #event only collision
+                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                            return true 
+                        else
+                            return false
+                        end
+                    else
+                        return false
+                    end
                 end
             when "left" 
                 if objectX <= 1 
                     return true
-                elsif checkDir(targetObject,"left",0) == true#true collide
+                elsif checkDir(targetObject,"left",8) == true#true collide
                     return true
                 else
-                    return false
+                    if objectX != playerObj.x && objectY != playerObj.y
+                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                            return true 
+                        else
+                            return false
+                        end
+                    else
+                        return false
+                    end
                 end
             when "right" 
                 if objectX >= (mWidth * 32) 
                     return true
-                elsif checkDir(targetObject,"right",0) == true#true collide
+                elsif checkDir(targetObject,"right",8) == true#true collide
                     return true
                 else
-                    return false
+                    if objectX != playerObj.x && objectY != playerObj.y
+                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                            return true 
+                        else
+                            return false
+                        end
+                    else
+                        return false
+                    end
                 end
         end
             

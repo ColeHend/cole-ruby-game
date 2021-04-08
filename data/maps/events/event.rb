@@ -2,7 +2,7 @@ require_relative "../../files/animate.rb"
 require_relative "move_collision.rb"
 require_relative "movement_control.rb"
 require_relative "hpbar.rb"
-class Event
+class Event #$scene_manager.scene["player"].player
   attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :moveType, :distance, :battle, :activateType, :vector, :eventObject
   include  Animate, Control_movement
   def initialize(object, eventTrigger, collidable, event,battle)
@@ -57,9 +57,13 @@ class Event
     @event.call
   end
 
-  def update(playerX, playerY, actionKeyTriggered)
+  def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
     @player = $scene_manager.scene["player"]
-    update_stuff(@x,@y,@dir,@animate,@canMove,@moving)
+    @eventObject
+    @x = self.x 
+    @y = self.y
+    @w = self.w
+    @h = self.h
     if @battle.currentHP > 0
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)
       set_move(@moveType)

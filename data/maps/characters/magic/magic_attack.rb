@@ -65,6 +65,7 @@ class MagicBook
         
         
         dist = 48
+        @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
         draw_character(spellObj, (facing+"Stop") ,1)
         case facing
         when "up"
@@ -84,7 +85,7 @@ class MagicBook
             createSpell.call
             make_shot(spellObj,event,"right",spellStability)
         end
-        @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
+        
     end
 
     def update
