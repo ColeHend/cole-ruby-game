@@ -10,9 +10,7 @@ module MoveCollision
         !(r1.first > r2.last || r1.last < r2.first)
     end
 
-    def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
-        eventArray = $scene_manager.scene["map"].currentMap.events
-        eventArray.each {|event|
+    def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
         range = 33 + rangeBoost
         targetX = targetObject.x
         targetY = targetObject.y
@@ -24,47 +22,44 @@ module MoveCollision
         eventH = event.h
         case dir
             when "up"
-                if (range+6) >= (eventY+(eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #up
+                if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
                     if (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
-                        if evtReturn == true
-                            return event
-                        else
-                            return true
-                        end
+                        return true
                     end
                 end
             when "down"
                 if range >= (eventY+(16) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #down
                     if (overlap?(((eventY)...(eventY+eventH)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
-                        if evtReturn == true
-                            return event
-                        else
-                            return true
-                        end
+                       return true
                     end
                 end
             when "left"
                 if (range-2 ) >= ((eventY) - targetY).abs && ((eventX+eventW) - targetX).abs <= (range) #up
                     if (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true) && (overlap?(((eventY)...(eventY+eventH+8)),((targetY)...(targetY+targetH))) === true)
-                        if evtReturn == true
-                            return event
-                        else
-                            return true
-                        end 
+                        return true
                     end
                 end
             when "right"
                 if (range-2 ) >= ((eventY) - targetY).abs && (eventX - (targetX + targetW)).abs <= (range) #up
                     if (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true) && (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true)
-                        if evtReturn == true
-                            return event
-                        else
-                            return true
-                        end
+                        return true
                     end
                 end
         end
+    end
+
+
+
+    def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
+        $scene_manager.scene["map"].currentMap.events.each {|event|
+            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
+                if evtReturn == true
+                    return event
+                end
+                return true
+            end
         }
+
     end
 
     def check_surrounding(direction,targetObject)
