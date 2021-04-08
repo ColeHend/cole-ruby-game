@@ -117,11 +117,8 @@ class Map01
         end
     end
     def update
-        $scene_manager.eventMap[1].each {|e|
-        if e.eventObject != nil
-                e.set_move("followPlayer",13*32)
-        end
-        }
+        $scene_manager.event['Event101'].set_move("followPlayer",13*32)
+        $scene_manager.event['Event102'].set_move("followPlayer",13*32)
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true
