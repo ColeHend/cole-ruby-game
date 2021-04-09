@@ -7,17 +7,18 @@ require_relative "characters/magic/magic_attack.rb"
 Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 include Animate
 class PlayerControl
-    attr_accessor :facing
+    attr_accessor :facing, :name
     def initialize() #meleeAttack(attackerObj,attacker,facing,rangeBoost=0)
         @playerObj = $scene_manager.object["player"]
         @playerBattle = $scene_manager.feature["party"].party[0]
+        @name = @playerBattle.name
         @skillAnimation = PlayAnimation.new
         @x = (@playerObj.x )
         @y = (@playerObj.y )
         @input = $scene_manager.input
         @facing = "down"
         @fightControl = FightCenter.new
-        @moveControl = Control_movement.new()
+        @moveControl = Control_movement.new(@name)
         @magicAttack = MagicBook.new(@playerBattle.int)
     end
     def player_attack

@@ -1,9 +1,9 @@
 require_relative "../events/move_collision.rb"
 class FightCenter
-    def initialize()
+    def initialize(name="fightCenter")
     # damage = ((wpnDMG*STR)/armor)
     # mDMG = (mDMG*INT)/mRes+2
-    @collisionDetect = MoveCollision.new
+    @collisionDetect = MoveCollision.new(name)
     end
 
     def damage_calc(wpnDMG,str=2,armor=10)

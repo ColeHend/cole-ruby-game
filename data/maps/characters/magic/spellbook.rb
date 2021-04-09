@@ -19,7 +19,7 @@ class Spellbook
             animName = "fire"
             spellEff = ->(){
                 defender = collisionDetect.check_collision(object,8,true)
-                if defender != nil
+                if defender != nil && defender != true
                     damage = FightCenter.new.magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("firebolt hit!")
@@ -27,9 +27,9 @@ class Spellbook
                     puts("-----magic--------#{defender.name}----------")
                     puts("damage: #{damage}")
                     puts("mRes: #{defender.mRes}")
-                    puts("defenderBeforeHP: #{defender.currentHP}")
+                    puts("defenderBeforeHP: #{defender.currentHP}/#{defender.hp}")
                     defender.currentHP -= damage
-                    puts("defenderAfterHP: #{defender.currentHP}")
+                    puts("defenderAfterHP: #{defender.currentHP}/#{defender.hp}")
                     puts("------------------------------------")
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)

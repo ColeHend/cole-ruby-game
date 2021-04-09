@@ -13,6 +13,7 @@ class Bestiary
             ghost = PlayerCharacter.new("ghost",15.0,12,12,12,12)
             ghost.weapon = Weapon.new("GhostTouch",15)
             ghost.totalArmor = 12
+            ghost.mRes = 12
             ghost.exp = 500 # gives 5% of 
             return ghost
         when "goblin"

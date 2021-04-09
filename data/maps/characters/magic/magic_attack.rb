@@ -18,7 +18,7 @@ class MagicBook
         @activeSpells = Array.new
         @spellList = Spellbook.new(@int)
         @animation = PlayAnimation.new()
-        @moveControl = Control_movement.new()
+        @moveControl = Control_movement.new("spell#{@x}")
     end
     
     def make_shot(targetObject,spellEVT,facing,spellStability)
@@ -64,17 +64,16 @@ class MagicBook
             @activeSpells.push(event)
         }
         
-        
         dist = 48
         @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
-        draw_character(spellObj, (facing+"Stop") ,1)
+        draw_character(event.eventObject, (facing+"Stop") ,1)
         case facing
         when "up"
             spellObj.y -= dist
             createSpell.call
             make_shot(spellObj,event,"up",spellStability)
         when "down"
-            spellObj.y += dist
+            spellObj.y += dist + 4
             createSpell.call
             make_shot(spellObj,event,"down",spellStability)
         when "left"
@@ -91,6 +90,7 @@ class MagicBook
 
     def update
         @spellList.update
+        
     end
     def draw
         

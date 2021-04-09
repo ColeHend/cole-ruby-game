@@ -5,7 +5,9 @@ require_relative "../map01.rb"
 require_relative "../map02.rb"
 #Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 class MoveCollision
-    def initialize()
+    def initialize(name="lame")
+        @player = $scene_manager.scene["player"]
+        @name = name
     end
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
@@ -60,25 +62,38 @@ class MoveCollision
                 end
         end
     end
-
+    def sameOb(obj1,obj2)
+        #if obj1.x == obj2.x
+            #if obj1.y == obj2.y
+                if obj1.w == obj2.w
+                    if obj1.h == obj2.h
+                        return true
+                    end
+                end
+            #end
+        #end
+        return false
+    end
     def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
         playerObj = $scene_manager.scene["player"].player
         $scene_manager.scene["map"].currentMap.events.each {|event|
 
-            if targetObject.x != event.x && targetObject.y != event.y
-                if collideCheck(targetObject,event,dir,rangeBoost,false) == true
-                    
-                    if evtReturn == true
-                        if targetObject.x != playerObj.x && targetObject.y != playerObj.y
-                            if collideCheck(targetObject,playerObj,dir,rangeBoost,false) == true
-                                event = $scene_manager.scene["player"]
-                            end
-                        end
-                        return event
-                    end
-                    return true
+        if sameOb(targetObject,playerObj) == false #&& targetObject.y != playerObj.y
+            if collideCheck(targetObject,@player,dir,rangeBoost,false) == true
+                if evtReturn == true
+                event = collideCheck(targetObject,@player,dir,rangeBoost,true)
                 end
+                return true
             end
+        end
+        if sameOb(targetObject,event) == false#&& targetObject.y != event.y
+            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
+                if evtReturn == true
+                    return event
+                end
+                return true
+            end
+        end
         }
 
     end
@@ -98,15 +113,12 @@ class MoveCollision
                 elsif checkDir(targetObject,"up",8) == true#check events
                     return true
                 else
-                    if targetObject != playerObj
-                        if collideCheck(targetObject,playerObj,direction,32,false) == true
+                    if sameOb(targetObject,playerObj) == false
+                        if collideCheck(targetObject,playerObj,direction,8,false) == true
                             return true 
-                        else
-                            return false
                         end
-                    else
-                        return false
                     end
+                    return false
                 end
             when "down"
                 if objectY >= (mHeight * 32-16)
@@ -114,15 +126,12 @@ class MoveCollision
                 elsif checkDir(targetObject,"down",8) == true#true collide
                     return true
                 else
-                    if objectX != playerObj.x && objectY != playerObj.y #event only collision
+                    if sameOb(targetObject,playerObj) == false
                         if collideCheck(targetObject,playerObj,direction,8,false) == true
                             return true 
-                        else
-                            return false
                         end
-                    else
-                        return false
                     end
+                    return false
                 end
             when "left" 
                 if objectX <= 1 
@@ -130,15 +139,12 @@ class MoveCollision
                 elsif checkDir(targetObject,"left",8) == true#true collide
                     return true
                 else
-                    if objectX != playerObj.x && objectY != playerObj.y
+                    if sameOb(targetObject,playerObj) == false
                         if collideCheck(targetObject,playerObj,direction,8,false) == true
                             return true 
-                        else
-                            return false
                         end
-                    else
-                        return false
                     end
+                    return false
                 end
             when "right" 
                 if objectX >= (mWidth * 32) 
@@ -146,15 +152,12 @@ class MoveCollision
                 elsif checkDir(targetObject,"right",8) == true#true collide
                     return true
                 else
-                    if objectX != playerObj.x && objectY != playerObj.y
+                    if sameOb(targetObject,playerObj) == false
                         if collideCheck(targetObject,playerObj,direction,8,false) == true
                             return true 
-                        else
-                            return false
                         end
-                    else
-                        return false
                     end
+                    return false
                 end
         end
             
@@ -192,6 +195,37 @@ class MoveCollision
         end
     end
         
+    def check_player_collision(targetObject,rangeBoost = 0,playerReturn = false)
+        if checkDir(targetObject,"up") == true
+            if playerReturn == true
+                player = $scene_manager.scene["player"]
+                return player
+            else
+                return true
+            end
+        elsif checkDir(targetObject,"down") == true
+            if playerReturn == true
+                player = $scene_manager.scene["player"]
+                return player
+            else
+                return true
+            end
+        elsif checkDir(targetObject,"left") == true
+            if playerReturn == true
+                player = $scene_manager.scene["player"]
+                return player
+            else
+                return true
+            end
+        elsif checkDir(targetObject,"right") == true
+            if playerReturn == true
+                player = $scene_manager.scene["player"]
+                return player
+            else
+                return true
+            end
+        end
+    end
     
         # ----Event Movement needs rewrite for vectors----
         moveRandom = ->(randomDir){}

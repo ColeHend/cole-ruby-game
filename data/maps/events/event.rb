@@ -3,7 +3,9 @@ require_relative "move_collision.rb"
 require_relative "movement_control.rb"
 require_relative "hpbar.rb"
 class Event #$scene_manager.scene["player"].player
-  attr_accessor :animate, :canMove, :moving, :collidable, :x, :y, :w, :h, :dir, :moveType, :distance, :battle, :activateType, :vector, :eventObject
+  attr_accessor :animate,:canMove,:moveType,:distance,:moving,:x,:y,:w,:h,:dir,:vector,:enemyGroups 
+  attr_accessor :collidable, :battle, :activateType, :eventObject, :facing, :hateGroup, :name
+
   #include  Animate, Control_movement
   def initialize(object, eventTrigger, collidable, event,battle)
     if object != nil
@@ -18,13 +20,15 @@ class Event #$scene_manager.scene["player"].player
       @w = 32
       @h = 32
     end
-    @moveControl = Control_movement.new()
+    @moveControl = Control_movement.new(battle.name)
+    @name = battle.name
     @eventObject = object
     @vector = Vector2.new(0, 0)
     @z = 5
     @dir = 8
     @battle = battle
-    
+    @hateGroup = "enemy"
+    @enemyGroups = ["player","guard"] 
     @eventTrigger = eventTrigger
     @solid = collidable
     @moveType = "none"
@@ -38,7 +42,7 @@ class Event #$scene_manager.scene["player"].player
 
   end
 
-  def set_move(kind,dist=12*32)
+  def set_move(kind,dist=12*32,innerDist=4*32,atkType="ranged")
     canMove()
     @moveType = kind
     @distance = dist
@@ -49,7 +53,7 @@ class Event #$scene_manager.scene["player"].player
         startTime = Gosu.milliseconds
         @moveControl.RandomMove(@vector,@eventObject,randomDir,startTime)
       when "followPlayer"
-        @moveControl.Follow(vector2, @eventObject,dist)
+        @moveControl.Follow(vector2,self, @eventObject,atkType,dist,innerDist)
       when "none"
     end
   end
