@@ -1,11 +1,10 @@
 require_relative "../../files/animate.rb"
-require_relative "../abs/fight_center.rb"
 require_relative "move_collision.rb"
 require_relative "../scene_map.rb"
 require_relative "../map.rb"
 require_relative "../map01.rb"
 require_relative "../map02.rb"
-require_relative "../characters/magic/magic_attack.rb"
+
 #require_relative "../player.rb"
 #Dir[File.join(__dir__,'..', '*.rb')].each { |file| require_relative file }
 class Vector2
@@ -18,7 +17,6 @@ end
 class Control_movement
     include Animate
     def initialize(name)
-        @skillAnimation = PlayAnimation.new
         @name = name
     end
 
@@ -67,60 +65,14 @@ class Control_movement
         end
         
     end
-
-    def eventAtkChoice(objectToMove,attackerClass,objectToFollow=$scene_manager.scene["player"],detectRange=6*32,actionRange=6*32,atkRange="ranged")
-        #fightControl = FightCenter.new.meleeAttack(objectToMove,"left","firebolt")
-        @magicAttack = MagicBook.new(attackerClass.battle.int)
-        #meleeAttack(attackerObj,attacker,facing,rangeBoost=0)
-        #magicAttack(attackerObj,attacker,facing,rangeBoost)
-        detectDist = detectRange
-        closestDist = actionRange
-        fightControl = FightCenter.new(attackerClass.name)
-        if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
-            if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist
-                if (objectToFollow.x - objectToMove.x ).abs >= closestDist && (objectToFollow.y - objectToMove.y ).abs >= closestDist
-                    if MoveCollision.new.check_collision(objectToMove,closestDist,false) == true || MoveCollision.new.check_player_collision(objectToMove,closestDist,false) == true
-                        if atkRange == "melee"
-                            case attackerClass.facing
-                            when "left"
-                                @skillAnimation.play_animation("slash",objectToMove.x-4*32,objectToMove.y-2*32,nil)
-                                fightControl.meleeAttack(objectToMove,attackerClass.battle,attackerClass.facing,32)
-                            when "right"
-                                @skillAnimation.play_animation("slash",objectToMove.x-1.8*32,objectToMove.y-2.1*32,:horiz)
-                                fightControl.meleeAttack(objectToMove,attackerClass.battle,attackerClass.facing,32)
-                            when "up"
-                                @skillAnimation.play_animation("slash",objectToMove.x-3*32,objectToMove.y-3*32,nil)
-                                fightControl.meleeAttack(objectToMove,attackerClass.battle,attackerClass.facing,32)
-                            when "down"
-                                @skillAnimation.play_animation("slash",objectToMove.x-3*32,objectToMove.y-2*32,:vert)
-                                fightControl.meleeAttack(objectToMove,attackerClass.battle,attackerClass.facing,32)
-                            end
-                            #@skillAnimation.play_animation("slash",objectToMove.x-4*32,objectToMove.y-2*32,nil)
-                            #FightCenter.new.meleeAttack(objectToMove,attackerClass.battle,attackerClass.facing,0)
-                        elsif atkRange == "ranged"
-                            @magicAttack.ranged_shot(objectToMove,attackerClass.facing,"firebolt")
-                        else
-                        end
-                    end
-                end
-            end
-        end
-    end
     
-    def Follow(vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,actRange=2*32,objectToFollow=$scene_manager.scene["player"])
-        #puts(objectToFollow.x)
-        #puts("^follow |  v Move")
-        #puts(objectToMove.x)
-        #@w = objectToMove.w
-        #@h = objectToMove.h
+    def Follow(vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,objectToFollow)
         lockedOn = false
         detectDist = range
         closestDist = 0
         objDetect = MoveCollision.new
         speed = 0.25
         time = 10
-
-        eventAtkChoice(objectToMove,attackerClass,objectToFollow,range,actRange,atkType) #  <- Starts its attack logic
 
         if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist
             if (objectToFollow.x - objectToMove.x ).abs >= closestDist && (objectToFollow.y - objectToMove.y ).abs >= closestDist
@@ -287,15 +239,7 @@ class Control_movement
         end
     end
     def update
-        @skillAnimation.update
-        if @magicAttack != nil
-            @magicAttack.update
-        end
     end
     def draw
-        @skillAnimation.draw
-        if @magicAttack != nil
-            @magicAttack.draw
-        end
     end
 end

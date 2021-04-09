@@ -14,8 +14,7 @@ class Player
         @y = (@player.y )
         @w = @player.w
         @h = @player.h
-        @hateGroup = "player"
-        @enemyGroups = ["enemy"] 
+         
         @activateType = "none"
         @z = 5
         @facing = @playerControl.facing

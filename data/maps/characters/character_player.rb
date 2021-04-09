@@ -2,7 +2,8 @@ require_relative "character_base.rb"
 require_relative "weapon.rb"
 require_relative "armor.rb"
 class PlayerCharacter < CharacterBase
-    attr_accessor :currentHP, :alive, :exp, :playerLevel, :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor, :mRes
+    attr_accessor :currentHP, :alive, :exp, :playerLevel,:enemyGroups, :hateGroup 
+    attr_accessor :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor, :mRes
     attr_reader :str, :dex, :int, :con, :hp, :deathExp
     def initialize(name,hp,str=14,dex=12,int=12,con=12,mRes=1)
         self.name = name
@@ -22,6 +23,8 @@ class PlayerCharacter < CharacterBase
         @legs = nil
         @feet = nil
         @totalArmor = total_ac(0)
+        @hateGroup = "player"
+        @enemyGroups = ["enemy"]
     end
     def getMod(stat)
         modifier = ((stat - 10))

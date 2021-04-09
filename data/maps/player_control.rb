@@ -23,22 +23,9 @@ class PlayerControl
     end
     def player_attack
         if @input.keyPressed(InputTrigger::ATTACK)
-            case @facing
-            when "left"
-                @skillAnimation.play_animation("slash",@playerObj.x-4*32,@playerObj.y-2*32,nil)
-                @fightControl.meleeAttack(@playerObj,@playerBattle,@facing,32)
-            when "right"
-                @skillAnimation.play_animation("slash",@playerObj.x-1.8*32,@playerObj.y-2.1*32,:horiz)
-                @fightControl.meleeAttack(@playerObj,@playerBattle,@facing,32)
-            when "up"
-                @skillAnimation.play_animation("slash",@playerObj.x-3*32,@playerObj.y-3*32,nil)
-                @fightControl.meleeAttack(@playerObj,@playerBattle,@facing,32)
-            when "down"
-                @skillAnimation.play_animation("slash",@playerObj.x-3*32,@playerObj.y-2*32,:vert)
-                @fightControl.meleeAttack(@playerObj,@playerBattle,@facing,32)
-            end
+            @fightControl.closeCombat(@playerObj, @playerBattle,@facing,"slash")
         elsif @input.keyPressed(InputTrigger::SPELL)
-                @magicAttack.ranged_shot(@playerObj,@facing,"firebolt")
+            @fightControl.rangedCombat(@playerObj,@facing,"firebolt",@magicAttack)
         end
     end
     def move_input
@@ -92,18 +79,21 @@ class PlayerControl
     end
 
     def update
+
         @playerObj = $scene_manager.object["player"]
         $scene_manager.scene["map"].currentMap.events.each {|e| e.update()}#update events collision
         @x = (@playerObj.x)
         @y = (@playerObj.y)
         @skillAnimation.update
         @magicAttack.update
+        @fightControl.update
         move_input
         player_attack
     end
 
     def draw
         @skillAnimation.draw
+        @fightControl.draw
         @magicAttack.draw
     end
 

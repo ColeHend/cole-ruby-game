@@ -15,51 +15,56 @@ class MoveCollision
 
     def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
         range = 33 + rangeBoost
-        targetX = targetObject.x
-        targetY = targetObject.y
-        targetW = targetObject.w
-        targetH = targetObject.h
-        eventX = event.x
-        eventY = event.y
-        eventW = event.w
-        eventH = event.h
-        case dir
-            when "up"
-                if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
-                    if (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
-                        if evtReturn == true
-                            return event
+        
+        if event != nil && targetObject != nil
+            targetX = targetObject.x
+            targetY = targetObject.y
+            targetW = targetObject.w
+            targetH = targetObject.h
+            eventX = event.x
+            eventY = event.y
+            eventW = event.w
+            eventH = event.h
+            case dir
+                when "up"
+                    if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
+                        if (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
+                            if evtReturn == true
+                                return event
+                            end
+                            return true
                         end
-                        return true
                     end
-                end
-            when "down"
-                if range >= (eventY+(16) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #down
-                    if (overlap?(((eventY)...(eventY+eventH)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
-                        if evtReturn == true
-                            return event
+                when "down"
+                    if range >= (eventY+(16) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #down
+                        if (overlap?(((eventY)...(eventY+eventH)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
+                            if evtReturn == true
+                                return event
+                            end
+                            return true
                         end
-                        return true
                     end
-                end
-            when "left"
-                if (range-2 ) >= ((eventY) - targetY).abs && ((eventX+eventW) - targetX).abs <= (range) #up
-                    if (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true) && (overlap?(((eventY)...(eventY+eventH+8)),((targetY)...(targetY+targetH))) === true)
-                        if evtReturn == true
-                            return event
+                when "left"
+                    if (range-2 ) >= ((eventY) - targetY).abs && ((eventX+eventW) - targetX).abs <= (range) #up
+                        if (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true) && (overlap?(((eventY)...(eventY+eventH+8)),((targetY)...(targetY+targetH))) === true)
+                            if evtReturn == true
+                                return event
+                            end
+                            return true
                         end
-                        return true
                     end
-                end
-            when "right"
-                if (range-2 ) >= ((eventY) - targetY).abs && (eventX - (targetX + targetW)).abs <= (range) #up
-                    if (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true) && (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true)
-                        if evtReturn == true
-                            return event
+                when "right"
+                    if (range-2 ) >= ((eventY) - targetY).abs && (eventX - (targetX + targetW)).abs <= (range) #up
+                        if (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true) && (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true)
+                            if evtReturn == true
+                                return event
+                            end
+                            return true
                         end
-                        return true
                     end
-                end
+            end
+        else
+            puts("collideCheck skipped..")
         end
     end
     def sameOb(obj1,obj2)
@@ -79,11 +84,11 @@ class MoveCollision
         $scene_manager.scene["map"].currentMap.events.each {|event|
 
         if sameOb(targetObject,playerObj) == false #&& targetObject.y != playerObj.y
-            if collideCheck(targetObject,@player,dir,rangeBoost,false) == true
+            if collideCheck(targetObject,playerObj,dir,rangeBoost,false) == true
                 if evtReturn == true
-                event = collideCheck(targetObject,@player,dir,rangeBoost,true)
+                event = $scene_manager.scene["player"]
+                return event
                 end
-                return true
             end
         end
         if sameOb(targetObject,event) == false#&& targetObject.y != event.y
