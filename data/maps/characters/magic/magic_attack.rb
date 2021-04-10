@@ -5,6 +5,7 @@ require_relative "../../events/event_trigger.rb"
 require_relative "../../events/move_collision.rb"
 require_relative "../../events/movement_control.rb"
 require_relative "../../../files/animate.rb"
+
 Dir[File.join(__dir__, '..', '*.rb')].each { |file| require file }
 class MagicBook
     def initialize(int = 12)
@@ -58,7 +59,7 @@ class MagicBook
         spellEff = spellCast[2]
         spellOnHit = spellCast[3]
 
-        event = Event.new(spellObj, EventTrigger::AUTOMATIC, true, spellEff,spellStability)
+        event = Event.new(spellObj, spellEff,spellStability)
         createSpell = ->(){
             @currentEvents =  $scene_manager.scene["map"].currentMap.events
             @activeSpells.push(event)

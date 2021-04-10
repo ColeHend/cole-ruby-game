@@ -80,7 +80,7 @@ class MoveCollision
         return false
     end
     def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
-        playerObj = $scene_manager.scene["player"].player
+        playerObj = $scene_manager.scene["player"].eventObject
         $scene_manager.scene["map"].currentMap.events.each {|event|
 
         if sameOb(targetObject,playerObj) == false #&& targetObject.y != playerObj.y
@@ -109,7 +109,7 @@ class MoveCollision
         mHeight = 20
         objectX = targetObject.x
         objectY = targetObject.y
-        playerObj = $scene_manager.scene["player"].player
+        playerObj = $scene_manager.scene["player"].eventObject
         
         case direction
             when "up"

@@ -63,8 +63,8 @@ class SaveGame
                 end
 
                 $scene_manager.register("player",Player.new())  #change to add current player values
-                $scene_manager.scene["player"].player.x = @saveFile["player"]["player"][1]
-                $scene_manager.scene["player"].player.y = @saveFile["player"]["player"][2]
+                $scene_manager.scene["player"].eventObject.x = @saveFile["player"]["player"][1]
+                $scene_manager.scene["player"].eventObject.y = @saveFile["player"]["player"][2]
                 $scene_manager.scene["player"].x = @saveFile["player"]["player"][1]
                 $scene_manager.scene["player"].y = @saveFile["player"]["player"][2]
                 #--------------- Done with player stuff --------------------------

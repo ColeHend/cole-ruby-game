@@ -60,7 +60,7 @@ class Map01
         #------------------------WarpSquare--------------------------------
         
         $scene_manager.registerEvent(1,"Teleport101",
-            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new(nil, ->(){
                 $scene_manager.scene["map"].change_map("map02")
                 $scene_manager.object["player"].y += 32
                 
@@ -71,7 +71,7 @@ class Map01
         @teleport1.y = 16
         
         $scene_manager.registerEvent(1,"Teleport102",
-            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new(nil, ->(){
                 $scene_manager.scene["map"].change_map("map02")
                 $scene_manager.object["player"].y += 32
         },@bestiary.enemy("god")))
@@ -83,7 +83,7 @@ class Map01
         # Event 101
         $scene_manager.register_object("Event101","greenMan",7*32,10*32,30,46,4,4)
         $scene_manager.registerEvent(1,"Event101",
-            Event.new($scene_manager.object["Event101"], EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event101"], ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
                 @talkin = true
                 $scene_manager.feature["party"].addToParty(NpcCharacter.new("Johnny",5))
@@ -94,7 +94,7 @@ class Map01
         # Event 102
         $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event102",
-            Event.new($scene_manager.object["Event102"], EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event102"], ->(){
                 if @showChoices == false
                     #$scene_manager.input.removeFromStack(@optionsBox.stackName)
                     $scene_manager.input.addToStack(@optionsBox.stackName)

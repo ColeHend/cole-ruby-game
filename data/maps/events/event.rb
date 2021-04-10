@@ -2,13 +2,14 @@ require_relative "../../files/animate.rb"
 require_relative "move_collision.rb"
 require_relative "movement_control.rb"
 require_relative "../player_control.rb"
+require_relative "../scene_map.rb"
 require_relative "hpbar.rb"
-class Event #$scene_manager.scene["player"].player
+class Event #$scene_manager.scene["player"].eventObject
   attr_accessor :animate,:canMove,:moveType,:distance,:moving,:x,:y,:w,:h,:dir,:vector
-  attr_accessor :collidable, :battle, :activateType, :eventObject, :facing, :name
+  attr_accessor :battle, :activateType, :eventObject, :facing, :name, :playerControl
 
   #include  Animate, Control_movement
-  def initialize(object, eventTrigger, collidable, event,battle)
+  def initialize(object, event,battle)
     if object != nil
       @x = object.x 
       @y = object.y
@@ -29,15 +30,9 @@ class Event #$scene_manager.scene["player"].player
     @z = 5
     @dir = 8
     @battle = battle
-    
-    @eventTrigger = eventTrigger
-    @solid = collidable
     @moveType = "none"
-    if @moveType == "player"
-      @playerControl = PlayerControl.new()
-    else
-      @moveControl = Control_movement.new(battle.name)
-    end
+    
+    @moveControl = Control_movement.new(battle.name)
     @activateType = "SELECT" # SELECT or TOUCH options
     @distance = 1
     @hpbar = HPbar.new(@x,@y,@battle.hp,@battle.currentHP)
@@ -45,7 +40,7 @@ class Event #$scene_manager.scene["player"].player
     @event = event
     @moving = false
     @animate, @canMove, @facing = false, true, "down"
-
+    
   end
 
   def set_move(kind,dist=12*32,innerDist=8*32,atkType="ranged",objectOfFocus=nil)
@@ -64,6 +59,7 @@ class Event #$scene_manager.scene["player"].player
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
       when "player"
+        @playerControl = PlayerControl.new()
         
       when "none"
     end
@@ -76,6 +72,7 @@ class Event #$scene_manager.scene["player"].player
   def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
     @moveControl.update
     @fightControl.update
+    
     @player = $scene_manager.scene["player"]
     @battle = battle
     if @eventObject != nil
@@ -98,9 +95,7 @@ class Event #$scene_manager.scene["player"].player
       @facing = @playerControl.facing
     end
   end
-  def w
-    return @w
-  end
+  
   def draw()
     @moveControl.draw
     @fightControl.draw

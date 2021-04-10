@@ -26,7 +26,7 @@ class Map02 < Map
         #Events
         #------------------------WarpSquare--------------------------------
         teleport1 = $scene_manager.registerEvent(2,"Teleport201",
-            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new(nil, ->(){
                 $scene_manager.scene["map"].change_map("map01")
                 $scene_manager.object["player"].y += 32
                 
@@ -35,7 +35,7 @@ class Map02 < Map
         teleport1[0].x = 12*32
         teleport1[0].y = 16
         teleport2 = $scene_manager.registerEvent(2,"Teleport202",
-            Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
+            Event.new(nil, ->(){
                 $scene_manager.scene["map"].change_map("map01")
                 $scene_manager.object["player"].y += 32
         },@bestiary.enemy("god")))
@@ -46,7 +46,7 @@ class Map02 < Map
         $scene_manager.register_object("Event201","shadowGuy",6*32,5*32,32,48,4,4)
         $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
         $scene_manager.registerEvent(2,"Event201",
-            Event.new($scene_manager.object["Event201"], EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event201"], ->(){
                 #@talkin = true
                 #$scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
@@ -56,7 +56,7 @@ class Map02 < Map
         ))
 
         $scene_manager.registerEvent(2,"Event202",
-            Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
+            Event.new($scene_manager.object["Event202"], ->(){
             },@bestiary.enemy("god")
             ))
         

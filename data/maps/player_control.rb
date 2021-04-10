@@ -3,6 +3,7 @@ require_relative "../files/play_animation.rb"
 require_relative "../files/input_trigger.rb"
 require_relative "./events/movement_control.rb"
 require_relative "abs/fight_center.rb"
+require_relative "scene_map.rb"
 require_relative "characters/magic/magic_attack.rb"
 Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 include Animate
