@@ -38,7 +38,7 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("-------------#{defender.name}-----------------")
+                    puts("----#{attacker.name}---------#{defender.name}-----------------")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -53,7 +53,7 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("-------------#{defender.name}-----------------")
+                    puts("----#{attacker.name}---------#{defender.name}-----------------")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -68,7 +68,7 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("-------------#{defender.name}-----------------")
+                    puts("----#{attacker.name}---------#{defender.name}-----------------")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -83,7 +83,7 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("-------------#{defender.name}-----------------")
+                    puts("----#{attacker.name}---------#{defender.name}-----------------")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")

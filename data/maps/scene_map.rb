@@ -45,23 +45,25 @@ class SceneMap
         @currentMap.update()#update map
         
         stackLength = ($scene_manager.input.inputStack.length-1)
-        deadEvents = Array.new
+        
         if $scene_manager.input.inputStack[stackLength] == "map"
             #@currentMap.events.each {|e| e.update()}#update events collision
             @currentMap.events.each_with_index {|e,index|    #updates events
                 e.update(KB.key_pressed?(InputTrigger::SELECT))#
+                deadEvents = Array.new
                 if e.battle.currentHP <= 0
                     deadEvents.push([index,(e.battle.exp * 0.05)])
                 end
-            } 
-            if deadEvents.length > 0
-                deadEvents.each {|e|
-                    @party.party.each {|pers|
-                        pers.give_xp(e[1])
+                if deadEvents.length > 0
+                    deadEvents.each {|e|
+                        @party.party.each {|pers|
+                            pers.give_xp(e[1])
+                        }
+                        @currentMap.events.delete_at(e[0])
                     }
-                    @currentMap.events.delete_at(e[0])
-                }
-            end
+                end
+            } 
+            
         end
         @camera_x = [[(@player.x) - 800 / 2, 0].max, ((@mWidth * 32) + 32) - 800].min
         @camera_y = [[(@player.y) - 600 / 2, 0].max, ((@mHeight * 32) + 32) - 600].min

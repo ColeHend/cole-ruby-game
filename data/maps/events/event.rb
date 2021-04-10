@@ -70,41 +70,41 @@ class Event #$scene_manager.scene["player"].eventObject
   end
 
   def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
-    
-    
-    
     @player = $scene_manager.scene["player"]
-    @battle = battle
+    
     if @eventObject != nil
       @x = @eventObject.x 
       @y = @eventObject.y
       @w = @eventObject.w
       @h = @eventObject.h
     end
-    if @battle.currentHP > 0
+    if self.battle.currentHP > 0
+      @battle = battle
+      if @moveType == "player"
+        @facing = @playerControl.facing
+        @playerControl.update
+      else
+        @moveControl.update
+        @fightControl.update
+        set_move(@moveType)
+      end
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)
-      
+    elsif self.battle.currentHP <= 0
     end
-    if @moveType == "player"
-      @facing = @playerControl.facing
-      @playerControl.update
-    else
-      @moveControl.update
-      @fightControl.update
-      set_move(@moveType)
-    end
+    
   end
   
   def draw()
     
     
-    if @moveType == "player"
-      @playerControl.draw
-    else
-      @moveControl.draw
-      @fightControl.draw
-    end
-    if @battle.currentHP > 0 && @eventObject != nil
+    
+    if self.battle.currentHP > 0 && @eventObject != nil
+      if @moveType == "player"
+        @playerControl.draw
+      else
+        @moveControl.draw
+        @fightControl.draw
+      end
       @eventObject.draw()
       @hpbar.draw
     end

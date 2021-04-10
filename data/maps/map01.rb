@@ -121,14 +121,19 @@ class Map01
         end
     end
     def update
-        $scene_manager.event["Teleport101"].x, $scene_manager.event["Teleport101"].y = 12*32, 16
-        $scene_manager.event["Teleport102"].x, $scene_manager.event["Teleport102"].y = 13*32, 16
+        event101 = $scene_manager.event["Event101"]
+        event102 = $scene_manager.event["Event102"]
+        @teleport1.x, @teleport1.y = 12*32, 16
+        @teleport2.x, @teleport2.y = 13*32, 16
         
-        $scene_manager.event["Teleport101"].set_move("none")
-        $scene_manager.event["Teleport102"].set_move("none")
-        
-        $scene_manager.event["Event101"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #greenguy $scene_manager.scene["player"]
-        $scene_manager.event["Event102"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.event["Event101"]) #ghost
+        @teleport1.set_move("none")
+        @teleport2.set_move("none")
+        if event101.battle.currentHP > 0
+            event101.set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #greenguy $scene_manager.scene["player"]
+        end
+        if event102.battle.currentHP > 0
+            event102.set_move("followPlayer",10*32,1*32,"melee",event101) #ghost
+        end
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true
