@@ -2,11 +2,12 @@ require_relative "../events/move_collision.rb"
 require_relative "../../files/play_animation.rb"
 require_relative "../characters/magic/magic_attack.rb"
 class FightCenter
-    def initialize(name="fightCenter")
+    def initialize(name,bat)
     # damage = ((wpnDMG*STR)/armor)
     # mDMG = (mDMG*INT)/mRes+2
     @collisionDetect = MoveCollision.new(name)
     @skillAnimation = PlayAnimation.new
+    @magicAttack 
     end
 
     def damage_calc(wpnDMG,str=2,armor=10)
@@ -17,74 +18,96 @@ class FightCenter
         magicDamage = (mDMG*int)/mRes+2
         return magicDamage
     end
-    
+    def isAnEnemy(baddy,goody)
+        goody.enemyGroups.each {|e|
+        if baddy.battle.hateGroup == e
+            return true
+        end
+        }
+        return false
+    end
+
     def meleeAttack(attackerObj,attacker,facing,rangeBoost=0) # The Melee Attack Removing the enemies hp
         #@collisionDetect.checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
+
         if @collisionDetect.checkDir(attackerObj,"up",rangeBoost) == true && facing == "up"
             defender = @collisionDetect.checkDir(attackerObj,"up",rangeBoost,true)
-            defender = defender.battle
-            damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
-            puts("-------------#{defender.name}-----------------")
-            puts("damage: #{damage}")
-            puts("armor: #{defender.totalArmor}")
-            puts("defenderBeforeHP: #{defender.currentHP}")
-            defender.currentHP -= damage
-            puts("defenderAfterHP: #{defender.currentHP}")
-            puts("-------------------------------")
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
+                defender.currentHP -= damage
+            end
         end
         if @collisionDetect.checkDir(attackerObj,"down",rangeBoost) == true && facing == "down"
             defender = @collisionDetect.checkDir(attackerObj,"down",rangeBoost,true)
-            defender = defender.battle
-            damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
-            defender.currentHP -= damage
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
+                defender.currentHP -= damage
+            end
         end
         if @collisionDetect.checkDir(attackerObj,"left",rangeBoost) == true && facing == "left"
             defender = @collisionDetect.checkDir(attackerObj,"left",rangeBoost,true)
-            defender = defender.battle
-            damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
-            defender.currentHP -= damage
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
+                defender.currentHP -= damage
+            end
         end
         if @collisionDetect.checkDir(attackerObj,"right",rangeBoost) == true && facing == "right"
             defender = @collisionDetect.checkDir(attackerObj,"right",rangeBoost,true)
-            defender = defender.battle
-            damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
-            defender.currentHP -= damage
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
+                defender.currentHP -= damage
+            end
         end
-        
+        #puts("-------------#{defender.name}-----------------")
+        #puts("damage: #{damage}")
+        #puts("armor: #{defender.totalArmor}")
+        #puts("defenderAfterHP: #{defender.currentHP}")
+        #puts("-------------------------------")
     end
 
     def magicAttack(attackerObj,attacker,facing,rangeBoost) # The Ranged Attack Removing the enemies hp
 
         if @collisionDetect.checkDir(attackerObj,"up",rangeBoost) == true && facing == "up"
             defender = @collisionDetect.checkDir(attackerObj,"up",rangeBoost,true)
-            defender = defender.battle
-            damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-            puts("-----magic--------#{defender.name}-----------------")
-            puts("damage: #{damage}")
-            puts("armor: #{defender.totalArmor}")
-            puts("defenderBeforeHP: #{defender.currentHP}")
-            defender.currentHP -= damage
-            puts("defenderAfterHP: #{defender.currentHP}")
-            puts("-------------------------------")
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
+                defender.currentHP -= damage
+            end
         end
         if @collisionDetect.checkDir(attackerObj,"down",rangeBoost) == true && facing == "down"
             defender = @collisionDetect.checkDir(attackerObj,"down",rangeBoost,true)
-            defender = defender.battle
-            damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-            defender.currentHP -= damage
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
+                defender.currentHP -= damage
+            end
         end
         if @collisionDetect.checkDir(attackerObj,"left",rangeBoost) == true && facing == "left"
             defender = @collisionDetect.checkDir(attackerObj,"left",rangeBoost,true)
-            defender = defender.battle
-            damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-            defender.currentHP -= damage
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
+                defender.currentHP -= damage
+            end
         end
         if @collisionDetect.checkDir(attackerObj,"right",rangeBoost) == true && facing == "right"
             defender = @collisionDetect.checkDir(attackerObj,"right",rangeBoost,true)
-            defender = defender.battle
-            damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-            defender.currentHP -= damage
+            if isAnEnemy(defender,attacker) == true
+                defender = defender.battle
+                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
+                defender.currentHP -= damage
+            end
         end
+        puts("-----magic--------#{defender.name}-----------------")
+        puts("damage: #{damage}")
+        puts("armor: #{defender.totalArmor}")
+        puts("defenderBeforeHP: #{defender.currentHP}")
+        puts("-------------------------------")
     end
     def closeCombat(objectToMove, battle,facing,wpnAnimation="slash") # The Actual Melee Attack triggering
         case facing
@@ -102,20 +125,11 @@ class FightCenter
             meleeAttack(objectToMove,battle,facing,32)
         end
     end
-    def rangedCombat(objectToMove,facing,spellUsed="firebolt",magicTomb) # The Actual Ranged Attack triggering
-        @magicAttack = magicTomb
+    def rangedCombat(objectToMove,facing,spellUsed="firebolt",bat) # The Actual Ranged Attack triggering
+        @magicAttack = MagicBook.new(bat.int)
         @magicAttack.ranged_shot(objectToMove,facing,spellUsed)
     end
 
-    
-    def isAnEnemy(baddy,goody)
-        goody.enemyGroups.each {|e|
-        if baddy.battle.hateGroup == e
-            return true
-        end
-        }
-        return false
-    end
     def eventBattleTarget(allTargets,theFighter)
         enemyTargets = Array.new
         allTargets.each {|target|
@@ -150,7 +164,7 @@ class FightCenter
                                 if atkRange == "melee"
                                     closeCombat(objectToMove, battle,facing,"slash")
                                 elsif atkRange == "ranged"
-                                    rangedCombat(objectToMove,facing,"firebolt",@magicAttack)
+                                    rangedCombat(objectToMove,facing,"firebolt",battle)
                                 else
                                 end
                             end

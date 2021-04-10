@@ -21,9 +21,6 @@ class SceneMap
         @mHeight = @currentMap.height   # @mHeight = @currentMap.map.height
         @camera_x = @camera_y = 0
 
-        
-
-        
     end 
     def change_map(map)
         $scene_manager.input.addToStack("map")
@@ -38,7 +35,6 @@ class SceneMap
             if e.currentHP <= 0 && e.alive == true
                 @deathTotal += 1
                 e.alive = false
-                $scene_manager.input.removeFromStack("map")
                 $scene_manager.switch_scene("gameover")
             end
         }
@@ -69,7 +65,7 @@ class SceneMap
         end
         @camera_x = [[(@player.x) - 800 / 2, 0].max, ((@mWidth * 32) + 32) - 800].min
         @camera_y = [[(@player.y) - 600 / 2, 0].max, ((@mHeight * 32) + 32) - 600].min
-        $scene_manager.scene["player"].set_move("player")
+        
     end
     def draw()
         

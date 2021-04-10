@@ -65,7 +65,7 @@ class MagicBook
             @activeSpells.push(event)
         }
         
-        dist = 48
+        dist = 64
         @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
         draw_character(event.eventObject, (facing+"Stop") ,1)
         case facing
@@ -74,7 +74,7 @@ class MagicBook
             createSpell.call
             make_shot(spellObj,event,"up",spellStability)
         when "down"
-            spellObj.y += dist + 4
+            spellObj.y += dist 
             createSpell.call
             make_shot(spellObj,event,"down",spellStability)
         when "left"

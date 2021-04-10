@@ -10,23 +10,27 @@ include Animate
 class PlayerControl
     attr_accessor :facing, :name
     def initialize() #meleeAttack(attackerObj,attacker,facing,rangeBoost=0)
-        @playerObj = $scene_manager.object["player"]
-        @playerBattle = $scene_manager.feature["party"].party[0]
+        @playerObj = $scene_manager.scene["player"].eventObject
+        @playerBattle = $scene_manager.scene["player"].battle
         @name = @playerBattle.name
         @skillAnimation = PlayAnimation.new
         @x = (@playerObj.x )
         @y = (@playerObj.y )
         @input = $scene_manager.input
-        @facing = "down"
-        @fightControl = FightCenter.new
+        @fightControl = FightCenter.new("player",@playerBattle)
         @moveControl = Control_movement.new(@name)
         @magicAttack = MagicBook.new(@playerBattle.int)
+        @facing = "down"
+        puts("playerControl created!")
     end
     def player_attack
-        if @input.keyPressed(InputTrigger::ATTACK)
-            @fightControl.closeCombat(@playerObj, @playerBattle,@facing,"slash")
-        elsif @input.keyPressed(InputTrigger::SPELL)
-            @fightControl.rangedCombat(@playerObj,@facing,"firebolt",@magicAttack)
+        if @facing != nil
+            if @input.keyPressed(InputTrigger::ATTACK)
+                @fightControl.closeCombat(@playerObj, @playerBattle,@facing,"slash")
+            elsif @input.keyPressed(InputTrigger::SPELL)
+                
+                @fightControl.rangedCombat(@playerObj,@facing,"firebolt",@playerBattle)
+            end
         end
     end
     def move_input
@@ -80,8 +84,7 @@ class PlayerControl
     end
 
     def update
-
-        @playerObj = $scene_manager.object["player"]
+        @playerObj = $scene_manager.scene["player"].eventObject
         $scene_manager.scene["map"].currentMap.events.each {|e| e.update()}#update events collision
         @x = (@playerObj.x)
         @y = (@playerObj.y)
@@ -90,11 +93,12 @@ class PlayerControl
         @fightControl.update
         move_input
         player_attack
+        
     end
 
     def draw
-        @skillAnimation.draw
         @fightControl.draw
+        @skillAnimation.draw
         @magicAttack.draw
     end
 

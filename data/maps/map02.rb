@@ -57,11 +57,8 @@ class Map02 < Map
 
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], ->(){
-            },@bestiary.enemy("god")
+            },@bestiary.enemy("goblin")
             ))
-        
-            
-            
     end
 
     def draw()

@@ -24,7 +24,7 @@ class Event #$scene_manager.scene["player"].eventObject
     end
     
     @name = battle.name
-    @fightControl = FightCenter.new(@name)
+    @fightControl = FightCenter.new(@name,battle)
     @eventObject = object
     @vector = Vector2.new(0, 0)
     @z = 5
@@ -70,8 +70,8 @@ class Event #$scene_manager.scene["player"].eventObject
   end
 
   def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
-    @moveControl.update
-    @fightControl.update
+    
+    
     
     @player = $scene_manager.scene["player"]
     @battle = battle
@@ -80,27 +80,30 @@ class Event #$scene_manager.scene["player"].eventObject
       @y = @eventObject.y
       @w = @eventObject.w
       @h = @eventObject.h
-    else
-      @x = 0
-      @y = 0
-      @w = 0
-      @h = 0
     end
     if @battle.currentHP > 0
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)
-      set_move(@moveType)
+      
     end
     if @moveType == "player"
-      @playerControl.update
       @facing = @playerControl.facing
+      @playerControl.update
+      
+    else
+      @moveControl.update
+      @fightControl.update
+      set_move(@moveType)
     end
   end
   
   def draw()
-    @moveControl.draw
-    @fightControl.draw
+    
+    
     if @moveType == "player"
       @playerControl.draw
+    else
+      @moveControl.draw
+      @fightControl.draw
     end
     if @battle.currentHP > 0 && @eventObject != nil
       @eventObject.draw()

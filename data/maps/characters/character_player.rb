@@ -24,7 +24,7 @@ class PlayerCharacter < CharacterBase
         @feet = nil
         @totalArmor = total_ac(0)
         @hateGroup = "player"
-        @enemyGroups = ["enemy"]
+        @enemyGroups = ["undead","goblin"]
     end
     def getMod(stat)
         modifier = ((stat - 10))

@@ -20,7 +20,7 @@ class Spellbook
             spellEff = ->(){
                 defender = collisionDetect.check_collision(object,8,true)
                 if defender != nil && defender != true
-                    damage = FightCenter.new.magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
+                    damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("firebolt hit!")
                     defender = defender.battle
