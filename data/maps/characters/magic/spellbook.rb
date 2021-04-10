@@ -24,13 +24,7 @@ class Spellbook
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("firebolt hit!")
                     defender = defender.battle
-                    puts("-----magic--------#{defender.name}----------")
-                    puts("damage: #{damage}")
-                    puts("mRes: #{defender.mRes}")
-                    puts("defenderBeforeHP: #{defender.currentHP}/#{defender.hp}")
                     defender.currentHP -= damage
-                    puts("defenderAfterHP: #{defender.currentHP}/#{defender.hp}")
-                    puts("------------------------------------")
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
                     puts("firebolt miss!")

@@ -80,25 +80,28 @@ class MoveCollision
         return false
     end
     def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
-        playerObj = $scene_manager.scene["player"].eventObject
-        $scene_manager.scene["map"].currentMap.events.each {|event|
+        playerObj = $scene_manager.scene["player"]
 
-        if sameOb(targetObject,playerObj) == false #&& targetObject.y != playerObj.y
+        $scene_manager.scene["map"].currentMap.events.each {|event|
+            
             if collideCheck(targetObject,playerObj,dir,rangeBoost,false) == true
-                if evtReturn == true
-                event = $scene_manager.scene["player"]
-                return event
+                if sameOb(targetObject,playerObj) == false
+                    if evtReturn == true
+                        playa = collideCheck(targetObject,playerObj,dir,rangeBoost,true)
+                        #puts("checkDir player return #{playa.battle.name}")
+                        return playa
+                    end
+                    return true
+                end
+            elsif collideCheck(targetObject,event,dir,rangeBoost,false) == true
+                if sameOb(targetObject,event) == false
+                    if evtReturn == true
+                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
+                        return event
+                    end
+                    return true
                 end
             end
-        end
-        if sameOb(targetObject,event) == false#&& targetObject.y != event.y
-            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
-                if evtReturn == true
-                    return event
-                end
-                return true
-            end
-        end
         }
 
     end
@@ -169,28 +172,28 @@ class MoveCollision
     end
 
     def check_collision(targetObject,rangeBoost = 0,evtReturn = false)
-        if checkDir(targetObject,"up") == true
+        if checkDir(targetObject,"up",rangeBoost) == true
             if evtReturn == true
                 event = checkDir(targetObject,"up",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkDir(targetObject,"down") == true
+        elsif checkDir(targetObject,"down",rangeBoost) == true
             if evtReturn == true
                 event = checkDir(targetObject,"down",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkDir(targetObject,"left") == true
+        elsif checkDir(targetObject,"left",rangeBoost) == true
             if evtReturn == true
                 event = checkDir(targetObject,"left",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkDir(targetObject,"right") == true
+        elsif checkDir(targetObject,"right",rangeBoost) == true
             if evtReturn == true
                 event = checkDir(targetObject,"right",rangeBoost,true)
                 return event
@@ -200,36 +203,5 @@ class MoveCollision
         end
     end
    
-    
-        # ----Event Movement needs rewrite for vectors----
-        moveRandom = ->(randomDir){}
-        facePlayer = ->(sight=300){
-           x = $scene_manager.scene["player"].x
-           y = $scene_manager.scene["player"].y
-           range = 400
-           if (x - targetX).abs <= range && (y - targetY).abs <= range
-            if (y - targetY) <= 0  && (x - targetX) >= 0
-               if (x-targetX).abs <= (y-targetY).abs
-                @objectToMove.set_animation(12)
-               else @objectToMove.set_animation(8)
-               end
-            elsif  (y - targetY) >= 0 && (x - targetX) <= 0
-               if (x-targetX).abs <= (y-targetY).abs
-                @objectToMove.set_animation(0)
-               else @objectToMove.set_animation(4)
-               end
-            end
-           end
-        }
-        
-        followPlayer = ->(sight=2,betweenMove=100){
-            @delayStop = Gosu.milliseconds
-            #if (@delayStop - @delayStart < betweenMove)
-           x = $scene_manager.scene["player"].x
-           y = $scene_manager.scene["player"].y
-           range = sight
-            
-         }
-         
          #event.call(objectToMove)
 end

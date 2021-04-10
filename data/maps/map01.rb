@@ -81,7 +81,8 @@ class Map01
         @teleport2.y = 16
         #-----------------------------------------------------------------
         # Event 101
-        $scene_manager.register_object("Event101","greenMan",7*32,10*32,30,46,4,4)
+        $scene_manager.register_object("Event101","greenMan",2*32,8*32,30,46,4,4)
+        $scene_manager.register_object("Event102","ghost",10*32,8*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event101",
             Event.new($scene_manager.object["Event101"], ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
@@ -92,7 +93,7 @@ class Map01
         },@bestiary.enemy("goblin")))
 
         # Event 102
-        $scene_manager.register_object("Event102","ghost",5*32,5*32,30,48,4,4)
+        
         $scene_manager.registerEvent(1,"Event102",
             Event.new($scene_manager.object["Event102"], ->(){
                 if @showChoices == false
@@ -125,8 +126,8 @@ class Map01
         
         $scene_manager.event["Teleport101"].set_move("none")
         $scene_manager.event["Teleport102"].set_move("none")
-        $scene_manager.event["Event102"].set_move("followPlayer",10*32,4*32,"ranged",$scene_manager.scene["player"]) #ghost
-        $scene_manager.event["Event101"].set_move("followPlayer",10*32,2*32,"melee",$scene_manager.scene["player"]) #greenguy
+        $scene_manager.event["Event102"].set_move("followPlayer",10*32,5*32,"ranged",$scene_manager.scene["player"]) #ghost
+        $scene_manager.event["Event101"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #greenguy
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true
