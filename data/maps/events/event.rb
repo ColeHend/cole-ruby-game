@@ -88,7 +88,6 @@ class Event #$scene_manager.scene["player"].eventObject
     if @moveType == "player"
       @facing = @playerControl.facing
       @playerControl.update
-      
     else
       @moveControl.update
       @fightControl.update

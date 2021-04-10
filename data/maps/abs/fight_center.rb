@@ -6,9 +6,9 @@ class FightCenter
     # damage = ((wpnDMG*STR)/armor)
     # mDMG = (mDMG*INT)/mRes+2
     @collisionDetect = MoveCollision.new(name)
-    @skillAnimation = PlayAnimation.new
+    @skillAnimation
     @magicAttack 
-    @showDamage = false
+    @showDamage = true
     end
 
     def damage_calc(wpnDMG,str=2,armor=10)
@@ -30,7 +30,7 @@ class FightCenter
 
     def meleeAttack(attackerObj,attacker,facing,rangeBoost=0) # The Melee Attack Removing the enemies hp
         #@collisionDetect.checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
-
+        
         if @collisionDetect.checkDir(attackerObj,"up",rangeBoost) == true && facing == "up"
             defender = @collisionDetect.checkDir(attackerObj,"up",rangeBoost,true)
             if isAnEnemy(defender,attacker) == true
@@ -137,6 +137,7 @@ class FightCenter
         end
     end
     def closeCombat(objectToMove, battle,facing,wpnAnimation="slash") # The Actual Melee Attack triggering
+        @skillAnimation = PlayAnimation.new
         case facing
         when "left"
             @skillAnimation.play_animation(wpnAnimation,objectToMove.x-4*32,objectToMove.y-2*32,nil)
@@ -202,15 +203,17 @@ class FightCenter
     end
 
     def update
-        @skillAnimation.update
         if @magicAttack != nil
             @magicAttack.update
+        elsif @skillAnimation != nil
+            @skillAnimation.update
         end
     end
     def draw
-        @skillAnimation.draw
         if @magicAttack != nil
             @magicAttack.draw
+        elsif @skillAnimation != nil
+            @skillAnimation.draw
         end
     end
 end

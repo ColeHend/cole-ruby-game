@@ -67,7 +67,7 @@ class MagicBook
         
         dist = 48
         @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
-        draw_character(event.eventObject, (facing+"Stop") ,1)
+        draw_character(event.eventObject, (facing) ,1)
         case facing
         when "up"
             spellObj.y -= dist

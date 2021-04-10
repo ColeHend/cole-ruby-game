@@ -12,7 +12,7 @@ class Bestiary
             god.enemyGroups = ["nobody"] 
             return god
         when "ghost"
-            ghost = PlayerCharacter.new("ghost",15.0,12,12,12,12)
+            ghost = PlayerCharacter.new("ghost",20.0,12,12,12,12)
             ghost.weapon = Weapon.new("GhostTouch",15)
             ghost.totalArmor = 12
             ghost.mRes = 12
