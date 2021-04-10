@@ -16,7 +16,7 @@ class Bestiary
             ghost.mRes = 12
             ghost.exp = 500 # gives 5% of 
             ghost.hateGroup = "undead"
-            ghost.enemyGroups = ["player","guard"] 
+            ghost.enemyGroups = ["player","guard","goblin"] 
             return ghost
         when "goblin"
             goblin = PlayerCharacter.new("goblin",30.0,12,12,12,12,2)
@@ -24,7 +24,7 @@ class Bestiary
             goblin.totalArmor = 8
             goblin.exp = 800 # gives 5% of 
             goblin.hateGroup = "goblin"
-            goblin.enemyGroups = ["player","guard"] 
+            goblin.enemyGroups = ["player","guard","ghost"] 
             return goblin
         end
 

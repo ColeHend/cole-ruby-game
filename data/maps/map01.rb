@@ -120,8 +120,8 @@ class Map01
         
         $scene_manager.event["Teleport101"].set_move("none")
         $scene_manager.event["Teleport102"].set_move("none")
-        $scene_manager.event["Event102"].set_move("followPlayer",8*32,4*32,"melee")
-        $scene_manager.event["Event101"].set_move("followPlayer",8*32,4*32,"ranged",$scene_manager.event["Event102"])
+        $scene_manager.event["Event102"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #ghost
+        $scene_manager.event["Event101"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #greenguy
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true

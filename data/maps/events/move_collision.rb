@@ -199,38 +199,7 @@ class MoveCollision
             end
         end
     end
-        
-    def check_player_collision(targetObject,rangeBoost = 0,playerReturn = false)
-        if checkDir(targetObject,"up") == true
-            if playerReturn == true
-                player = $scene_manager.scene["player"]
-                return player
-            else
-                return true
-            end
-        elsif checkDir(targetObject,"down") == true
-            if playerReturn == true
-                player = $scene_manager.scene["player"]
-                return player
-            else
-                return true
-            end
-        elsif checkDir(targetObject,"left") == true
-            if playerReturn == true
-                player = $scene_manager.scene["player"]
-                return player
-            else
-                return true
-            end
-        elsif checkDir(targetObject,"right") == true
-            if playerReturn == true
-                player = $scene_manager.scene["player"]
-                return player
-            else
-                return true
-            end
-        end
-    end
+   
     
         # ----Event Movement needs rewrite for vectors----
         moveRandom = ->(randomDir){}

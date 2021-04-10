@@ -48,7 +48,7 @@ class Event #$scene_manager.scene["player"].player
 
   end
 
-  def set_move(kind,dist=12*32,innerDist=4*32,atkType="ranged",objectOfFocus=$scene_manager.scene["player"])
+  def set_move(kind,dist=12*32,innerDist=8*32,atkType="ranged",objectOfFocus=nil)
     canMove()
     @moveType = kind
     @distance = dist

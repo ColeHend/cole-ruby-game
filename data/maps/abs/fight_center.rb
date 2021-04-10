@@ -106,29 +106,53 @@ class FightCenter
         @magicAttack = magicTomb
         @magicAttack.ranged_shot(objectToMove,facing,spellUsed)
     end
-    def eventAtkChoice(objectToMove, battle,facing ,detectRange=6*32,actionRange=6*32,atkRange="ranged",objectToFollow)
+
+    
+    def isAnEnemy(baddy,goody)
+        goody.enemyGroups.each {|e|
+        if baddy.battle.hateGroup == e
+            return true
+        end
+        }
+        return false
+    end
+    def eventBattleTarget(allTargets,theFighter)
+        enemyTargets = Array.new
+        allTargets.each {|target|
+            if isAnEnemy(target,theFighter) == true
+                enemyTargets.push(target)
+            end
+        }
+        case enemyTargets.length
+        when 0
+            return nil
+        when 1
+            return enemyTargets[0]
+        else
+            if enemyTargets.length > 1
+                return enemyTargets[0]
+            else
+                return nil
+            end
+        end
+    end
+    def eventAtkChoice(objectToMove, battle,facing ,detectRange,actionRange,atkRange="ranged",objectToFollow)
         @magicAttack = MagicBook.new(battle.int)
         detectDist = detectRange
         closestDist = actionRange
-        def isAnEnemy(baddy,battle)
-            battle.enemyGroups.each {|e|
-            if baddy.battle.hateGroup == e
-                return true
-            end
-            }
-            return false
-        end
-        if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
-            if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist
-                if (objectToFollow.x - objectToMove.x ).abs >= closestDist && (objectToFollow.y - objectToMove.y ).abs >= closestDist
-                    if MoveCollision.new.check_collision(objectToMove,closestDist,false) == true || MoveCollision.new.check_player_collision(objectToMove,closestDist,false) == true
-                        theEnemy = MoveCollision.new.check_collision(objectToMove,closestDist,true)
-                        if isAnEnemy(theEnemy,battle) == true
-                            if atkRange == "melee"
-                                closeCombat(objectToMove, battle,facing,"slash")
-                            elsif atkRange == "ranged"
-                                rangedCombat(objectToMove,facing,"firebolt",@magicAttack)
-                            else
+        if objectToFollow != nil
+            if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
+                if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist
+                    if (objectToFollow.x - objectToMove.x ).abs >= closestDist && (objectToFollow.y - objectToMove.y ).abs >= closestDist
+                        if MoveCollision.new.check_collision(objectToMove,closestDist,false) == true
+                            theEnemy = MoveCollision.new.check_collision(objectToMove,closestDist,true)
+                            if isAnEnemy(theEnemy,battle) == true
+                                if atkRange == "melee"
+                                    closeCombat(objectToMove, battle,facing,"slash")
+                                elsif atkRange == "ranged"
+                                    rangedCombat(objectToMove,facing,"firebolt",@magicAttack)
+                                else
+                                end
                             end
                         end
                     end
