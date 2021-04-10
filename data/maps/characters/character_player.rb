@@ -2,8 +2,9 @@ require_relative "character_base.rb"
 require_relative "weapon.rb"
 require_relative "armor.rb"
 class PlayerCharacter < CharacterBase
-    attr_accessor :currentHP, :alive, :exp, :playerLevel, :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor
-    attr_reader :str, :dex, :int, :con, :hp, :mRes, :deathExp
+    attr_accessor :currentHP, :alive, :exp, :playerLevel,:enemyGroups, :hateGroup 
+    attr_accessor :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor, :mRes
+    attr_reader :str, :dex, :int, :con, :hp, :deathExp
     def initialize(name,hp,str=14,dex=12,int=12,con=12,mRes=1)
         self.name = name
         self.hp = hp
@@ -22,6 +23,8 @@ class PlayerCharacter < CharacterBase
         @legs = nil
         @feet = nil
         @totalArmor = total_ac(0)
+        @hateGroup = "player"
+        @enemyGroups = ["undead","goblin"]
     end
     def getMod(stat)
         modifier = ((stat - 10))
@@ -30,10 +33,12 @@ class PlayerCharacter < CharacterBase
     
     def level_up
         #stat increases and stuff
-        @exp = (@exp-@lvlUpExp)
         @playerLevel = (@playerLevel+1)
         self.hp = (self.hp+5)
         @lvlUpExp = (1000*@playerLevel) 
+        self.int = (self.int+1)
+        self.con = (self.con+1)
+        
     end
 
     def give_xp(expAmt)

@@ -1,4 +1,5 @@
 require_relative "files/input.rb"
+require_relative "files/game_object.rb"
 class SceneManager
     attr_accessor :scene, :currentScene, :feature, :images, :event, :eventMap, :object
     attr_reader :input
@@ -17,11 +18,11 @@ class SceneManager
     end
 
     def register_image(name,imgName,columns,rows)
-        @images[name] = GameObject.new(0,0,0,0,imgName,nil,columns,rows)
+        @images[name] = Game_Object.new(name,0,0,0,0,imgName,nil,columns,rows)
            
     end
     def register_object(name,img,x,y,bbWidth,bbHeight,cols,rows)
-        @object[name]= GameObject.new(x, y, bbWidth, bbHeight, img, nil, cols, rows)
+        @object[name]= GameObject.new(x,y,bbWidth,bbHeight,img,nil,cols,rows)
     end
 
     def registerFeature(featureName,featureClass)

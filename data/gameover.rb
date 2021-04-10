@@ -7,6 +7,8 @@ class Gameover
     end
     def update
         if KB.key_pressed?(InputTrigger::SELECT)
+            $scene_manager.input.removeFromStack("map")
+            $scene_manager.input.addToStack("optionsBox")
             $scene_manager.switch_scene("title")
         end
     end

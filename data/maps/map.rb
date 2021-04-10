@@ -10,6 +10,7 @@ class Mapper
         @mapfile = file
         @player = $scene_manager.scene["player"]
         draw_tile_loop()
+        
     end
 
     def draw_tile(tile,y,x,passable)

@@ -13,22 +13,23 @@ class Spellbook
             object = $scene_manager.register_object("firebolt","fireshotCharacter",0,0,32,32,4,4)
             spell = PlayerCharacter.new("firebolt",1)
             mDMG = 5
+            collisionDetect = MoveCollision.new
             #
             spell.totalArmor = 1
             animName = "fire"
             spellEff = ->(){
-                defender = check_collision(object,8,true)
-                if defender != nil
-                    damage = FightCenter.new.magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
+                defender = collisionDetect.check_collision(object,8,true)
+                if defender != nil && defender != true
+                    damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("firebolt hit!")
                     defender = defender.battle
                     puts("-----magic--------#{defender.name}----------")
                     puts("damage: #{damage}")
                     puts("mRes: #{defender.mRes}")
-                    puts("defenderBeforeHP: #{defender.currentHP}")
+                    puts("defenderBeforeHP: #{defender.currentHP}/#{defender.hp}")
                     defender.currentHP -= damage
-                    puts("defenderAfterHP: #{defender.currentHP}")
+                    puts("defenderAfterHP: #{defender.currentHP}/#{defender.hp}")
                     puts("------------------------------------")
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
