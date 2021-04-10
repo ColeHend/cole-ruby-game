@@ -58,24 +58,27 @@ class Map01
 
         #   -----Events-----
         #------------------------WarpSquare--------------------------------
-        teleport1 = $scene_manager.registerEvent(1,"Teleport101",
+        
+        $scene_manager.registerEvent(1,"Teleport101",
             Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
                 $scene_manager.scene["map"].change_map("map02")
                 $scene_manager.object["player"].y += 32
                 
         },@bestiary.enemy("god")))
-        puts(teleport1)
-        teleport1[0].activateType = "TOUCH"
-        teleport1[0].x = 12*32
-        teleport1[0].y = 16
-        teleport2 = $scene_manager.registerEvent(1,"Teleport102",
+        @teleport1 = $scene_manager.event["Teleport101"]
+        @teleport1.activateType = "TOUCH"
+        @teleport1.x = 12*32
+        @teleport1.y = 16
+        
+        $scene_manager.registerEvent(1,"Teleport102",
             Event.new(nil, EventTrigger::ACTION_KEY, true, ->(){
                 $scene_manager.scene["map"].change_map("map02")
                 $scene_manager.object["player"].y += 32
         },@bestiary.enemy("god")))
-        teleport2[0].activateType = "TOUCH"
-        teleport2[0].x = 13*32
-        teleport2[0].y = 16
+        @teleport2 = $scene_manager.event["Teleport102"]
+        @teleport2.activateType = "TOUCH"
+        @teleport2.x = 13*32
+        @teleport2.y = 16
         #-----------------------------------------------------------------
         # Event 101
         $scene_manager.register_object("Event101","greenMan",7*32,10*32,30,46,4,4)
@@ -117,11 +120,13 @@ class Map01
         end
     end
     def update
+        $scene_manager.event["Teleport101"].x, $scene_manager.event["Teleport101"].y = 12*32, 16
+        $scene_manager.event["Teleport102"].x, $scene_manager.event["Teleport102"].y = 13*32, 16
         
         $scene_manager.event["Teleport101"].set_move("none")
         $scene_manager.event["Teleport102"].set_move("none")
-        $scene_manager.event["Event102"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #ghost
-        $scene_manager.event["Event101"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"]) #greenguy
+        $scene_manager.event["Event102"].set_move("followPlayer",10*32,2*32,"melee",$scene_manager.scene["player"]) #ghost
+        $scene_manager.event["Event101"].set_move("followPlayer",10*32,2*32,"melee",$scene_manager.scene["player"]) #greenguy
         @map.update()
         #$scene_manager.eventMap[1]
         if @showChoices == true

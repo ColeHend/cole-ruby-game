@@ -77,8 +77,8 @@ class Control_movement
         if objectToFollow != nil
             if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist
                 if (objectToFollow.x - objectToMove.x ).abs >= closestDist && ((objectToFollow.y-16) - objectToMove.y ).abs >= closestDist
-                    if (objectToFollow.x - objectToMove.x ).abs >= ((objectToFollow.y-16) - objectToMove.y).abs && ((objectToFollow.x-16) - objectToMove.x ).abs <= range # In Range X Dis Greater
-                        if objectToFollow.x < objectToMove.x # farther left
+                    if (objectToFollow.x - objectToMove.x ).abs > ((objectToFollow.y-16) - objectToMove.y).abs && ((objectToFollow.x-16) - objectToMove.x ).abs <= range # In Range X Dis Greater
+                        if objectToFollow.x <= objectToMove.x # farther left
                             if objDetect.check_surrounding("left", objectToMove)  == false
                                 attackerClass.facing = "left"
                                 Move(vectorToMove,objectToMove,"left",speed,time)
@@ -155,8 +155,8 @@ class Control_movement
                                 end
                             end
                         end
-                    elsif ((objectToFollow.x-16) - objectToMove.x ).abs <= ((objectToFollow.y-16) - objectToMove.y).abs && (objectToFollow.y - objectToMove.y).abs <= range # In Range Y Dis Greater
-                        if objectToFollow.y > objectToMove.y #farther down
+                    elsif ((objectToFollow.x-16) - objectToMove.x ).abs < ((objectToFollow.y-16) - objectToMove.y).abs && (objectToFollow.y - objectToMove.y).abs <= range # In Range Y Dis Greater
+                        if objectToFollow.y >= objectToMove.y #farther down
                             if objDetect.check_surrounding("down", objectToMove)  == false
                                 attackerClass.facing = "down"
                                 Move(vectorToMove,objectToMove,"down",speed,time)
@@ -236,14 +236,14 @@ class Control_movement
                     elsif ((objectToFollow.y-16) - objectToMove.y).abs <= (range) && ((objectToFollow.x-16) - objectToMove.x ).abs <= (range) # In Range Else
                         if objectToFollow.y <= objectToMove.y #farther up
                             if objectToFollow.x >= objectToMove.x # up and right
-                                if objDetect.check_surrounding("up", objectToMove)  == false
-                                    attackerClass.facing = "up"
-                                    Move(vectorToMove,objectToMove,"up",speed,time)
-                                elsif objDetect.check_surrounding("up", objectToMove)  == true
-                                    if objDetect.check_surrounding("right", objectToMove)  == false
-                                        attackerClass.facing = "right"
-                                        Move(vectorToMove,objectToMove,"right",speed,time)
-                                    elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                if objDetect.check_surrounding("right", objectToMove)  == false
+                                    attackerClass.facing = "right"
+                                    Move(vectorToMove,objectToMove,"right",speed,time)
+                                elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                    if objDetect.check_surrounding("up", objectToMove)  == false
+                                        attackerClass.facing = "up"
+                                        Move(vectorToMove,objectToMove,"up",speed,time)
+                                    elsif objDetect.check_surrounding("up", objectToMove)  == true
                     
                                     end
                                 end
@@ -262,7 +262,7 @@ class Control_movement
                             end
                 
                         elsif objectToFollow.y < objectToMove.y #farther down
-                            if objectToFollow.x > objectToMove.x # down and right
+                            if objectToFollow.x >= objectToMove.x # down and right
                                 if objDetect.check_surrounding("right", objectToMove)  == false
                                     attackerClass.facing = "right"
                                     Move(vectorToMove,objectToMove,"right",speed,time)

@@ -8,6 +8,8 @@ class Bestiary
         when "god"
             god = PlayerCharacter.new("god",1000000.0,12,12,12,12,100000)
             god.totalArmor = 100000
+            god.hateGroup = "notouchy"
+            god.enemyGroups = ["nobody"] 
             return god
         when "ghost"
             ghost = PlayerCharacter.new("ghost",15.0,12,12,12,12)

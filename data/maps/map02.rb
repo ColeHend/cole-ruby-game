@@ -57,7 +57,7 @@ class Map02 < Map
 
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], EventTrigger::ACTION_KEY, true, ->(){
-            },@bestiary.enemy("ghost")
+            },@bestiary.enemy("god")
             ))
         
             
@@ -78,6 +78,7 @@ class Map02 < Map
 
     def update()
         @map.update()
-        $scene_manager.event["Event201"].set_move("followPlayer",13*32)
+        $scene_manager.event["Event201"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"])
+        $scene_manager.event["Event202"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"])
     end
 end
