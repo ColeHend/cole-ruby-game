@@ -17,7 +17,7 @@ class PlayerControl
         @x = (@playerObj.x )
         @y = (@playerObj.y )
         @input = $scene_manager.input
-        @fightControl = FightCenter.new("player",@playerBattle)
+        @fightControl = FightCenter.new("player",@playerBattle,Gosu::milliseconds())
         @moveControl = Control_movement.new(@name)
         @magicAttack = MagicBook.new(@playerBattle.int)
         @facing = "down"

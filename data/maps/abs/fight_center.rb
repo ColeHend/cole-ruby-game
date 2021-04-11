@@ -2,13 +2,19 @@ require_relative "../events/move_collision.rb"
 require_relative "../../files/play_animation.rb"
 require_relative "../characters/magic/magic_attack.rb"
 class FightCenter
-    def initialize(name,bat)
+    def initialize(name,bat,cooldownTimer=Gosu::milliseconds())
     # damage = ((wpnDMG*STR)/armor)
     # mDMG = (mDMG*INT)/mRes+2
+    @name = name
     @collisionDetect = MoveCollision.new(name)
-    @skillAnimation
+    @skillAnimation = PlayAnimation.new()
     @magicAttack 
     @showDamage = true
+    @meleeCool = false
+    @cooldownTime = cooldownTimer
+    @spellCast = nil
+    @magicCool = Array.new()
+    @lastSpell
     end
 
     def damage_calc(wpnDMG,str=2,armor=10)
@@ -24,13 +30,50 @@ class FightCenter
         if baddy.battle.hateGroup == e
             return true
         end
+        
         }
+        return false
+    end
+    
+    def meleeCooldown(cooldownTime=350)
+        if @meleeCool == true
+            if ((Gosu::milliseconds - @cooldownTime)) >= cooldownTime
+                @cooldownTime = Gosu::milliseconds
+                @meleeCool = false
+            end
+        end
+    end
+
+    def magicCoolList()
+        if @spellCast != nil
+            if @magicCool.length > 0
+                @magicCool.each_with_index{|spell,index|
+                delayTime = spell[4]
+                #currentTime = delayTime - (Gosu::milliseconds - @cooldownTime)
+                if ((Gosu::milliseconds - @cooldownTime)) >= delayTime
+                    currentTime = delayTime
+                    @cooldownTime = Gosu::milliseconds
+                    @magicCool.delete_at(index)
+                    @spellCast = nil
+                end
+                }
+            end
+        end
+    end
+    def onMagicCoolList(spellname)
+        if @magicCool.length > 0
+            @magicCool.each {|spell|
+                if @spellCast[5] == spellname
+                    return true
+                end
+            }
+        end
         return false
     end
 
     def meleeAttack(attackerObj,attacker,facing,rangeBoost=0) # The Melee Attack Removing the enemies hp
         #@collisionDetect.checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
-        
+        @collisionDetect = MoveCollision.new(@name)
         if @collisionDetect.checkDir(attackerObj,"up",rangeBoost) == true && facing == "up"
             defender = @collisionDetect.checkDir(attackerObj,"up",rangeBoost,true)
             if isAnEnemy(defender,attacker) == true
@@ -137,25 +180,37 @@ class FightCenter
         end
     end
     def closeCombat(objectToMove, battle,facing,wpnAnimation="slash") # The Actual Melee Attack triggering
-        @skillAnimation = PlayAnimation.new
-        case facing
-        when "left"
-            @skillAnimation.play_animation(wpnAnimation,objectToMove.x-4*32,objectToMove.y-2*32,nil)
-            meleeAttack(objectToMove,battle,facing,32)
-        when "right"
-            @skillAnimation.play_animation(wpnAnimation,objectToMove.x-1.8*32,objectToMove.y-2.1*32,:horiz)
-            meleeAttack(objectToMove,battle,facing,32)
-        when "up"
-            @skillAnimation.play_animation(wpnAnimation,objectToMove.x-3*32,objectToMove.y-3*32,nil)
-            meleeAttack(objectToMove,battle,facing,32)
-        when "down"
-            @skillAnimation.play_animation(wpnAnimation,objectToMove.x-3*32,objectToMove.y-2*32,:vert)
-            meleeAttack(objectToMove,battle,facing,32)
+        if  @meleeCool == false
+            case facing
+            when "left"
+                @skillAnimation.play_animation(wpnAnimation,objectToMove.x-4*32,objectToMove.y-2*32,nil)
+                meleeAttack(objectToMove,battle,facing,32)
+                puts("attack")
+            when "right"
+                @skillAnimation.play_animation(wpnAnimation,objectToMove.x-1.8*32,objectToMove.y-2.1*32,:horiz)
+                meleeAttack(objectToMove,battle,facing,32)
+                puts("attack")
+            when "up"
+                @skillAnimation.play_animation(wpnAnimation,objectToMove.x-3*32,objectToMove.y-3*32,nil)
+                meleeAttack(objectToMove,battle,facing,32)
+                puts("attack")
+            when "down"
+                @skillAnimation.play_animation(wpnAnimation,objectToMove.x-3*32,objectToMove.y-2*32,:vert)
+                meleeAttack(objectToMove,battle,facing,32)
+                puts("attack")
+            end
+            @meleeCool = true
         end
     end
     def rangedCombat(objectToMove,facing,spellUsed="firebolt",bat) # The Actual Ranged Attack triggering
-        @magicAttack = MagicBook.new(bat.int)
-        @magicAttack.ranged_shot(objectToMove,facing,spellUsed)
+        if onMagicCoolList(spellUsed) == false
+            @magicAttack = MagicBook.new(bat.int)
+            @spellCast = @magicAttack.spellList.spell(spellUsed)
+            #@lastSpell = @spellCast[5]
+            @magicCool.push(@spellCast)
+            @magicAttack.ranged_shot(objectToMove,facing,spellUsed)
+            
+        end
     end
 
     def eventBattleTarget(allTargets,theFighter)
@@ -178,21 +233,36 @@ class FightCenter
             end
         end
     end
-    def eventAtkChoice(objectToMove, battle,facing ,detectRange,actionRange,atkRange="ranged",objectToFollow)
-        detectDist = detectRange
-        closestDist = actionRange
-        if objectToFollow != nil
+    def eventAtkChoice(objectToMove, battle,facing ,detectDist,closestDist,atkRange="ranged",objectToFollow)
+        if objectToFollow.is_a?(GameObject) == false
+            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
+                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+                if theEnemy.is_a?(Event)
+                    if isAnEnemy(theEnemy,battle)
+                        if objectToMove.x != theEnemy.x && objectToMove.y != theEnemy.y
+                            objectToFollow = theEnemy.eventObject
+                        end
+                    end
+                end
+            end
+        end
+        if objectToFollow.is_a?(GameObject)
             #if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
                 if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist # outer ring
                     if (objectToFollow.x - objectToMove.x ).abs <= closestDist && (objectToFollow.y - objectToMove.y ).abs <= closestDist #inner ring
-                        if MoveCollision.new.check_collision(objectToMove,closestDist,false) == true #needs to check if colliding with an object
-                            theEnemy = MoveCollision.new.check_collision(objectToMove,closestDist,true)
-                            if isAnEnemy(theEnemy,battle) == true
-                                if atkRange == "melee"
-                                    closeCombat(objectToMove, battle,facing,"slash")
-                                elsif atkRange == "ranged"
-                                    rangedCombat(objectToMove,facing,"firebolt",battle)
-                                else
+                        if MoveCollision.new.check_inRange(objectToMove,closestDist,false) == true #needs to check if colliding with an object
+                            theEnemy = MoveCollision.new.check_inRange(objectToMove,closestDist,true)
+                            if theEnemy.is_a?(Event)
+                                
+                                if isAnEnemy(theEnemy,battle) == true
+                                    #puts("closestDist #{closestDist},outerDist #{detectDist},range #{battle.name}")
+                                    theEnemy
+                                    if atkRange == "melee"
+                                        closeCombat(objectToMove, battle,facing,"slash")
+                                    elsif atkRange == "ranged"
+                                        rangedCombat(objectToMove,facing,"firebolt",battle)
+                                    else
+                                    end
                                 end
                             end
                         end
@@ -203,6 +273,10 @@ class FightCenter
     end
 
     def update
+        @cooldownTime
+        
+        meleeCooldown(350)
+        magicCoolList()
         if @magicAttack != nil
             @magicAttack.update
         elsif @skillAnimation != nil

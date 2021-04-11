@@ -12,10 +12,22 @@ class MoveCollision
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
     end
+    def sameOb(obj1,obj2)
+        #if obj1.x == obj2.x
+            #if obj1.y == obj2.y
+                if obj1.w == obj2.w
+                    if obj1.h == obj2.h
+                        return true
+                    end
+                end
+            #end
+        #end
+        return false
+    end
 
     def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
-        range = 33 + rangeBoost
-        
+        range = 33
+        range += rangeBoost
         if event != nil && targetObject != nil
             targetX = targetObject.x
             targetY = targetObject.y
@@ -67,19 +79,8 @@ class MoveCollision
             puts("collideCheck skipped..")
         end
     end
-    def sameOb(obj1,obj2)
-        #if obj1.x == obj2.x
-            #if obj1.y == obj2.y
-                if obj1.w == obj2.w
-                    if obj1.h == obj2.h
-                        return true
-                    end
-                end
-            #end
-        #end
-        return false
-    end
-    def checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
+    
+    def checkDir(targetObject,dir,rangeBoost,evtReturn = false)
         playerObj = $scene_manager.scene["player"]
 
         $scene_manager.scene["map"].currentMap.events.each {|event|
@@ -103,9 +104,8 @@ class MoveCollision
                 end
             end
         }
-
     end
-
+    
     def check_surrounding(direction,targetObject)
         #currentMap =  $scene_manager.scene["map"].currentMap 
         mWidth = 30
@@ -170,8 +170,8 @@ class MoveCollision
         end
             
     end
-
-    def check_collision(targetObject,rangeBoost = 0,evtReturn = false)
+    
+    def check_collision(targetObject,rangeBoost ,evtReturn = false)
         if checkDir(targetObject,"up",rangeBoost) == true
             if evtReturn == true
                 event = checkDir(targetObject,"up",rangeBoost,true)
@@ -202,6 +202,113 @@ class MoveCollision
             end
         end
     end
+
+    def inRange(targetObject,event,dir,rangeBoost,evtReturn)
+        range = 33
+        range += rangeBoost
+        if event != nil && targetObject != nil
+            targetX = targetObject.x
+            targetY = targetObject.y
+            targetW = targetObject.w
+            targetH = targetObject.h
+            eventX = event.x
+            eventY = event.y
+            eventW = event.w
+            eventH = event.h
+            case dir
+                when "up"
+                    if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
+                        if evtReturn == true
+                            return event
+                        end
+                        return true
+                    end
+                when "down"
+                    if range >= (eventY+(16) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #down
+                        if evtReturn == true
+                            return event
+                        end
+                        return true
+                    end
+                when "left"
+                    if (range-2 ) >= ((eventY) - targetY).abs && ((eventX+eventW) - targetX).abs <= (range) #up
+                        if evtReturn == true
+                            return event
+                        end
+                        return true
+                    end
+                when "right"
+                    if (range-2 ) >= ((eventY) - targetY).abs && (eventX - (targetX + targetW)).abs <= (range) #up
+                        if evtReturn == true
+                            return event
+                        end
+                        return true
+                    end
+            end
+        else
+            puts("collideCheck skipped..")
+        end
+    end
+    def checkRange(targetObject,dir,rangeBoost,evtReturn = false)
+        playerObj = $scene_manager.scene["player"]
+
+        $scene_manager.scene["map"].currentMap.events.each {|event|
+        
+        if inRange(targetObject,playerObj,dir,rangeBoost,false) == true
+            if sameOb(targetObject,playerObj) == false
+                if evtReturn == true
+                    playa = inRange(targetObject,playerObj,dir,rangeBoost,true)
+                    #puts("checkDir player return #{playa.battle.name}")
+                    return playa
+                end
+                return true
+            end
+        end
+            if inRange(targetObject,event,dir,rangeBoost,false) == true
+                if sameOb(targetObject,event) == false
+                    if evtReturn == true
+                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
+                        return event
+                    end
+                    return true
+                end
+            end
+            
+        }
+    end
+    
+    def check_inRange(targetObject,rangeBoost ,evtReturn = false)
+        if checkRange(targetObject,"up",rangeBoost) == true
+            if evtReturn == true
+                event = checkRange(targetObject,"up",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        elsif checkRange(targetObject,"down",rangeBoost) == true
+            if evtReturn == true
+                event = checkRange(targetObject,"down",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        elsif checkRange(targetObject,"left",rangeBoost) == true
+            if evtReturn == true
+                event = checkRange(targetObject,"left",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        elsif checkRange(targetObject,"right",rangeBoost) == true
+            if evtReturn == true
+                event = checkRange(targetObject,"right",rangeBoost,true)
+                return event
+            else
+                return true
+            end
+        end
+    end
+    
    
          #event.call(objectToMove)
 end

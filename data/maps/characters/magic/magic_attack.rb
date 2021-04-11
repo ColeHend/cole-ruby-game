@@ -8,6 +8,7 @@ require_relative "../../../files/animate.rb"
 
 Dir[File.join(__dir__, '..', '*.rb')].each { |file| require file }
 class MagicBook
+    attr_accessor :spellList
     def initialize(int = 12)
         @currentMap =  $scene_manager.scene["map"].currentMap
         @playerObj = $scene_manager.object["player"]
@@ -32,10 +33,10 @@ class MagicBook
                     
                     @moveControl.Move(spellEVT.vector,targetObject,facing,1,4)
                     
-                    if collisionDetect.check_collision(targetObject) == true
+                    if collisionDetect.check_collision(targetObject,0) == true
                         spellEVT.activate_event
                         break
-                    elsif collisionDetect.check_collision(targetObject) != true && u == range
+                    elsif collisionDetect.check_collision(targetObject,0) != true && u == range
                         spellEVT.activate_event
                         break
                     end
@@ -65,7 +66,7 @@ class MagicBook
             @activeSpells.push(event)
         }
         
-        dist = 48
+        dist = 56
         @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
         draw_character(event.eventObject, (facing) ,1)
         case facing

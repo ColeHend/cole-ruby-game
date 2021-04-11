@@ -13,7 +13,7 @@ class Bestiary
             return god
         when "ghost"
             ghost = PlayerCharacter.new("ghost",20.0,12,12,12,12)
-            ghost.weapon = Weapon.new("GhostTouch",15)
+            ghost.weapon = Weapon.new("GhostTouch",8)
             ghost.totalArmor = 12
             ghost.mRes = 12
             ghost.exp = 500 # gives 5% of 
@@ -22,11 +22,11 @@ class Bestiary
             return ghost
         when "goblin"
             goblin = PlayerCharacter.new("goblin",30.0,12,12,12,12,2)
-            goblin.weapon = Weapon.new("Rusty Sword",8)
+            goblin.weapon = Weapon.new("Rusty Sword",6)
             goblin.totalArmor = 8
             goblin.exp = 800 # gives 5% of 
             goblin.hateGroup = "goblin"
-            goblin.enemyGroups = ["player","guard","undead"] 
+            goblin.enemyGroups = ["guard","undead"] 
             return goblin
         end
 

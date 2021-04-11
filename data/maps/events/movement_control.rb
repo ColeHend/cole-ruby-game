@@ -67,233 +67,243 @@ class Control_movement
     end
     
     def Follow(vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,objectToFollow)
+        @objectToFollow = objectToFollow
         lockedOn = false
         detectDist = range
-        closestDist = 0
+        closestDist = 16
         objDetect = MoveCollision.new
         speed = 0.25
         time = 10
-    
-        if objectToFollow != nil
-            if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist
-                if (objectToFollow.x - objectToMove.x ).abs >= closestDist && ((objectToFollow.y-16) - objectToMove.y ).abs >= closestDist
-                    if (objectToFollow.x - objectToMove.x ).abs > ((objectToFollow.y-16) - objectToMove.y).abs && ((objectToFollow.x-16) - objectToMove.x ).abs <= range # In Range X Dis Greater farther horizontal
-                        if objectToFollow.x < objectToMove.x # farther left
+        if @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
+            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
+                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+                if theEnemy != nil
+                    if isAnEnemy(theEnemy,attackerClass.battle)
+                        @objectToFollow = theEnemy.eventObject
+                    end
+                end
+            end
+        end
+        if @objectToFollow != nil
+            if (@objectToFollow.x - objectToMove.x ).abs <= detectDist && (@objectToFollow.y - objectToMove.y ).abs <= detectDist
+                if (@objectToFollow.x - objectToMove.x ).abs >= closestDist && ((@objectToFollow.y-16) - objectToMove.y ).abs >= closestDist
+                    if (@objectToFollow.x - objectToMove.x ).abs > ((@objectToFollow.y-16) - objectToMove.y).abs && ((@objectToFollow.x-16) - objectToMove.x ).abs <= range # In Range X Dis Greater farther horizontal
+                        if @objectToFollow.x < objectToMove.x # farther left
                             if objDetect.check_surrounding("left", objectToMove)  == false
                                 attackerClass.facing = "left"
-                                Move(vectorToMove,objectToMove,"left",speed,time)
+                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 
                             elsif objDetect.check_surrounding("left", objectToMove)  == true
-                                if objectToFollow.y < objectToMove.y
+                                if @objectToFollow.y < objectToMove.y
                                     if objDetect.check_surrounding("up", objectToMove)  == false
                                         attackerClass.facing = "up"
-                                        Move(vectorToMove,objectToMove,"up",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("up", objectToMove)  == true
                                         if objDetect.check_surrounding("down", objectToMove)  == false
                                             attackerClass.facing = "down"
-                                            Move(vectorToMove,objectToMove,"down",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("down", objectToMove)  == true
                                             if objDetect.check_surrounding("right", objectToMove)  == false
                                                 attackerClass.facing = "right"
-                                                Move(vectorToMove,objectToMove,"right",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
-                                elsif objectToFollow.y == objectToMove.y
+                                elsif @objectToFollow.y/32 == objectToMove.y/32
                                     attackerClass.facing = "left"
-                                    Move(vectorToMove,objectToMove,"left",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 else
                                     if objDetect.check_surrounding("down", objectToMove)  == false
                                         attackerClass.facing = "down"
-                                        Move(vectorToMove,objectToMove,"down",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("down", objectToMove)  == true
                                         if objDetect.check_surrounding("up", objectToMove)  == false
                                             attackerClass.facing = "up"
-                                            Move(vectorToMove,objectToMove,"up",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("up", objectToMove)  == true
                                             if objDetect.check_surrounding("right", objectToMove)  == false
                                                 attackerClass.facing = "right"
-                                                Move(vectorToMove,objectToMove,"right",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
                                 end
                             end
-                        elsif objectToFollow.x>objectToMove.x # farther right
+                        elsif @objectToFollow.x>objectToMove.x # farther right
                             if objDetect.check_surrounding("right", objectToMove)  == false
                                 attackerClass.facing = "right"
-                                Move(vectorToMove,objectToMove,"right",speed,time)
+                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 
                             elsif objDetect.check_surrounding("right", objectToMove)  == true
-                                if objectToFollow.y < objectToMove.y
+                                if @objectToFollow.y < objectToMove.y
                                     if objDetect.check_surrounding("up", objectToMove)  == false
                                         attackerClass.facing = "up"
-                                        Move(vectorToMove,objectToMove,"up",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("up", objectToMove)  == true
                                         if objDetect.check_surrounding("down", objectToMove)  == false
                                             attackerClass.facing = "down"
-                                            Move(vectorToMove,objectToMove,"down",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("down", objectToMove)  == true
                                             if objDetect.check_surrounding("left", objectToMove)  == false
                                                 attackerClass.facing = "left"
-                                                Move(vectorToMove,objectToMove,"left",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
-                                elsif objectToFollow.y == objectToMove.y
+                                elsif @objectToFollow.y/32 == objectToMove.y/32
                                     attackerClass.facing = "right"
-                                    Move(vectorToMove,objectToMove,"right",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 else
                                     if objDetect.check_surrounding("down", objectToMove)  == false
                                         attackerClass.facing = "down"
-                                        Move(vectorToMove,objectToMove,"down",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("down", objectToMove)  == true
                                         if objDetect.check_surrounding("up", objectToMove)  == false
                                             attackerClass.facing = "up"
-                                            Move(vectorToMove,objectToMove,"up",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("up", objectToMove)  == true
                                             if objDetect.check_surrounding("left", objectToMove)  == false
                                                 attackerClass.facing = "left"
-                                                Move(vectorToMove,objectToMove,"left",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
                                 end
                             end
                         end
-                    elsif ((objectToFollow.x-16) - objectToMove.x ).abs < ((objectToFollow.y-16) - objectToMove.y).abs && (objectToFollow.y - objectToMove.y).abs <= range # In Range Y Dis Greater farther vertical
-                        if objectToFollow.y > objectToMove.y #farther down
+                    elsif ((@objectToFollow.x-16) - objectToMove.x ).abs < ((@objectToFollow.y-16) - objectToMove.y).abs && (@objectToFollow.y - objectToMove.y).abs <= range # In Range Y Dis Greater farther vertical
+                        if @objectToFollow.y > objectToMove.y #farther down
                             if objDetect.check_surrounding("down", objectToMove)  == false
                                 attackerClass.facing = "down"
-                                Move(vectorToMove,objectToMove,"down",speed,time)
+                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 
                             elsif objDetect.check_surrounding("down", objectToMove)  == true
-                                if objectToFollow.x > objectToMove.x
+                                if @objectToFollow.x > objectToMove.x
                                     if objDetect.check_surrounding("right", objectToMove)  == false
                                         attackerClass.facing = "right"
-                                        Move(vectorToMove,objectToMove,"right",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("right", objectToMove)  == true
                                         if objDetect.check_surrounding("left", objectToMove)  == false
                                             attackerClass.facing = "left"
-                                            Move(vectorToMove,objectToMove,"left",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("left", objectToMove)  == true
                                             if objDetect.check_surrounding("up", objectToMove)  == false
                                                 attackerClass.facing = "up"
-                                                Move(vectorToMove,objectToMove,"up",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
-                                elsif objectToFollow.x == objectToMove.x
+                                elsif @objectToFollow.x/32 == objectToMove.x/32
                                     attackerClass.facing = "down"
-                                    Move(vectorToMove,objectToMove,"down",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 else
                                     if objDetect.check_surrounding("left", objectToMove)  == false
                                         attackerClass.facing = "left"
-                                        Move(vectorToMove,objectToMove,"left",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("left", objectToMove)  == true
                                         if objDetect.check_surrounding("right", objectToMove)  == false
                                             attackerClass.facing = "right"
-                                            Move(vectorToMove,objectToMove,"right",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("right", objectToMove)  == true
                                             if objDetect.check_surrounding("down", objectToMove)  == false
                                                 attackerClass.facing = "down"
-                                                Move(vectorToMove,objectToMove,"down",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
                                 end
                             end
-                        elsif objectToFollow.y < objectToMove.y #farther up
+                        elsif @objectToFollow.y < objectToMove.y #farther up
                             if objDetect.check_surrounding("up", objectToMove)  == false
                                 attackerClass.facing = "up"
-                                Move(vectorToMove,objectToMove,"up",speed,time)
+                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 
                             elsif objDetect.check_surrounding("up", objectToMove)  == true
-                                if objectToFollow.x > objectToMove.x
+                                if @objectToFollow.x > objectToMove.x
                                     if objDetect.check_surrounding("right", objectToMove)  == false
                                         attackerClass.facing = "right"
-                                        Move(vectorToMove,objectToMove,"right",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("right", objectToMove)  == true
                                         if objDetect.check_surrounding("left", objectToMove)  == false
                                             attackerClass.facing = "left"
-                                            Move(vectorToMove,objectToMove,"left",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("left", objectToMove)  == true
                                             if objDetect.check_surrounding("down", objectToMove)  == false
                                                 attackerClass.facing = "down"
-                                                Move(vectorToMove,objectToMove,"down",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
-                                elsif objectToFollow.x == objectToMove.x
+                                elsif @objectToFollow.x/32 == objectToMove.x/32
                                     attackerClass.facing = "up"
-                                    Move(vectorToMove,objectToMove,"up",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 else
                                     if objDetect.check_surrounding("left", objectToMove)  == false
                                         attackerClass.facing = "left"
-                                        Move(vectorToMove,objectToMove,"left",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("left", objectToMove)  == true
                                         if objDetect.check_surrounding("right", objectToMove)  == false
                                             attackerClass.facing = "right"
-                                            Move(vectorToMove,objectToMove,"right",speed,time)
+                                            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                         elsif objDetect.check_surrounding("right", objectToMove)  == true
                                             if objDetect.check_surrounding("down", objectToMove)  == false
                                                 attackerClass.facing = "down"
-                                                Move(vectorToMove,objectToMove,"down",speed,time)
+                                                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                             end
                                         end
                                     end
                                 end
                             end
                         end
-                    elsif ((objectToFollow.y-16) - objectToMove.y).abs <= (range) && ((objectToFollow.x-16) - objectToMove.x ).abs <= (range) # In Range Else
-                        if objectToFollow.y <= objectToMove.y #farther up
-                            if objectToFollow.x >= objectToMove.x # up and right
+                    elsif ((@objectToFollow.y-16) - objectToMove.y).abs <= (range) && ((@objectToFollow.x-16) - objectToMove.x ).abs <= (range) # In Range Else
+                        if @objectToFollow.y <= objectToMove.y #farther up
+                            if @objectToFollow.x >= objectToMove.x # up and right
                                 if objDetect.check_surrounding("right", objectToMove)  == false
                                     attackerClass.facing = "right"
-                                    Move(vectorToMove,objectToMove,"right",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 elsif objDetect.check_surrounding("right", objectToMove)  == true
                                     if objDetect.check_surrounding("up", objectToMove)  == false
                                         attackerClass.facing = "up"
-                                        Move(vectorToMove,objectToMove,"up",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("up", objectToMove)  == true
                     
                                     end
                                 end
-                            elsif objectToFollow.x < objectToMove.x # up and left
+                            elsif @objectToFollow.x < objectToMove.x # up and left
                                 if objDetect.check_surrounding("left", objectToMove)  == false
                                     attackerClass.facing = "left"
-                                    Move(vectorToMove,objectToMove,"left",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 elsif objDetect.check_surrounding("left", objectToMove)  == true
                                     if objDetect.check_surrounding("up", objectToMove)  == false
                                         attackerClass.facing = "up"
-                                        Move(vectorToMove,objectToMove,"up",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("up", objectToMove)  == true
                     
                                     end
                                 end
                             end
                 
-                        elsif objectToFollow.y < objectToMove.y #farther down
-                            if objectToFollow.x >= objectToMove.x # down and right
+                        elsif @objectToFollow.y < objectToMove.y #farther down
+                            if @objectToFollow.x >= objectToMove.x # down and right
                                 if objDetect.check_surrounding("right", objectToMove)  == false
                                     attackerClass.facing = "right"
-                                    Move(vectorToMove,objectToMove,"right",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 elsif objDetect.check_surrounding("right", objectToMove)  == true
                                     if objDetect.check_surrounding("down", objectToMove)  == false
                                         attackerClass.facing = "down"
-                                        Move(vectorToMove,objectToMove,"down",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("down", objectToMove)  == true
                     
                                     end
                                 end
-                            elsif objectToFollow.x < objectToMove.x # down and left
+                            elsif @objectToFollow.x < objectToMove.x # down and left
                                 if objDetect.check_surrounding("left", objectToMove)  == false
                                     attackerClass.facing = "left"
-                                    Move(vectorToMove,objectToMove,"left",speed,time)
+                                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                 elsif objDetect.check_surrounding("left", objectToMove)  == true
                                     if objDetect.check_surrounding("down", objectToMove)  == false
                                         attackerClass.facing = "down"
-                                        Move(vectorToMove,objectToMove,"down",speed,time)
+                                        Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                                     elsif objDetect.check_surrounding("down", objectToMove)  == true
                     
                                     end
@@ -301,13 +311,21 @@ class Control_movement
                             end
                         end
                     end
-                elsif (objectToFollow.y - objectToMove.y).abs <= (range) && (objectToFollow.x - objectToMove.x ).abs <= (range) # In Range Else
+                elsif (@objectToFollow.y - objectToMove.y).abs <= (range) && (@objectToFollow.x - objectToMove.x ).abs <= (range) # In Range Else
                 end
             end
         end
 
     end
+     def isAnEnemy(baddy,goody)
+        goody.enemyGroups.each {|e|
+        if baddy.battle.hateGroup == e
+            return true
+        end
         
+        }
+        return false
+    end   
     def RandomMove(vectorToMove,objectToMove,randomDir,delayStart=490)
         @randomNum = rand(4)
         @delayStop = Gosu.milliseconds
@@ -338,16 +356,16 @@ class Control_movement
         rightEventCheck = collisionDetect.checkDir(targetObject,"right",0,true)
         
         #check if input and colliding
-        if collisionDetect.checkDir(targetObject,"up") == true
+        if collisionDetect.checkDir(targetObject,"up",0) == true
             activateType = upEventCheck
             activateType = activateType.activateType
-        elsif collisionDetect.checkDir(targetObject,"down") == true
+        elsif collisionDetect.checkDir(targetObject,"down",0) == true
             activateType = downEventCheck
             activateType = activateType.activateType
-        elsif collisionDetect.checkDir(targetObject,"left") == true
+        elsif collisionDetect.checkDir(targetObject,"left",0) == true
             activateType = leftEventCheck
             activateType = activateType.activateType
-        elsif collisionDetect.checkDir(targetObject,"right") == true
+        elsif collisionDetect.checkDir(targetObject,"right",0) == true
             activateType = rightEventCheck
             activateType = activateType.activateType
         else
@@ -356,24 +374,24 @@ class Control_movement
         
         if activateType == "SELECT"
             if KB.key_pressed?(InputTrigger::SELECT)
-                if collisionDetect.checkDir(targetObject,"up") == true
+                if collisionDetect.checkDir(targetObject,"up",0) == true
                     upEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"down") == true
+                elsif collisionDetect.checkDir(targetObject,"down",0) == true
                     downEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"left") == true
+                elsif collisionDetect.checkDir(targetObject,"left",0) == true
                     leftEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"right") == true
+                elsif collisionDetect.checkDir(targetObject,"right",0) == true
                     rightEventCheck.activate_event
                 end
             end
         elsif activateType == "TOUCH"
-            if collisionDetect.checkDir(targetObject,"up") == true
+            if collisionDetect.checkDir(targetObject,"up",0) == true
                 upEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"down") == true
+            elsif collisionDetect.checkDir(targetObject,"down",0) == true
                 downEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"left") == true
+            elsif collisionDetect.checkDir(targetObject,"left",0) == true
                 leftEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"right") == true
+            elsif collisionDetect.checkDir(targetObject,"right",0) == true
                 rightEventCheck.activate_event
             end
         end

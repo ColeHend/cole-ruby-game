@@ -24,7 +24,7 @@ class Event #$scene_manager.scene["player"].eventObject
     end
     
     @name = battle.name
-    @fightControl = FightCenter.new(@name,battle)
+    @fightControl = FightCenter.new(@name,battle,Gosu::milliseconds())
     @eventObject = object
     @vector = Vector2.new(0, 0)
     @z = 5
@@ -55,6 +55,7 @@ class Event #$scene_manager.scene["player"].eventObject
         @moveControl.RandomMove(@vector,@eventObject,randomDir,startTime)
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
+          @facing
           @moveControl.Follow(vector2,self, @eventObject,atkType,dist,objectOfFocus)
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
