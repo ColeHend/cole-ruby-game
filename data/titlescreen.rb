@@ -11,14 +11,14 @@ class TitleScreen
             $scene_manager.register("title",TitleScreen.new())
             $scene_manager.register("gameover",Gameover.new())
             $scene_manager.registerFeature("party",PlayerParty.new)
-            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10.0))
+            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",30.0))
              # change to make player an event instead
             $scene_manager.register("map",SceneMap.new())
             
             $scene_manager.register_object("fancyWindowSkin","fancyWindowSkin",0,0,0,0,6,4)
             $scene_manager.register_object("earthboundWindowSkin","earthboundWindowSkin",0,0,0,0,6,4)
             $scene_manager.register_object("blackWindowSkin","blackWindowSkin",0,0,0,0,6,4)
-            playerObj = $scene_manager.register_object("player",:player,6*32,8*32,31,47,4,4)
+            playerObj = $scene_manager.register_object("player",:player,6*32,6*32,31,47,4,4)
             $scene_manager.register("player",Event.new(playerObj, ->(){},$scene_manager.feature["party"].party[0]))
             $scene_manager.register_image("CastleTownTileset",:CastleTown,8,23)
             $scene_manager.images["windowSkin"] = $scene_manager.images["fancyWindowSkin"]

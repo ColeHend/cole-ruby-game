@@ -22,9 +22,9 @@ class Event #$scene_manager.scene["player"].eventObject
       @w = 32
       @h = 32
     end
-    
+    @moveArray = Array.new
     @name = battle.name
-    @fightControl = FightCenter.new(@name,battle)
+    @fightControl = FightCenter.new(@name,battle,Gosu::milliseconds())
     @eventObject = object
     @vector = Vector2.new(0, 0)
     @z = 5
@@ -55,7 +55,13 @@ class Event #$scene_manager.scene["player"].eventObject
         @moveControl.RandomMove(@vector,@eventObject,randomDir,startTime)
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
-          @moveControl.Follow(vector2,self, @eventObject,atkType,dist,objectOfFocus)
+          @facing
+          #            vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,objectToFollow,moveArray)
+          @moveControl.Follow(vector2,self, @eventObject,atkType,dist,innerDist,objectOfFocus,@moveArray)
+          if @moveArray.length > 0
+            @moveArray[0].call()
+            @moveArray.delete_at(0)
+          end
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
       when "player"
@@ -70,42 +76,41 @@ class Event #$scene_manager.scene["player"].eventObject
   end
 
   def update(actionKeyTriggered = KB.key_pressed?(InputTrigger::SELECT))
-    
-    
-    
     @player = $scene_manager.scene["player"]
-    @battle = battle
+    
     if @eventObject != nil
       @x = @eventObject.x 
       @y = @eventObject.y
       @w = @eventObject.w
       @h = @eventObject.h
     end
-    if @battle.currentHP > 0
+    if self.battle.currentHP > 0
+      @battle = battle
+      if @moveType == "player"
+        @facing = @playerControl.facing
+        @playerControl.update
+      else
+        @moveControl.update
+        @fightControl.update
+        set_move(@moveType)
+      end
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)
-      
+    elsif self.battle.currentHP <= 0
     end
-    if @moveType == "player"
-      @facing = @playerControl.facing
-      @playerControl.update
-      
-    else
-      @moveControl.update
-      @fightControl.update
-      set_move(@moveType)
-    end
+    
   end
   
   def draw()
     
     
-    if @moveType == "player"
-      @playerControl.draw
-    else
-      @moveControl.draw
-      @fightControl.draw
-    end
-    if @battle.currentHP > 0 && @eventObject != nil
+    
+    if self.battle.currentHP > 0 && @eventObject != nil
+      if @moveType == "player"
+        @playerControl.draw
+      else
+        @moveControl.draw
+        @fightControl.draw
+      end
       @eventObject.draw()
       @hpbar.draw
     end

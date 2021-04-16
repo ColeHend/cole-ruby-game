@@ -12,11 +12,12 @@ class Spellbook
         when "firebolt"
             object = $scene_manager.register_object("firebolt","fireshotCharacter",0,0,32,32,4,4)
             spell = PlayerCharacter.new("firebolt",1)
-            mDMG = 5
             collisionDetect = MoveCollision.new
-            #
+            manaCost = 2 #does nothing
+            mDMG = 2
             spell.totalArmor = 1
             animName = "fire"
+            cooldown = 750
             spellEff = ->(){
                 defender = collisionDetect.check_collision(object,8,true)
                 if defender != nil && defender != true
@@ -25,13 +26,21 @@ class Spellbook
                     puts("firebolt hit!")
                     defender = defender.battle
                     defender.currentHP -= damage
+                    puts("-------------Magic-----------------")
+                    puts("beingAttacked: #{defender.name}")
+                    puts("magicDmg: #{mDMG}")
+                    puts("damage: #{damage}")
+                    puts("magicResistance: #{defender.mRes}")
+                    puts("defenderAfterHP: #{defender.currentHP}")
+                    puts("-------------------------------")
+                    
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
                     puts("firebolt miss!")
                 end
                 spell.currentHP = 0
             }
-            array = [object,spell,spellEff,animName]
+            array = [object,spell,spellEff,animName,cooldown,spellName]
             return array
         end
     end

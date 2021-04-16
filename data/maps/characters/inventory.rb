@@ -10,12 +10,9 @@ class Inventory
         @updateMenu = nil
 
         
-        add_poison()
-        add_poison()
-        add_poison()
-        add_poison()
-        add_poison()
-        
+        add_potion()
+        add_potion()
+        add_potion()
         add_potion()
         add_potion() 
 
