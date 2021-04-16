@@ -14,7 +14,7 @@ class Spellbook
             spell = PlayerCharacter.new("firebolt",1)
             collisionDetect = MoveCollision.new
             manaCost = 2 #does nothing
-            mDMG = 6
+            mDMG = 2
             spell.totalArmor = 1
             animName = "fire"
             cooldown = 750
@@ -26,6 +26,14 @@ class Spellbook
                     puts("firebolt hit!")
                     defender = defender.battle
                     defender.currentHP -= damage
+                    puts("-------------Magic-----------------")
+                    puts("beingAttacked: #{defender.name}")
+                    puts("magicDmg: #{mDMG}")
+                    puts("damage: #{damage}")
+                    puts("magicResistance: #{defender.mRes}")
+                    puts("defenderAfterHP: #{defender.currentHP}")
+                    puts("-------------------------------")
+                    
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
                     puts("firebolt miss!")

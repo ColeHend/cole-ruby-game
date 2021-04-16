@@ -22,7 +22,7 @@ class Event #$scene_manager.scene["player"].eventObject
       @w = 32
       @h = 32
     end
-    
+    @moveArray = Array.new
     @name = battle.name
     @fightControl = FightCenter.new(@name,battle,Gosu::milliseconds())
     @eventObject = object
@@ -56,7 +56,12 @@ class Event #$scene_manager.scene["player"].eventObject
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
           @facing
-          @moveControl.Follow(vector2,self, @eventObject,atkType,dist,objectOfFocus)
+          #            vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,objectToFollow,moveArray)
+          @moveControl.Follow(vector2,self, @eventObject,atkType,dist,innerDist,objectOfFocus,@moveArray)
+          if @moveArray.length > 0
+            @moveArray[0].call()
+            @moveArray.delete_at(0)
+          end
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
       when "player"

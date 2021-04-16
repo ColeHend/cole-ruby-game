@@ -81,7 +81,10 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("----#{attacker.name}---------#{defender.name}-----------------")
+                    puts("-------------Melee-----------------")
+                    puts("attacker: #{attacker.name}")
+                    puts("beingAttacked: #{defender.name}")
+                    puts("weaponDmg: #{attacker.weapon.damage}")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -96,7 +99,10 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("----#{attacker.name}---------#{defender.name}-----------------")
+                    puts("-------------Melee-----------------")
+                    puts("attacker: #{attacker.name}")
+                    puts("beingAttacked: #{defender.name}")
+                    puts("weaponDmg: #{attacker.weapon.damage}")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -111,7 +117,10 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("----#{attacker.name}---------#{defender.name}-----------------")
+                    puts("-------------Melee-----------------")
+                    puts("attacker: #{attacker.name}")
+                    puts("beingAttacked: #{defender.name}")
+                    puts("weaponDmg: #{attacker.weapon.damage}")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -126,7 +135,10 @@ class FightCenter
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)
                 defender.currentHP -= damage
                 if @showDamage == true
-                    puts("----#{attacker.name}---------#{defender.name}-----------------")
+                    puts("-------------Melee-----------------")
+                    puts("attacker: #{attacker.name}")
+                    puts("beingAttacked: #{defender.name}")
+                    puts("weaponDmg: #{attacker.weapon.damage}")
                     puts("damage: #{damage}")
                     puts("armor: #{defender.totalArmor}")
                     puts("defenderAfterHP: #{defender.currentHP}")
@@ -137,48 +149,7 @@ class FightCenter
         
     end
 
-    def magicAttack(attackerObj,attacker,facing,rangeBoost) # The Ranged Attack Removing the enemies hp
-
-        if @collisionDetect.checkDir(attackerObj,"up",rangeBoost) == true && facing == "up"
-            defender = @collisionDetect.checkDir(attackerObj,"up",rangeBoost,true)
-            if isAnEnemy(defender,attacker) == true
-                defender = defender.battle
-                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-                defender.currentHP -= damage
-            end
-        end
-        if @collisionDetect.checkDir(attackerObj,"down",rangeBoost) == true && facing == "down"
-            defender = @collisionDetect.checkDir(attackerObj,"down",rangeBoost,true)
-            if isAnEnemy(defender,attacker) == true
-                defender = defender.battle
-                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-                defender.currentHP -= damage
-            end
-        end
-        if @collisionDetect.checkDir(attackerObj,"left",rangeBoost) == true && facing == "left"
-            defender = @collisionDetect.checkDir(attackerObj,"left",rangeBoost,true)
-            if isAnEnemy(defender,attacker) == true
-                defender = defender.battle
-                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-                defender.currentHP -= damage
-            end
-        end
-        if @collisionDetect.checkDir(attackerObj,"right",rangeBoost) == true && facing == "right"
-            defender = @collisionDetect.checkDir(attackerObj,"right",rangeBoost,true)
-            if isAnEnemy(defender,attacker) == true
-                defender = defender.battle
-                damage = magicDamage_calc(attacker.weapon.damage,attacker.getMod(attacker.int),0)
-                defender.currentHP -= damage
-            end
-        end
-        if @showDamage == true
-            puts("-----magic--------#{defender.name}-----------------")
-            puts("damage: #{damage}")
-            puts("armor: #{defender.totalArmor}")
-            puts("defenderBeforeHP: #{defender.currentHP}")
-            puts("-------------------------------")
-        end
-    end
+    
     def closeCombat(objectToMove, battle,facing,wpnAnimation="slash") # The Actual Melee Attack triggering
         if  @meleeCool == false
             case facing
@@ -233,10 +204,60 @@ class FightCenter
             end
         end
     end
+    def npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+        theEnemy = MoveCollision.new.check_inRange(objectToMove,closestDist,true)
+        if theEnemy.is_a?(Event) 
+            if isAnEnemy(theEnemy,battle) == true #attacks inside here
+                if atkRange == "melee"
+                    closeCombat(objectToMove, battle,facing,"slash")
+                elsif atkRange == "ranged"
+                    rangedCombat(objectToMove,facing,"firebolt",battle)
+                else
+                end
+            end
+        end
+    end
     def eventAtkChoice(objectToMove, battle,facing ,detectDist,closestDist,atkRange="ranged",objectToFollow)
-        if objectToFollow.is_a?(GameObject) == false
-            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
-                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+        objCollision = MoveCollision.new
+        
+        if objectToFollow.is_a?(GameObject)
+            #if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
+                if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist # outer ring
+                    if (objectToFollow.x - objectToMove.x ).abs <= closestDist && (objectToFollow.y - objectToMove.y ).abs <= closestDist #inner ring
+                        if objCollision.check_inRange(objectToMove,closestDist,false) == true #checks if is in total range
+                            case facing
+                            when "up"
+                                if objCollision.checkRange(objectToMove,"up",closestDist) == true
+                                    if (objectToMove.y - objectToFollow.y).abs < closestDist
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                    end
+                                end
+                            when "down"
+                                if objCollision.checkRange(objectToMove,"down",closestDist) == true
+                                    if (objectToMove.y - objectToFollow.y).abs < closestDist
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                    end
+                                end
+                            when "left"
+                                if objCollision.checkRange(objectToMove,"left",closestDist) == true
+                                    if (objectToMove.x - objectToFollow.x).abs < closestDist
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                    end
+                                end
+                            when "right"
+                                if objCollision.checkRange(objectToMove,"right",closestDist) == true
+                                    if (objectToMove.x - objectToFollow.x).abs < closestDist
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            #end
+        elsif objectToFollow.is_a?(GameObject) == false
+            if objCollision.check_inRange(objectToMove,detectDist ,false) == true
+                theEnemy = objCollision.check_inRange(objectToMove,detectDist,true)
                 if theEnemy.is_a?(Event)
                     if isAnEnemy(theEnemy,battle)
                         if objectToMove.x != theEnemy.x && objectToMove.y != theEnemy.y
@@ -246,42 +267,19 @@ class FightCenter
                 end
             end
         end
-        if objectToFollow.is_a?(GameObject)
-            #if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
-                if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist # outer ring
-                    if (objectToFollow.x - objectToMove.x ).abs <= closestDist && (objectToFollow.y - objectToMove.y ).abs <= closestDist #inner ring
-                        if MoveCollision.new.check_inRange(objectToMove,closestDist,false) == true #needs to check if colliding with an object
-                            theEnemy = MoveCollision.new.check_inRange(objectToMove,closestDist,true)
-                            if theEnemy.is_a?(Event)
-                                
-                                if isAnEnemy(theEnemy,battle) == true
-                                    #puts("closestDist #{closestDist},outerDist #{detectDist},range #{battle.name}")
-                                    theEnemy
-                                    if atkRange == "melee"
-                                        closeCombat(objectToMove, battle,facing,"slash")
-                                    elsif atkRange == "ranged"
-                                        rangedCombat(objectToMove,facing,"firebolt",battle)
-                                    else
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            #end
-        end
     end
 
     def update
-        @cooldownTime
-        
-        meleeCooldown(350)
-        magicCoolList()
+        @cooldownTimer
+
         if @magicAttack != nil
             @magicAttack.update
         elsif @skillAnimation != nil
             @skillAnimation.update
         end
+
+        magicCoolList()
+        meleeCooldown(350)
     end
     def draw
         if @magicAttack != nil

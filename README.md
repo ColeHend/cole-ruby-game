@@ -12,9 +12,11 @@
  - option box input stack handling
  - Save/Load needs fine tuning
 
+ - Fix player attacking
+
     Missing major features
  - attack decision logic(NI)
- - pathfinding logic(NI)
+ - pathfinding logic(NLI)
  - sound
  - tileset class controlling tile based events
  - menu needs tighter abs intergration (set the spell,change equipment,etc..)
@@ -27,3 +29,6 @@
   - Weapons and spell hold attack range
   - Stitch maps together like pokemon
   - More animations for weapons and spells
+
+  Things not to forget
+  - change enemy object detection to pull all detected enemies into an array and choose the closest

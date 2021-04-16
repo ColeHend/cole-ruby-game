@@ -81,8 +81,8 @@ class Map01
         @teleport2.y = 16
         #-----------------------------------------------------------------
         # Event 101
-        $scene_manager.register_object("Event101","greenMan",20*32,16*32,31,46,4,4)
-        $scene_manager.register_object("Event102","ghost",25*32,18*32,30,48,4,4)
+        $scene_manager.register_object("Event101","greenMan",19*32,12*32,31,46,4,4)
+        $scene_manager.register_object("Event102","ghost",19*32,15*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event101",
             Event.new($scene_manager.object["Event101"], ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
@@ -116,10 +116,10 @@ class Map01
         @teleport1.set_move("none")
         @teleport2.set_move("none")
         if event101.battle.currentHP > 0 #set greenguy ai
-            event101.set_move("followPlayer",10*32,3*32,"ranged",nil) 
+            event101.set_move("followPlayer",10*32,1*32,"melee",player.eventObject) 
         end
         if event102.battle.currentHP > 0#set ghost ai
-            event102.set_move("followPlayer",10*32,3*32,"ranged",nil) 
+            event102.set_move("followPlayer",10*32,3*32,"ranged",player.eventObject) 
         end
     end
     def draw

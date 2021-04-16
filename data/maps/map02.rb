@@ -77,7 +77,7 @@ class Map02 < Map
 
     def update()
         @map.update()
-        $scene_manager.event["Event201"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"])
-        $scene_manager.event["Event202"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.event["Event201"])
+        $scene_manager.event["Event201"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.scene["player"].eventObject)
+        $scene_manager.event["Event202"].set_move("followPlayer",10*32,1*32,"melee",$scene_manager.event["Event201"].eventObject)
     end
 end

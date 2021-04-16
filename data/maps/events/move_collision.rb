@@ -5,7 +5,7 @@ require_relative "../map01.rb"
 require_relative "../map02.rb"
 #Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 class MoveCollision
-    def initialize(name="lame")
+    def initialize(name="name")
         @player = $scene_manager.scene["player"]
         @name = name
     end
@@ -94,7 +94,8 @@ class MoveCollision
                     end
                     return true
                 end
-            elsif collideCheck(targetObject,event,dir,rangeBoost,false) == true
+            end
+            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
                 if sameOb(targetObject,event) == false
                     if evtReturn == true
                         #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
@@ -217,14 +218,14 @@ class MoveCollision
             eventH = event.h
             case dir
                 when "up"
-                    if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
+                    if (range) >= ((eventY + (eventH)) - (targetY)).abs && ((eventX) - targetX).abs <= (range - 16) #up
                         if evtReturn == true
                             return event
                         end
                         return true
                     end
                 when "down"
-                    if range >= (eventY+(16) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range-16) #down
+                    if range >= ((eventY) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #down
                         if evtReturn == true
                             return event
                         end
@@ -253,7 +254,17 @@ class MoveCollision
         playerObj = $scene_manager.scene["player"]
 
         $scene_manager.scene["map"].currentMap.events.each {|event|
-        
+
+        if inRange(targetObject,event,dir,rangeBoost,false) == true
+            if sameOb(targetObject,event) == false
+                if evtReturn == true
+                    #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
+                    return event
+                end
+                return true
+            end
+        end
+
         if inRange(targetObject,playerObj,dir,rangeBoost,false) == true
             if sameOb(targetObject,playerObj) == false
                 if evtReturn == true
@@ -264,15 +275,7 @@ class MoveCollision
                 return true
             end
         end
-            if inRange(targetObject,event,dir,rangeBoost,false) == true
-                if sameOb(targetObject,event) == false
-                    if evtReturn == true
-                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
-                        return event
-                    end
-                    return true
-                end
-            end
+            
             
         }
     end
@@ -309,6 +312,4 @@ class MoveCollision
         end
     end
     
-   
-         #event.call(objectToMove)
 end
