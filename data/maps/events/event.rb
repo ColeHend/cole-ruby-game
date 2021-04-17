@@ -97,7 +97,9 @@ class Event #$scene_manager.scene["player"].eventObject
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)
     elsif self.battle.currentHP <= 0
     end
-    
+    if self.battle.name == "god"
+      self.battle.currentHP = self.battle.hp
+    end
   end
   
   def draw()

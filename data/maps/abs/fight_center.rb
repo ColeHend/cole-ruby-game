@@ -268,7 +268,7 @@ class FightCenter
     def update
         @cooldownTimer
         @skillAnimation.update
-        if @magicAttack != nil
+        if @magicAttack.is_a?(MagicBook)
             @magicAttack.update
         end
 
@@ -277,7 +277,7 @@ class FightCenter
     end
     def draw
         @skillAnimation.draw
-        if @magicAttack != nil
+        if @magicAttack.is_a?(MagicBook)
             @magicAttack.draw
         end
     end

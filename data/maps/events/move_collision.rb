@@ -76,7 +76,7 @@ class MoveCollision
                     end
             end
         else
-            puts("collideCheck skipped..")
+            return false
         end
     end
     
@@ -84,7 +84,15 @@ class MoveCollision
         playerObj = $scene_manager.scene["player"]
 
         $scene_manager.scene["map"].currentMap.events.each {|event|
-            
+            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
+                if sameOb(targetObject,event) == false
+                    if evtReturn == true
+                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
+                        return event
+                    end
+                    return true
+                end
+            end
             if collideCheck(targetObject,playerObj,dir,rangeBoost,false) == true
                 if sameOb(targetObject,playerObj) == false
                     if evtReturn == true
@@ -95,15 +103,7 @@ class MoveCollision
                     return true
                 end
             end
-            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
-                if sameOb(targetObject,event) == false
-                    if evtReturn == true
-                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
-                        return event
-                    end
-                    return true
-                end
-            end
+            
         }
     end
     
