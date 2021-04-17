@@ -1,4 +1,4 @@
-      **Current Controls**
+**Current Controls**
   - *Move* : Arrow Keys
   - *Run* : Z
   - *Sneak* : X
