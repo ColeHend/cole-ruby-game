@@ -8,18 +8,18 @@
 
     **Bugs**  
 - Save/Load needs fine tuning
+- attack decision logic(*NI*)
+- pathfinding logic(*NLI*)
 
     **Missing major features**
-- attack decision logic(NI)
-- pathfinding logic(NLI)
 - sound
 - tileset class controlling tile based events
-- menu needs tighter abs intergration (set the spell,change equipment,etc..)
+- menu needs tighter abs intergration *(set the spell,change equipment,etc..)*
 
     **Missing features(or potential features)**
 - Shop
 - Character Creator
-- Multiplayer (local or network)
+- Multiplayer (*local or network*)
 - Transition effects
 - Weapons and spell hold attack range
 - Stitch maps together like pokemon

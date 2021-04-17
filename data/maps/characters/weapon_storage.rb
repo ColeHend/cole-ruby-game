@@ -10,19 +10,25 @@ class WeaponStorage
     def take(name)
         case name
         when "bronzeSword"
-            # Weapon.new(name,damage = 6,animation="slash",enchantment = nil)
             damage = 6
             animation="slash"
             enchantment = nil
-            bronzeSword = Weapon.new("Bronze Sword",damage,animation,enchantment)
-            return bronzeSword
+            return Weapon.new("Bronze Sword",damage,animation,enchantment)
         when "ironSword"
-            # Weapon.new(name,damage = 6,animation="slash",enchantment = nil)
             damage = 10
             animation="slash"
             enchantment = nil
-            bronzeSword = Weapon.new("Iron Sword",damage,animation,enchantment)
-            return bronzeSword
+            return Weapon.new("Iron Sword",damage,animation,enchantment)
+        when "bronzeMace"
+            damage = 6
+            animation="blunt"
+            enchantment = nil
+            return Weapon.new("Bronze Mace",damage,animation,enchantment)
+        when "ironMace"
+            damage = 10
+            animation="blunt"
+            enchantment = nil
+            return Weapon.new("Iron Mace",damage,animation,enchantment)
         end
     end
 end

@@ -81,8 +81,7 @@ class Map01
         @teleport2.y = 1*32
         #-----------------------------------------------------------------
         # Event 101
-        $scene_manager.register_object("Event101","greenMan",4*32,14*32,31,46,4,4)
-        $scene_manager.register_object("Event102","ghost",19*32,15*32,30,48,4,4)
+        $scene_manager.register_object("Event101","goblin",4*32,14*32,48,64,4,4)
         $scene_manager.registerEvent(1,"Event101",
             Event.new($scene_manager.object["Event101"], ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
@@ -92,8 +91,9 @@ class Map01
                 
         },@bestiary.enemy("goblin")))
         $scene_manager.event["Event101"].activateType = "SELECT"
+
         # Event 102
-        
+        $scene_manager.register_object("Event102","ghost",19*32,15*32,30,48,4,4)
         $scene_manager.registerEvent(1,"Event102",
             Event.new($scene_manager.object["Event102"], ->(){
                 if @showChoices == false
@@ -105,10 +105,18 @@ class Map01
                 end
         },@bestiary.enemy("ghost")))
         $scene_manager.event["Event102"].activateType = "SELECT"
+
+        # Event 103
+        $scene_manager.register_object("Event103","charizard",12*32,10*32,62,62,4,4)
+        $scene_manager.registerEvent(1,"Event103",
+            Event.new($scene_manager.object["Event103"], ->(){},
+            @bestiary.enemy("charizard")))
+        $scene_manager.event["Event103"].activateType = "SELECT"
     end
     def setMovement()
         event101 = $scene_manager.event["Event101"] #greenguy 
         event102 = $scene_manager.event["Event102"] #ghost
+        event103 = $scene_manager.event["Event103"] #charizard
         player = $scene_manager.scene["player"]
         @teleport1.x, @teleport1.y = 12*32, 16
         @teleport2.x, @teleport2.y = 13*32, 16
@@ -123,7 +131,11 @@ class Map01
         end
         if event102.battle.currentHP > 0#set ghost ai
             event102.activateType = "SELECT"
-            event102.set_move("followPlayer",8*32,4*32,"ranged",player.eventObject) 
+            event102.set_move("followPlayer",8*32,1.75*32,"melee",player.eventObject) 
+        end
+        if event103.battle.currentHP > 0#set charizard ai
+            event103.activateType = "SELECT"
+            event103.set_move("followPlayer",10*32,5*32,"ranged",player.eventObject) 
         end
     end
     def draw

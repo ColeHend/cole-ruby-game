@@ -2,7 +2,7 @@ require_relative "character_base.rb"
 require_relative "weapon_storage.rb"
 require_relative "armor.rb"
 class PlayerCharacter < CharacterBase
-    attr_accessor :currentHP, :alive, :exp, :playerLevel,:enemyGroups, :hateGroup 
+    attr_accessor :currentHP, :alive, :exp, :playerLevel,:enemyGroups, :hateGroup, :knownSpells 
     attr_accessor :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor, :mRes
     attr_reader :str, :dex, :int, :con, :hp, :deathExp
     def initialize(name,hp,str=14,dex=12,int=12,con=12,mRes=1)
@@ -14,6 +14,7 @@ class PlayerCharacter < CharacterBase
         @exp = 0
         @str, @dex, @int, @con, @mRes = str, dex, int, con, mRes
         @lvlUpExp = (1000*@playerLevel)
+        @knownSpells = ["firebolt"]
         @weapon = WeaponStorage.new.take("ironSword")
         @shield = nil
         @helm = nil

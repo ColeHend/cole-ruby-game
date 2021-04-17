@@ -6,15 +6,19 @@ class PlayAnimation
         #(x, y = nil, img = nil, sprite_cols = nil, sprite_rows = nil, interval = 10, indices = nil, lifetime = nil, sound = nil, sound_ext = '.wav', sound_volume = 1)
         @runEffects = Array.new()
         #@slash = 
+        @animation = nil
     end
 
     def play_animation(animation="slash",x,y,flip)
         @flip = flip or nil
-        case animation
+        @animation = animation
+        case @animation
             when "slash"
                 @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4]))
             when "fire"
                 @runEffects.push(Effect.new(x, y, "fire", 5, 2, 1, [0,1,2,3]))
+            when "blunt"
+                @runEffects.push(Effect.new(x, y, "bluntWeapon", 5, 2, 1, [0,1,2,3]))
             else 
                 puts("FAIL") 
                 
@@ -23,7 +27,9 @@ class PlayAnimation
 
     def draw
         if @runEffects.length > 0
-            @runEffects.each {|effect|effect.draw(nil,1,1,0xff,0xffffff,nil,@flip)}
+            @runEffects.each {|effect|
+                effect.draw(nil,1,1,0xff,0xffffff,nil,@flip)
+            }
         end
     end
 
