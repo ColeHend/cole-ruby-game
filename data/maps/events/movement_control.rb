@@ -222,7 +222,7 @@ class Control_movement
         end
     end   
     
-    def triggerEvent(targetObject,activateType="TOUCH")
+    def triggerEvent(targetObject,activateType="SELECT")
         # targetObject is likely the player
         # returns the event in that direction if present
         collisionDetect = MoveCollision.new

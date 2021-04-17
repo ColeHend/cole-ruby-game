@@ -152,6 +152,7 @@ class FightCenter
     
     def closeCombat(objectToMove, battle,facing,wpnAnimation="slash") # The Actual Melee Attack triggering
         if  @meleeCool == false
+            wpnAnimation = battle.weapon.animation
             case facing
             when "left"
                 @skillAnimation.play_animation(wpnAnimation,objectToMove.x-4*32,objectToMove.y-2*32,nil)

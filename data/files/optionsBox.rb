@@ -31,7 +31,9 @@ class OptionsBox
         #$can_move = !@drawDialog
     end
 
-    
+    def change_options(newChoices)
+        @choices = newChoices
+    end
     
     def doInput(key)
         stackLength = ($scene_manager.input.inputStack.length-1)

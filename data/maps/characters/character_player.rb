@@ -1,5 +1,5 @@
 require_relative "character_base.rb"
-require_relative "weapon.rb"
+require_relative "weapon_storage.rb"
 require_relative "armor.rb"
 class PlayerCharacter < CharacterBase
     attr_accessor :currentHP, :alive, :exp, :playerLevel,:enemyGroups, :hateGroup 
@@ -14,7 +14,7 @@ class PlayerCharacter < CharacterBase
         @exp = 0
         @str, @dex, @int, @con, @mRes = str, dex, int, con, mRes
         @lvlUpExp = (1000*@playerLevel)
-        @weapon = Weapon.new("Sword",10)
+        @weapon = WeaponStorage.new.take("ironSword")
         @shield = nil
         @helm = nil
         @necklace = nil

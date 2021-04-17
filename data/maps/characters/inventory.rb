@@ -7,8 +7,8 @@ class Inventory
     def initialize
         puts("Inventory Initializing")
         @items   = Array.new
-        @weapons = Hash.new
-        @armor   = Hash.new
+        @weapons = Array.new
+        @armor   = Array.new
         @itemStorehouse = ItemStorehouse.new(@items)
         
 
