@@ -7,24 +7,23 @@ class PlayerParty
         @maxPartySize = 2
         @gold = 24
         @inventory = Inventory.new()
+        @inventory.add_item("potion")
+        @inventory.add_item("potion")
+        @inventory.add_item("potion")
+        @inventory.add_item("megaPotion")
+        @inventory.add_item("megaPotion")
+        @inventory.add_item("megaPotion")
         @deathCap = @maxPartySize
         @deathTotal = 0
     end
 
     def get_items
     end
-    
-     def use_item(spot,person)
-        puts(person.name)
-        #spot.function.call(person)
-        # @inventory.items[spot.name].function.call(person)
-        # @inventory.items.delete(spot.name)
-     end
 
     def addToParty(character)
         if @party.length < @maxPartySize
             self.party.push(character)
-            #@party.each(){|e|puts("New Party Member Name: "+e.name+"| HP: "+e.hp.to_s)}
+            puts("New Party Member Name: #{character.name}| HP: #{character.hp}")
         end
     end
 

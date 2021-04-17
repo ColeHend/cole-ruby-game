@@ -20,7 +20,7 @@ class ItemStorehouse
                 @updateMenu.call
             })
             return potion
-        when "mega potion"
+        when "megaPotion"
             healAmnt = 20
             megaPotion = Item.new("Mega Potion",->(person){
                 if (person.currentHP + healAmnt) <= person.hp

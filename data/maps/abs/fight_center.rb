@@ -156,19 +156,15 @@ class FightCenter
             when "left"
                 @skillAnimation.play_animation(wpnAnimation,objectToMove.x-4*32,objectToMove.y-2*32,nil)
                 meleeAttack(objectToMove,battle,facing,32)
-                puts("attack")
             when "right"
                 @skillAnimation.play_animation(wpnAnimation,objectToMove.x-1.8*32,objectToMove.y-2.1*32,:horiz)
                 meleeAttack(objectToMove,battle,facing,32)
-                puts("attack")
             when "up"
                 @skillAnimation.play_animation(wpnAnimation,objectToMove.x-3*32,objectToMove.y-3*32,nil)
                 meleeAttack(objectToMove,battle,facing,32)
-                puts("attack")
             when "down"
                 @skillAnimation.play_animation(wpnAnimation,objectToMove.x-3*32,objectToMove.y-2*32,:vert)
                 meleeAttack(objectToMove,battle,facing,32)
-                puts("attack")
             end
             @meleeCool = true
         end
@@ -271,21 +267,18 @@ class FightCenter
 
     def update
         @cooldownTimer
-
+        @skillAnimation.update
         if @magicAttack != nil
             @magicAttack.update
-        elsif @skillAnimation != nil
-            @skillAnimation.update
         end
 
         magicCoolList()
         meleeCooldown(350)
     end
     def draw
+        @skillAnimation.draw
         if @magicAttack != nil
             @magicAttack.draw
-        elsif @skillAnimation != nil
-            @skillAnimation.draw
         end
     end
 end

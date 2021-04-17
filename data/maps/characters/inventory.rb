@@ -5,16 +5,12 @@ require_relative "item_storehouse.rb"
 class Inventory
     attr_reader :items, :weapons, :armor
     def initialize
+        puts("Inventory Initializing")
         @items   = Array.new
         @weapons = Hash.new
         @armor   = Hash.new
         @itemStorehouse = ItemStorehouse.new(@items)
-        add_item("potion")
-        add_item("potion")
-        add_item("potion")
-        add_item("mega potion")
-        add_item("mega potion")
-        add_item("mega potion")
+        
 
     end 
     def takeItem(name)
@@ -29,7 +25,7 @@ class Inventory
 
     def add_item(name)
         daItem = takeItem(name)
-        puts(daItem.name)
+        puts("Added to Inventory: #{daItem.name}")
         @items.push(daItem)
     end
 end

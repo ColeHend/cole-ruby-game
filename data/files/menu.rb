@@ -10,9 +10,7 @@ class Menu
         if @inventory.items.is_a?(Array)
             if (@inventory.items.length > 0)
                 @items = @inventory.items.each_with_index.map{|e,index| 
-                    Option.new(e.name,->(){
-                        $scene_manager.feature["party"].use_item(e,@party[0])
-                    })
+                    Option.new(e.name,->(){})
                 }
             else
                 @items = [Option.new("No Items",->(){})]
@@ -98,7 +96,7 @@ class Menu
         
         
         if @showItems == true
-            updateMenu()
+            
             @inventory = $scene_manager.feature["party"].inventory
             @itemsBox.update
             stackLength = ($scene_manager.input.inputStack.length-1)
@@ -107,10 +105,7 @@ class Menu
                 @itemChoice =  @inventory.items.map{|e|e.function}
                 @itemAmount = @items.length
 
-                if @items.size >= 1
-                else
-                @items = [Option.new("No Items",->(){})]
-                end
+                updateMenu()
 
                 if @input.keyPressed(InputTrigger::UP) then # Up Arrow
                     if @currentItemOp != 0
