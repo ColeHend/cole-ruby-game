@@ -15,8 +15,8 @@ class PlayerParty
     end
     
      def use_item(spot,person)
-        puts(person)
-        spot.function.call(person)
+        puts(person.name)
+        #spot.function.call(person)
         # @inventory.items[spot.name].function.call(person)
         # @inventory.items.delete(spot.name)
      end

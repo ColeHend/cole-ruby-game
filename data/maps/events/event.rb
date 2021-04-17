@@ -56,12 +56,8 @@ class Event #$scene_manager.scene["player"].eventObject
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
           @facing
-          #            vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,objectToFollow,moveArray)
+          #  Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
           @moveControl.Follow(vector2,self, @eventObject,atkType,dist,innerDist,objectOfFocus,@moveArray)
-          if @moveArray.length > 0
-            @moveArray[0].call()
-            @moveArray.delete_at(0)
-          end
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
       when "player"
@@ -92,6 +88,10 @@ class Event #$scene_manager.scene["player"].eventObject
       else
         @moveControl.update
         @fightControl.update
+        if @moveArray.length > 0
+          @moveArray[0].call()
+          @moveArray.delete_at(0)
+        end
         set_move(@moveType)
       end
       @hpbar.update(@x,@y,@battle.hp,@battle.currentHP)

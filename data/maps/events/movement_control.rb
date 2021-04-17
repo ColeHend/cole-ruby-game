@@ -74,7 +74,7 @@ class Control_movement
         
     end
     
-    def Follow(vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,nearDist,objectToFollow,moveArray)
+    def Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
         @objectToFollow = objectToFollow
         lockedOn = false
         detectDist = range
