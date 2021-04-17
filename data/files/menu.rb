@@ -58,7 +58,7 @@ class Menu
 
         
         #Options and Boxes
-        @options = [Option.new("Party",->(){}),
+        @options = [Option.new("Equip",->(){}),
             Option.new("Items",->(){@input.addToStack("itemsBox")
                 @showItems = true }),
             Option.new("Save",->(){SaveGame.new().writeSave(1)}),
