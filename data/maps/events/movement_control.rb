@@ -19,7 +19,15 @@ class Control_movement
     def initialize(name)
         @name = name
     end
-
+    def isAnEnemy(baddy,goody)
+        goody.enemyGroups.each {|e|
+        if baddy.battle.hateGroup == e
+            return true
+        end
+        
+        }
+        return false
+    end  
     def Move(vector,objectToMove,direction,speed=1,timing = 6)
         vector.x = 0
         vector.y = 0
@@ -65,6 +73,7 @@ class Control_movement
         end
         
     end
+    
     def Follow(vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,nearDist,objectToFollow,moveArray)
         @objectToFollow = objectToFollow
         lockedOn = false
@@ -99,7 +108,7 @@ class Control_movement
         if @objectToFollow.is_a?(GameObject) == true
             followAbsX = ((@objectToFollow.x+(@objectToFollow.w/2)) - (objectToMove.x+(objectToMove.w/2)) ).abs
             followAbsY = ((@objectToFollow.y+32) - (objectToMove.y+32) ).abs
-
+            
             if objDetect.check_inRange(objectToMove,detectDist ,false) == true#in total range
                 if objDetect.check_inRange(objectToMove,nearDist ,false) == true #is in close range
                     if followAbsY <= tileDetectW
@@ -140,7 +149,6 @@ class Control_movement
                 elsif followAbsY <= tileDetectW && followAbsX > nearDist && followAbsY > nearDist # on horizontal
                     if @objectToFollow.x < objectToMove.x#left
                         if objDetect.check_surrounding("left", objectToMove)  == false
-                            puts("yhi")
                             moveArray.push(moveLeft)
                         elsif objDetect.check_surrounding("left", objectToMove)  == true
                         end
@@ -163,6 +171,7 @@ class Control_movement
                         end
                     end
                 elsif followAbsY < followAbsX#farther left or right
+
                     if @objectToFollow.x < objectToMove.x#left
                         if objDetect.check_surrounding("left", objectToMove)  == false
                             moveArray.push(moveLeft)
@@ -174,8 +183,12 @@ class Control_movement
                         elsif objDetect.check_surrounding("right", objectToMove)  == true
                         end
                     end
+                elsif objDetect.check_inRange(objectToMove,detectDist ,false) == false
                 end
-                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+                defender = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+                if defender.is_a?(Event) 
+                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+                end
             end
         elsif @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
             if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
@@ -187,16 +200,8 @@ class Control_movement
                 end
             end
         end
-    end
-     def isAnEnemy(baddy,goody)
-        goody.enemyGroups.each {|e|
-        if baddy.battle.hateGroup == e
-            return true
-        end
-        
-        }
-        return false
-    end   
+    end 
+     
     def RandomMove(vectorToMove,objectToMove,randomDir,delayStart=490)
         @randomNum = rand(4)
         @delayStop = Gosu.milliseconds
