@@ -53,7 +53,7 @@ class OptionsBox
                 end
             when "select"
                     @choice[@currentOp].call()
-                    #@currentOp = 0
+                    @currentOp = 0
                     @colors = Array.new(25,@notCurrentColor)
                     @colors[@currentOp] = @currentColor
                     

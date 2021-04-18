@@ -2,10 +2,6 @@ require_relative "weapon.rb"
 class WeaponStorage
     def initialize()
         @weapons
-        @updateMenu = nil
-    end
-    def register_update_function(updateFunk)
-        @updateMenu = updateFunk
     end
     def take(name)
         case name

@@ -58,8 +58,12 @@ class Menu
 
         
         #Options and Boxes
-        @options = [Option.new("Equip",->(){}),
-            Option.new("Items",->(){@input.addToStack("itemsBox")
+        @options = 
+            [Option.new("Equip",->(){
+                @input.addToStack("Equipment")
+                $scene_manager.switch_scene("equipMenu")}),
+            Option.new("Items",->(){
+                @input.addToStack("itemsBox")
                 @showItems = true }),
             Option.new("Save",->(){SaveGame.new().writeSave(1)}),
             Option.new("Exit Game",->(){

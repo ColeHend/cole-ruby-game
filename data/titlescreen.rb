@@ -27,6 +27,7 @@ class TitleScreen
             #$scene_manager.feature["party"].inventory.push(Inventory.new.items["poison"])
             #$scene_manager.feature["party"].inventory.push(Inventory.new.items["potion"])
             $scene_manager.register("menu",Menu.new())
+            $scene_manager.register("equipMenu",EquipMenu.new())
             $scene_manager.input.addToStack("map")
             $scene_manager.scene["player"].set_move("player")
             $scene_manager.switch_scene("map")

@@ -2,17 +2,20 @@ require_relative "armor.rb"
 class ArmorStorage
     def initialize()
         @armors
-        @updateMenu = nil
-    end
-    def register_update_function(updateFunk)
-        @updateMenu = updateFunk
     end
     def take(name)
+        #Types Are : "head","neck", "body", "hands", "legs", "feet"
         case name
-        when "bronzeHelm"
+        when "leatherHelm"
+            type = "head"
             armor = 5
             enchantment = nil
-            return Weapon.new("Bronze Helm",armor,enchantment)
+            return Armor.new("Leather Helm",type,armor,enchantment)
+        when "leatherArmor"
+            type = "body"
+            armor = 5
+            enchantment = nil
+            return Armor.new("Leather Armor",type,armor,enchantment)
         end
     end
 end

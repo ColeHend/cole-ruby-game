@@ -139,11 +139,29 @@ class Control_movement
                         if objDetect.check_surrounding("up", objectToMove)  == false
                             moveArray.push(moveUp)
                         elsif objDetect.check_surrounding("up", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     elsif @objectToFollow.y > objectToMove.y#below
                         if objDetect.check_surrounding("down", objectToMove)  == false
                             moveArray.push(moveDown)
                         elsif objDetect.check_surrounding("down", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     end
                 elsif followAbsY <= tileDetectW && followAbsX > nearDist && followAbsY > nearDist # on horizontal
@@ -151,11 +169,29 @@ class Control_movement
                         if objDetect.check_surrounding("left", objectToMove)  == false
                             moveArray.push(moveLeft)
                         elsif objDetect.check_surrounding("left", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     elsif @objectToFollow.x > objectToMove.x#right
                         if objDetect.check_surrounding("right", objectToMove)  == false
                             moveArray.push(moveRight)
                         elsif objDetect.check_surrounding("right", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     end
                 elsif followAbsY > followAbsX# farther up or down
@@ -163,11 +199,29 @@ class Control_movement
                         if objDetect.check_surrounding("up", objectToMove)  == false
                             moveArray.push(moveUp)
                         elsif objDetect.check_surrounding("up", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     elsif @objectToFollow.y > objectToMove.y#down
                         if objDetect.check_surrounding("down", objectToMove)  == false
                             moveArray.push(moveDown)
                         elsif objDetect.check_surrounding("down", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     end
                 elsif followAbsY < followAbsX#farther left or right
@@ -176,11 +230,29 @@ class Control_movement
                         if objDetect.check_surrounding("left", objectToMove)  == false
                             moveArray.push(moveLeft)
                         elsif objDetect.check_surrounding("left", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     elsif @objectToFollow.x > objectToMove.x#right
                         if objDetect.check_surrounding("right", objectToMove)  == false
                             moveArray.push(moveRight)
                         elsif objDetect.check_surrounding("right", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     end
                 elsif objDetect.check_inRange(objectToMove,detectDist ,false) == false

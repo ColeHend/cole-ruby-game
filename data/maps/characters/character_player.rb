@@ -19,13 +19,13 @@ class PlayerCharacter < CharacterBase
         @shield = nil
         @helm = nil
         @necklace = nil
-        @chest = Armor.new("BreastPlate",5)
+        @chest = Armor.new("BreastPlate","body",5)
         @hands = nil
         @legs = nil
         @feet = nil
         @totalArmor = total_ac(0)
         @hateGroup = "player"
-        @enemyGroups = ["undead","goblin"]
+        @enemyGroups = ["undead","goblin","charizard"]
     end
     def getMod(stat)
         modifier = ((stat - 10))

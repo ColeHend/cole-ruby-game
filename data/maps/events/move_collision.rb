@@ -5,9 +5,9 @@ require_relative "../map01.rb"
 require_relative "../map02.rb"
 #Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 class MoveCollision
-    def initialize(name="name")
+    def initialize(hateGroup="name")
         @player = $scene_manager.scene["player"]
-        @name = name
+        @hateGroup = hateGroup
     end
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
@@ -26,7 +26,7 @@ class MoveCollision
     end
 
     def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
-        range = 33
+        range = 32
         range += rangeBoost
         if event != nil && targetObject != nil
             targetX = targetObject.x

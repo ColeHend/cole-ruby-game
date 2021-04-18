@@ -1,8 +1,9 @@
 class Weapon
-    attr_reader :name, :damage, :animation
-    attr_accessor :enchantment
+    attr_accessor :name, :damage, :animation
+    attr_accessor :enchantment, :type
     def initialize(name,damage = 6,animation="slash",enchantment = nil)
         @name = name
+        @type = "weapon"
         @damage = damage
         @animation = animation
         @enchantment = enchantment
