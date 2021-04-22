@@ -33,6 +33,8 @@ class OptionsBox
 
     def change_options(newChoices)
         @choices = newChoices
+        @choiceNames = @choices.map{|e|e.text_image}
+        @choiceAmount = @choiceNames.length 
     end
     
     def doInput(key)
@@ -63,6 +65,10 @@ class OptionsBox
     end
 
     def update
+        @choiceNames = @choices.map{|e|e.text_image}
+        @choice =  @choices.map{|e|e.function}
+        @choiceAmount = @choiceNames.length
+        
         if @input.keyPressed(InputTrigger::UP) then #down
             doInput("up") 
         elsif @input.keyPressed(InputTrigger::DOWN) then #up
@@ -70,9 +76,7 @@ class OptionsBox
         elsif @input.keyPressed(InputTrigger::SELECT) then #select
             doInput("select")
         end
-        @choiceNames = @choices.map{|e|e.text_image}
-        @choice =  @choices.map{|e|e.function}
-        @choiceAmount = @choiceNames.length
+        
     end
         
     def hidden(visible)

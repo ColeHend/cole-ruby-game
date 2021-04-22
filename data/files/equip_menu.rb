@@ -18,6 +18,7 @@ class EquipMenu
         back = [Option.new("Back",->(){
             @input.removeFromStack(@optionsBox.stackName)
             $scene_manager.switch_scene("menu")
+            @input.addToStack("options")
         })]
         @currentOptions = back
         @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@currentOptions,"")
@@ -39,34 +40,42 @@ class EquipMenu
         
         @equipmentOptions =  [
             Option.new("Weapon",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyWeaponsList
                 @optionsBox.change_options(@partyWeaponsList)
             }),
             Option.new("Shield",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyShieldArmor
                 @optionsBox.change_options(@partyShieldArmor)
             }),
             Option.new("Head",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyHeadArmor
                 @optionsBox.change_options(@partyHeadArmor)
             }),
             Option.new("Neck",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyNeckArmor
                 @optionsBox.change_options(@partyNeckArmor)
             }),
             Option.new("Body",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyBodyArmor
                 @optionsBox.change_options(@partyBodyArmor)
             }),
             Option.new("Hands",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyHandsArmor
                 @optionsBox.change_options(@partyHandsArmor)
             }),
             Option.new("Legs",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyLegsArmor
                 @optionsBox.change_options(@partyLegsArmor)
             }),
             Option.new("Feet",->(){
+                mapPartyEquipment()
                 @currentOptions = @partyFeetArmor
                 @optionsBox.change_options(@partyFeetArmor)
             }),
@@ -255,12 +264,14 @@ class EquipMenu
         @partyFeetArmor.push(equipBack)
     end
     def update
+        @currentOptions
         @choiceNames = @currentOptions.map{|e|e.text_image}
         @currentChoices =  @currentOptions.map{|e|e.function}
         @choiceAmount = @currentOptions.length
         @equipColors[@currentPartyMember] = @currentEquipColor
+        @optionsBox.change_options(@currentOptions)
         @optionsBox.update
-
+        
         if @input.keyPressed(InputTrigger::UP) then # Up Arrow
             if @currentChoiceOp != 0
                 @colors[@currentChoiceOp] = @notCurrentColor
@@ -275,15 +286,16 @@ class EquipMenu
             end
         elsif @input.keyPressed(InputTrigger::SELECT) then #Select Key
             if @currentChoices[@currentChoiceOp] != nil
-                mapPartyEquipment()
+                
                 @currentChoices[@currentChoiceOp].call()
                 mapPartyEquipment()
             end
             
         end
         if @input.keyPressed(InputTrigger::ESCAPE) then #Escape Key
-            @input.removeFromStack(@optionsBox.stackName)
-            $scene_manager.switch_scene("menu")
+            #@input.removeFromStack(@optionsBox.stackName)
+            #$scene_manager.switch_scene("menu")
+            @input.addToStack("options")
         end
         
     end
