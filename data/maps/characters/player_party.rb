@@ -87,6 +87,7 @@ class PlayerParty
                 @party[equipSpot].weapon = equipment
                 #weapon =@inventory.weapons
                 #weapon = (weapon - [equipment])
+                @inventory.weapons.delete_at(@inventory.weapons.index(equipment))
             when "shield"
                 unequip(equipment.type,equipSpot)
                 @party[equipSpot].shield = equipment

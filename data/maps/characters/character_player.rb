@@ -15,7 +15,7 @@ class PlayerCharacter < CharacterBase
         @str, @dex, @int, @con, @mRes = str, dex, int, con, mRes
         @lvlUpExp = (1000*@playerLevel)
         @knownSpells = ["firebolt"]
-        @weapon = WeaponStorage.new.take("ironSword")
+        @weapon = Weapon.new("Big Stick",1,"blunt")
         @shield = Armor.new("Pot Lid","shield",1)
         @helm = Armor.new("Sun Hat","helm",1)
         @necklace = Armor.new("Charm","necklace",1)

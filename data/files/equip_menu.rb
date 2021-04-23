@@ -49,55 +49,39 @@ class EquipMenu
             Option.new("Weapon",->(){
                 @currentOptions = weaponOptions()
                 @optionsBox.change_options(weaponOptions())
-                #weapon = weaponOptions()
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,weapon,"")
             }),
             Option.new("Shield",->(){ 
                 @currentOptions = armorOptions("shield")
                 @optionsBox.change_options(armorOptions("shield"))
-                #shield = armorOptions("shield")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,shield,"")
             }),
             Option.new("Head",->(){
                 @currentOptions = armorOptions("helm")
                 @optionsBox.change_options(armorOptions("helm"))
-                #helm = armorOptions("helm")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,helm,"")
             }),
             Option.new("Neck",->(){
                 @currentOptions = armorOptions("neck")
                 @optionsBox.change_options(armorOptions("neck"))
-                #neck = armorOptions("neck")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,neck,"")
             }),
             Option.new("Body",->(){
                 @currentOptions = armorOptions("body")
                 @optionsBox.change_options(armorOptions("body"))
-                #body = armorOptions("body")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,body,"")
             }),
             Option.new("Hands",->(){
                 @currentOptions = armorOptions("hands")
                 @optionsBox.change_options(armorOptions("hands"))
-                #hands = armorOptions("hands")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,hands,"")
             }),
             Option.new("Legs",->(){
                 @currentOptions = armorOptions("legs")
                 @optionsBox.change_options(armorOptions("legs"))
-                #legs = armorOptions("legs")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,legs,"")
             }),
             Option.new("Feet",->(){
                 @currentOptions = armorOptions("feet")
                 @optionsBox.change_options(armorOptions("feet"))
-                #feet = armorOptions("feet")
-                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,feet,"")
             }),
             Option.new("Back",->(){
+                @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
                 #@currentOptions = @startOptions
                 #@optionsBox.change_options(@startOptions)
-                @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
         })]
         #change to party options
         
@@ -113,6 +97,10 @@ class EquipMenu
         @equipColors = Array.new(5,@black)
         
         
+        @partyNames = @party.party.map{|e|Gosu::Image.from_text(e.name, 25,:underline=>true)}
+        @partyHP = @party.party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
+        @partyLVL = @party.party.map{|e|Gosu::Image.from_text("Level: "+e.playerLevel.to_s, 18)}
+        @partyXP = @party.party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
 
         #   Armor 
         #Types Are : "helm","neck", "body", "hands", "legs", "feet"
@@ -143,13 +131,17 @@ class EquipMenu
         array = Array.new
         array = @party.inventory.weapons.each.map{|e|
         if e.is_a?(Weapon) == true
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
+            Option.new(e.name,->(){ #Actual weapon option
+                @party.equip(e,@currentPartyMember)
+                @currentOptions = @equipmentOptions
+                @optionsBox.change_options(@equipmentOptions)
+            })
         end
         }
         if amountIsNone(array) == true
             array = [Option.new("none",->(){})]
         end
-        array.push(Option.new("Unequip",->(){@party.unequip("weapon",@currentPartyMember)}))
+        #array.push(Option.new("Unequip",->(){@party.unequip("weapon",@currentPartyMember)}))
         array.push(Option.new("Back",->(){
             @currentOptions = @equipmentOptions
             @optionsBox.change_options(@equipmentOptions)
@@ -161,7 +153,11 @@ class EquipMenu
         array = Array.new
         array = armorArray(type).each.map{|e| #
             if e.is_a?(Armor)
-                Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
+                Option.new(e.name,->(){ #actual armor option
+                    @party.equip(e,@currentPartyMember)
+                    @currentOptions = @equipmentOptions
+                    @optionsBox.change_options(@equipmentOptions)
+                })
             end
         }
         if amountIsNone(array) == true
@@ -241,6 +237,7 @@ class EquipMenu
         @choiceNames = @currentOptions.map{|e|e.text_image}
         @currentChoices =  @currentOptions.map{|e|e.function}
         @choiceAmount = @currentOptions.length
+        @currentChoiceOp = @optionsBox.currentOp
         #@white = @currentEquipColor
         @optionsBox.update
         
@@ -271,18 +268,19 @@ class EquipMenu
     end
     def draw
         #Draw Party Info 
-        @partyNames = @party.party.map{|e|Gosu::Image.from_text(e.name, 25,:underline=>true)}
-        @partyHP = @party.party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
-        @partyLVL = @party.party.map{|e|Gosu::Image.from_text("Level: "+e.playerLevel.to_s, 18)}
-        @partyXP = @party.party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
-        @partyAC = @party.party.map{|e|Gosu::Image.from_text("AC: "+e.total_ac(0).to_s, 18)}
+        @partyAC = @party.party.map{|e|Gosu::Image.from_text("Armor: "+e.total_ac(0).to_s, 18)}
+        @partySTR = @party.party.map{|e|Gosu::Image.from_text("Strength: "+e.str.to_s, 18)}
+        @partyWPNDMG = @party.party.map{|e|Gosu::Image.from_text("Weapon Damage: "+(e.weapon.damage*(@party.party[@currentPartyMember].getMod(@party.party[@currentPartyMember].str))).to_s, 18)}
+        @partyDEX = @party.party.map{|e|Gosu::Image.from_text("Dexterity: "+e.dex.to_s, 18)}
+        @partyINT = @party.party.map{|e|Gosu::Image.from_text("Intelligence: "+e.int.to_s, 18)}
+        @partyCON = @party.party.map{|e|Gosu::Image.from_text("Constitution: "+e.con.to_s, 18)}
+        @partyMRES = @party.party.map{|e|Gosu::Image.from_text("Magic Resistance: "+e.mRes.to_s, 18)}
         mapPartyEquipment()
         
-        
+        #left column
         @partyNames[@currentPartyMember].draw((7*32), 20, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyLVL[@currentPartyMember].draw((7*32), 45, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyHP[@currentPartyMember].draw((7*32), 70, 8,scale_x = 1, scale_y = 1, color = @white)
-        @partyAC[@currentPartyMember].draw((12*32), 70, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyWeapons[@currentPartyMember].draw((7*32), 100, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyShield[@currentPartyMember].draw((7*32), 130, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyHead[@currentPartyMember].draw((7*32), 155, 8,scale_x = 1, scale_y = 1, color = @white)
@@ -290,7 +288,15 @@ class EquipMenu
         @partyBody[@currentPartyMember].draw((7*32), 205, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyHands[@currentPartyMember].draw((7*32), 230, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyLegs[@currentPartyMember].draw((7*32), 255, 8,scale_x = 1, scale_y = 1, color = @white)
-        @partyFeet[@currentPartyMember].draw((7*32), 275, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyFeet[@currentPartyMember].draw((7*32), 280, 8,scale_x = 1, scale_y = 1, color = @white)
+        #right column
+        @partyWPNDMG[@currentPartyMember].draw((14*32), 45, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyAC[@currentPartyMember].draw((14*32), 70, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partySTR[@currentPartyMember].draw((14*32), 95, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyDEX[@currentPartyMember].draw((14*32), 120, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyINT[@currentPartyMember].draw((14*32), 145, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyCON[@currentPartyMember].draw((14*32), 170, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyMRES[@currentPartyMember].draw((14*32), 195, 8,scale_x = 1, scale_y = 1, color = @white)
         
 
         #draw boxes
