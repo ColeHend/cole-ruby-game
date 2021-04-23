@@ -32,7 +32,12 @@ class OptionsBox
     end
 
     def change_options(newChoices)
+        @notCurrentColor = @white
+        @currentColor = @brightGreen
+        @colors = Array.new(40,@notCurrentColor)
+        @colors[0] = @currentColor
         @choices = newChoices
+        @choice =  @choices.map{|e|e.function}
         @choiceNames = @choices.map{|e|e.text_image}
         @choiceAmount = @choiceNames.length 
     end
@@ -68,7 +73,7 @@ class OptionsBox
         @choiceNames = @choices.map{|e|e.text_image}
         @choice =  @choices.map{|e|e.function}
         @choiceAmount = @choiceNames.length
-        
+
         if @input.keyPressed(InputTrigger::UP) then #down
             doInput("up") 
         elsif @input.keyPressed(InputTrigger::DOWN) then #up

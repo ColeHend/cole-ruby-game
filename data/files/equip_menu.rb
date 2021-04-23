@@ -33,59 +33,74 @@ class EquipMenu
                 @currentPartyMember = index
                 @currentOptions = @equipmentOptions
                 @optionsBox.change_options(@equipmentOptions)
+                @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@equipmentOptions,"")
             })
         }
         @startOptions.push(back[0])
         mapPartyEquipment()
+        @currentOptions = @startOptions
+        #@optionsBox.change_options(@startOptions)
+        @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
+        #equiment options
+        #--------------------------
         
+        #---- @party.unequip(equipItem,equipSpot)
         @equipmentOptions =  [
             Option.new("Weapon",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyWeaponsList
-                @optionsBox.change_options(@partyWeaponsList)
+                @currentOptions = weaponOptions()
+                @optionsBox.change_options(weaponOptions())
+                #weapon = weaponOptions()
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,weapon,"")
             }),
-            Option.new("Shield",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyShieldArmor
-                @optionsBox.change_options(@partyShieldArmor)
+            Option.new("Shield",->(){ 
+                @currentOptions = armorOptions("shield")
+                @optionsBox.change_options(armorOptions("shield"))
+                #shield = armorOptions("shield")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,shield,"")
             }),
             Option.new("Head",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyHeadArmor
-                @optionsBox.change_options(@partyHeadArmor)
+                @currentOptions = armorOptions("helm")
+                @optionsBox.change_options(armorOptions("helm"))
+                #helm = armorOptions("helm")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,helm,"")
             }),
             Option.new("Neck",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyNeckArmor
-                @optionsBox.change_options(@partyNeckArmor)
+                @currentOptions = armorOptions("neck")
+                @optionsBox.change_options(armorOptions("neck"))
+                #neck = armorOptions("neck")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,neck,"")
             }),
             Option.new("Body",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyBodyArmor
-                @optionsBox.change_options(@partyBodyArmor)
+                @currentOptions = armorOptions("body")
+                @optionsBox.change_options(armorOptions("body"))
+                #body = armorOptions("body")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,body,"")
             }),
             Option.new("Hands",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyHandsArmor
-                @optionsBox.change_options(@partyHandsArmor)
+                @currentOptions = armorOptions("hands")
+                @optionsBox.change_options(armorOptions("hands"))
+                #hands = armorOptions("hands")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,hands,"")
             }),
             Option.new("Legs",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyLegsArmor
-                @optionsBox.change_options(@partyLegsArmor)
+                @currentOptions = armorOptions("legs")
+                @optionsBox.change_options(armorOptions("legs"))
+                #legs = armorOptions("legs")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,legs,"")
             }),
             Option.new("Feet",->(){
-                mapPartyEquipment()
-                @currentOptions = @partyFeetArmor
-                @optionsBox.change_options(@partyFeetArmor)
+                @currentOptions = armorOptions("feet")
+                @optionsBox.change_options(armorOptions("feet"))
+                #feet = armorOptions("feet")
+                #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,feet,"")
             }),
             Option.new("Back",->(){
-                @currentOptions = @startOptions
-                @optionsBox.change_options(@startOptions)
+                #@currentOptions = @startOptions
+                #@optionsBox.change_options(@startOptions)
+                @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
         })]
         #change to party options
-        @currentOptions = @startOptions
-        @optionsBox.change_options(@startOptions)
+        
 
         #   Colors
         @white = Gosu::Color.argb(0xff_ffffff)
@@ -100,7 +115,7 @@ class EquipMenu
         
 
         #   Armor 
-        #Types Are : "head","neck", "body", "hands", "legs", "feet"
+        #Types Are : "helm","neck", "body", "hands", "legs", "feet"
         @currentArmorOp = 0 
         
         @colors = Array.new(40,@notCurrentColor)
@@ -124,6 +139,44 @@ class EquipMenu
         }
         return array
     end
+    def weaponOptions()
+        array = Array.new
+        array = @party.inventory.weapons.each.map{|e|
+        if e.is_a?(Weapon) == true
+            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
+        end
+        }
+        if amountIsNone(array) == true
+            array = [Option.new("none",->(){})]
+        end
+        array.push(Option.new("Unequip",->(){@party.unequip("weapon",@currentPartyMember)}))
+        array.push(Option.new("Back",->(){
+            @currentOptions = @equipmentOptions
+            @optionsBox.change_options(@equipmentOptions)
+            #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,@equipmentOptions,"")
+        }))
+        return array
+    end
+    def armorOptions(type)
+        array = Array.new
+        array = armorArray(type).each.map{|e| #
+            if e.is_a?(Armor)
+                Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
+            end
+        }
+        if amountIsNone(array) == true
+            array = [Option.new("none",->(){})]
+        end
+        array.push(Option.new("Unequip",->(){@party.unequip(type,@currentPartyMember)}))
+        array.push(Option.new("Back",->(){
+            @currentOptions = @equipmentOptions
+            @optionsBox.change_options(@equipmentOptions)
+            #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,@equipmentOptions,"")
+        }))
+        puts(array[0].text)
+        return array
+    end
+    #----
     def mapPartyEquipment()
         @partyWeapons = @party.party.map{|e|
         if e.weapon != nil
@@ -181,95 +234,14 @@ class EquipMenu
             Gosu::Image.from_text("Feet: None", 18)
         end
         }
-        #equiment options
-        #--------------------------
-        equipBack = Option.new("Back",->(){
-            @currentOptions = @equipmentOptions
-            @optionsBox.change_options(@equipmentOptions)
-        })
-        #--------------------------- @party.unequip(equipItem,equipSpot)
-        @partyWeaponsList = @party.inventory.weapons.each.map{|e|
-        if e.is_a?(Weapon) == true
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        end
-        }
-        if amountIsNone(@partyWeaponsList) == true
-            @partyWeaponsList = [Option.new("none",->(){})]
-        end
-        @partyWeaponsList.push(Option.new("Unequip",->(){@party.unequip("weapon",@currentPartyMember)}))
-        @partyWeaponsList.push(equipBack)
-
         
-        @partyHeadArmor = armorArray("head").each.map{|e| #head
-            Option.new(e.name,->(){})
-        }
-        if amountIsNone(@partyHeadArmor) == true
-            @partyHeadArmor = [Option.new("none",->(){})]
-        end
-        @partyHeadArmor.push(Option.new("Unequip",->(){@party.unequip("head",@currentPartyMember)}))
-        @partyHeadArmor.push(equipBack)
-
-        @partyShieldArmor = armorArray("shield").each.map{|e| #shield
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        }
-        if amountIsNone(@partyShieldArmor) == true
-            @partyShieldArmor = [Option.new("none",->(){})]
-        end
-        @partyShieldArmor.push(Option.new("Unequip",->(){@party.unequip("shield",@currentPartyMember)}))
-        @partyShieldArmor.push(equipBack)
-
-        @partyNeckArmor = armorArray("neck").each.map{|e| #neck
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        }
-        if amountIsNone(@partyNeckArmor) == true
-            @partyNeckArmor = [Option.new("none",->(){})]
-        end
-        @partyNeckArmor.push(Option.new("Unequip",->(){@party.unequip("neck",@currentPartyMember)}))
-        @partyNeckArmor.push(equipBack)
-
-        @partyBodyArmor = armorArray("body").each.map{|e| #body
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        }
-        if amountIsNone(@partyBodyArmor) == true
-            @partyBodyArmor = [Option.new("none",->(){})]
-        end
-        @partyBodyArmor.push(Option.new("Unequip",->(){@party.unequip("body",@currentPartyMember)}))
-        @partyBodyArmor.push(equipBack)
-
-        @partyHandsArmor = armorArray("hands").each.map{|e| #hands
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        }
-        if amountIsNone(@partyHandsArmor) == true
-            @partyHandsArmor = [Option.new("none",->(){})]
-        end
-        @partyHandsArmor.push(Option.new("Unequip",->(){@party.unequip("hands",@currentPartyMember)}))
-        @partyHandsArmor.push(equipBack)
-
-        @partyLegsArmor = armorArray("legs").each.map{|e| #legs
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        }
-        if amountIsNone(@partyLegsArmor) == true
-            @partyLegsArmor = [Option.new("none",->(){})]
-        end
-        @partyLegsArmor.push(Option.new("Unequip",->(){@party.unequip("legs",@currentPartyMember)}))
-        @partyLegsArmor.push(equipBack)
-
-        @partyFeetArmor = armorArray("feet").each.map{|e| #feet
-            Option.new(e.name,->(){@party.equip(e,@currentPartyMember)})
-        }
-        if amountIsNone(@partyFeetArmor) == true
-            @partyFeetArmor = [Option.new("none",->(){})]
-        end
-        @partyFeetArmor.push(Option.new("Unequip",->(){@party.unequip("feet",@currentPartyMember)}))
-        @partyFeetArmor.push(equipBack)
     end
+
     def update
-        @currentOptions
         @choiceNames = @currentOptions.map{|e|e.text_image}
         @currentChoices =  @currentOptions.map{|e|e.function}
         @choiceAmount = @currentOptions.length
-        @equipColors[@currentPartyMember] = @currentEquipColor
-        @optionsBox.change_options(@currentOptions)
+        #@white = @currentEquipColor
         @optionsBox.update
         
         if @input.keyPressed(InputTrigger::UP) then # Up Arrow
@@ -286,16 +258,14 @@ class EquipMenu
             end
         elsif @input.keyPressed(InputTrigger::SELECT) then #Select Key
             if @currentChoices[@currentChoiceOp] != nil
-                
                 @currentChoices[@currentChoiceOp].call()
-                mapPartyEquipment()
             end
             
         end
         if @input.keyPressed(InputTrigger::ESCAPE) then #Escape Key
             #@input.removeFromStack(@optionsBox.stackName)
             #$scene_manager.switch_scene("menu")
-            @input.addToStack("options")
+            #@input.addToStack("options")
         end
         
     end
@@ -305,21 +275,23 @@ class EquipMenu
         @partyHP = @party.party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
         @partyLVL = @party.party.map{|e|Gosu::Image.from_text("Level: "+e.playerLevel.to_s, 18)}
         @partyXP = @party.party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
+        @partyAC = @party.party.map{|e|Gosu::Image.from_text("AC: "+e.total_ac(0).to_s, 18)}
+        mapPartyEquipment()
         
         
-        for a in (0...@party.party.length)
-            @partyNames[a].draw((7*32), 20+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyLVL[a].draw((7*32), 45+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyHP[a].draw((7*32), 70+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyWeapons[a].draw((7*32), 100+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyShield[a].draw((7*32), 130+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyHead[a].draw((7*32), 155+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyNeck[a].draw((7*32), 180+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyBody[a].draw((7*32), 205+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyHands[a].draw((7*32), 230+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyLegs[a].draw((7*32), 255+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-            @partyFeet[a].draw((7*32), 275+(90*a), 8,scale_x = 1, scale_y = 1, color = @equipColors[@currentPartyMember])
-        end
+        @partyNames[@currentPartyMember].draw((7*32), 20, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyLVL[@currentPartyMember].draw((7*32), 45, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyHP[@currentPartyMember].draw((7*32), 70, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyAC[@currentPartyMember].draw((12*32), 70, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyWeapons[@currentPartyMember].draw((7*32), 100, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyShield[@currentPartyMember].draw((7*32), 130, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyHead[@currentPartyMember].draw((7*32), 155, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyNeck[@currentPartyMember].draw((7*32), 180, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyBody[@currentPartyMember].draw((7*32), 205, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyHands[@currentPartyMember].draw((7*32), 230, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyLegs[@currentPartyMember].draw((7*32), 255, 8,scale_x = 1, scale_y = 1, color = @white)
+        @partyFeet[@currentPartyMember].draw((7*32), 275, 8,scale_x = 1, scale_y = 1, color = @white)
+        
 
         #draw boxes
         @optionsBox.draw

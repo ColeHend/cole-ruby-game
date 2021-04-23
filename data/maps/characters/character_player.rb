@@ -16,18 +16,19 @@ class PlayerCharacter < CharacterBase
         @lvlUpExp = (1000*@playerLevel)
         @knownSpells = ["firebolt"]
         @weapon = WeaponStorage.new.take("ironSword")
-        @shield = nil
-        @helm = nil
-        @necklace = nil
-        @chest = Armor.new("BreastPlate","body",5)
-        @hands = nil
-        @legs = nil
-        @feet = nil
+        @shield = Armor.new("Pot Lid","shield",1)
+        @helm = Armor.new("Sun Hat","helm",1)
+        @necklace = Armor.new("Charm","necklace",1)
+        @chest = Armor.new("Cotton Shirt","body",1)
+        @hands = Armor.new("Cotton Gloves","hands",1)
+        @legs = Armor.new("Cotton Pants","legs",1)
+        @feet = Armor.new("Cotton Shoes","feet",1)
         @totalArmor = total_ac(0)
         @hateGroup = "player"
         @enemyGroups = ["undead","goblin","charizard"]
     end
     def getMod(stat)
+        @totalArmor = total_ac(0)
         modifier = ((stat - 10))
         return modifier
     end
@@ -48,8 +49,6 @@ class PlayerCharacter < CharacterBase
             level_up()
         end
     end
-
-    private #everything after here is private
 
     def total_ac(modifier = 0)
         totalAC = 10

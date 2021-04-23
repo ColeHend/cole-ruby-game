@@ -34,6 +34,7 @@ class PlayerParty
     end
     
     def unequip(equipType,equipSpot)
+        puts("unequip run")
         case equipType
         when "weapon"
             if @party[equipSpot].weapon != nil
@@ -46,7 +47,7 @@ class PlayerParty
                 @inventory.armor.push(@party[equipSpot].shield)
                 @party[equipSpot].shield = nil
             end
-        when "head"
+        when "helm"
             if @party[equipSpot].helm != nil
                 @inventory.armor.push(@party[equipSpot].helm)
                 @party[equipSpot].helm = nil
@@ -84,8 +85,8 @@ class PlayerParty
             when "weapon"
                 unequip(equipment.type,equipSpot)
                 @party[equipSpot].weapon = equipment
-                weapon =@inventory.weapons
-                weapon = (weapon - [equipment])
+                #weapon =@inventory.weapons
+                #weapon = (weapon - [equipment])
             when "shield"
                 unequip(equipment.type,equipSpot)
                 @party[equipSpot].shield = equipment
@@ -115,6 +116,7 @@ class PlayerParty
                 @party[equipSpot].feet = equipment
                 @inventory.armor.delete_at(@inventory.armor.index(equipment))
             end
+            puts("equip run")
         end
     end
     

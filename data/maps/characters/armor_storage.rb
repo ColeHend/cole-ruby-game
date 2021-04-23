@@ -4,10 +4,10 @@ class ArmorStorage
         @armors
     end
     def take(name)
-        #Types Are : "head","neck", "body", "hands", "legs", "feet"
+        #Types Are : "helm","neck", "body", "hands", "legs", "feet"
         case name
         when "leatherHelm"
-            type = "head"
+            type = "helm"
             armor = 5
             enchantment = nil
             return Armor.new("Leather Helm",type,armor,enchantment)
