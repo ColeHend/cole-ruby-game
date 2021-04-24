@@ -127,15 +127,15 @@ class Map01
         @teleport2.set_move("none")
         if event101.battle.currentHP > 0 #set greenguy ai
             event101.activateType = "SELECT"
-            event101.set_move("followPlayer",6*32,1.75*32,"melee",event103.eventObject) 
+            event101.set_move("followPlayer",6*32,1.75*32,"melee",player.eventObject) 
         end
         if event102.battle.currentHP > 0#set ghost ai
             event102.activateType = "SELECT"
-            event102.set_move("followPlayer",8*32,1.75*32,"melee",event103.eventObject) 
+            event102.set_move("followPlayer",8*32,1.75*32,"melee",player.eventObject) 
         end
         if event103.battle.currentHP > 0#set charizard ai
             event103.activateType = "SELECT"
-            event103.set_move("followPlayer",10*32,5*32,"ranged",event101.eventObject) 
+            event103.set_move("followPlayer",10*32,5*32,"ranged",player.eventObject) 
         end
     end
     def draw
