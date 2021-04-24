@@ -23,8 +23,8 @@ class MagicBook
         @moveControl = Control_movement.new("spell#{@x}")
     end
     
-    def make_shot(targetObject,spellEVT,facing,spellStability)
-        range = 5*8
+    def make_shot(targetObject,spellEVT,facing,spellStability,spellRange)
+        range = spellRange*8
         u = 0
         
             Thread.new{
@@ -55,7 +55,7 @@ class MagicBook
         spellObj = spellCast[0]
         spellObj.x = attackObj.x
         spellObj.y = attackObj.y
-
+        spellRange = spellCast[6]
         spellStability = spellCast[1]
         spellEff = spellCast[2]
         spellOnHit = spellCast[3]
@@ -73,19 +73,19 @@ class MagicBook
         when "up"
             spellObj.y -= dist
             createSpell.call
-            make_shot(spellObj,event,"up",spellStability)
+            make_shot(spellObj,event,"up",spellStability,spellRange)
         when "down"
             spellObj.y += dist 
             createSpell.call
-            make_shot(spellObj,event,"down",spellStability)
+            make_shot(spellObj,event,"down",spellStability,spellRange)
         when "left"
             spellObj.x -= dist
             createSpell.call
-            make_shot(spellObj,event,"left",spellStability)
+            make_shot(spellObj,event,"left",spellStability,spellRange)
         when "right"
             spellObj.x += dist
             createSpell.call
-            make_shot(spellObj,event,"right",spellStability)
+            make_shot(spellObj,event,"right",spellStability,spellRange)
         end
         
     end

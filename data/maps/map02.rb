@@ -34,7 +34,7 @@ class Map02 < Map
         teleport1 = $scene_manager.event["Teleport201"]
         teleport1.activateType = "TOUCH"
         teleport1.x = 12*32
-        teleport1.y = 16
+        teleport1.y = 1*32
         $scene_manager.registerEvent(2,"Teleport202",
             Event.new(nil, ->(){
                 $scene_manager.scene["map"].change_map("map01")
@@ -43,10 +43,10 @@ class Map02 < Map
         teleport1 = $scene_manager.event["Teleport202"]
         teleport1.activateType = "TOUCH"
         teleport1.x = 13*32
-        teleport1.y = 16
+        teleport1.y = 1*32
         #-----------------------------------------------------------------
         $scene_manager.register_object("Event201","shadowGuy",6*32,5*32,32,48,4,4)
-        $scene_manager.register_object("Event202","lightCoat",15*32,10*32,32,48,4,4)
+        $scene_manager.register_object("Event202","lightCoat",15*32,10*32,30,47,4,4)
         $scene_manager.registerEvent(2,"Event201",
             Event.new($scene_manager.object["Event201"], ->(){
                 #@talkin = true
@@ -56,11 +56,13 @@ class Map02 < Map
                 @events[1].set_move("random")
         },@bestiary.enemy("goblin")
         ))
+        $scene_manager.event["Event201"].activateType = "SELECT"
 
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], ->(){
             },@bestiary.enemy("goblin")
             ))
+            $scene_manager.event["Event202"].activateType = "SELECT"
     end
 
     def draw()

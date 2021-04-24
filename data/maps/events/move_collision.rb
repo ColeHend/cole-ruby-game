@@ -5,9 +5,9 @@ require_relative "../map01.rb"
 require_relative "../map02.rb"
 #Dir[File.join(__dir__, '*.rb')].each { |file| require file }
 class MoveCollision
-    def initialize(name="name")
+    def initialize(hateGroup="name")
         @player = $scene_manager.scene["player"]
-        @name = name
+        @hateGroup = hateGroup
     end
     def overlap?(r1,r2)
         !(r1.first > r2.last || r1.last < r2.first)
@@ -26,7 +26,7 @@ class MoveCollision
     end
 
     def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
-        range = 33
+        range = 32
         range += rangeBoost
         if event != nil && targetObject != nil
             targetX = targetObject.x
@@ -76,7 +76,7 @@ class MoveCollision
                     end
             end
         else
-            puts("collideCheck skipped..")
+            return false
         end
     end
     
@@ -84,7 +84,15 @@ class MoveCollision
         playerObj = $scene_manager.scene["player"]
 
         $scene_manager.scene["map"].currentMap.events.each {|event|
-            
+            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
+                if sameOb(targetObject,event) == false
+                    if evtReturn == true
+                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
+                        return event
+                    end
+                    return true
+                end
+            end
             if collideCheck(targetObject,playerObj,dir,rangeBoost,false) == true
                 if sameOb(targetObject,playerObj) == false
                     if evtReturn == true
@@ -95,15 +103,7 @@ class MoveCollision
                     return true
                 end
             end
-            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
-                if sameOb(targetObject,event) == false
-                    if evtReturn == true
-                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
-                        return event
-                    end
-                    return true
-                end
-            end
+            
         }
     end
     

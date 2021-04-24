@@ -7,6 +7,15 @@ class Spellbook
         @animation = PlayAnimation.new()
         @int = int
     end
+    def damageInfo(defender,mDMG,damage)
+        puts("-------------Magic-----------------")
+        puts("beingAttacked: #{defender.name}")
+        puts("magicDmg: #{mDMG}")
+        puts("damage: #{damage}")
+        puts("magicResistance: #{defender.mRes}")
+        puts("defenderAfterHP: #{defender.currentHP}")
+        puts("-------------------------------")
+    end
     def spell(spellName)
         case spellName
         when "firebolt"
@@ -15,6 +24,7 @@ class Spellbook
             collisionDetect = MoveCollision.new
             manaCost = 2 #does nothing
             mDMG = 2
+            range = 5
             spell.totalArmor = 1
             animName = "fire"
             cooldown = 750
@@ -26,21 +36,42 @@ class Spellbook
                     puts("firebolt hit!")
                     defender = defender.battle
                     defender.currentHP -= damage
-                    puts("-------------Magic-----------------")
-                    puts("beingAttacked: #{defender.name}")
-                    puts("magicDmg: #{mDMG}")
-                    puts("damage: #{damage}")
-                    puts("magicResistance: #{defender.mRes}")
-                    puts("defenderAfterHP: #{defender.currentHP}")
-                    puts("-------------------------------")
-                    
+                    damageInfo(defender,mDMG,damage)
                 else
                     @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
                     puts("firebolt miss!")
                 end
                 spell.currentHP = 0
             }
-            array = [object,spell,spellEff,animName,cooldown,spellName]
+            array = [object,spell,spellEff,animName,cooldown,spellName,range]
+            return array
+        when "fireball"
+            object = $scene_manager.register_object("fireball","fireball",0,0,32,32,4,4)
+            spell = PlayerCharacter.new("fireball",1)
+            collisionDetect = MoveCollision.new
+            manaCost = 4 #does nothing
+            mDMG = 5
+            range = 8
+            spell.totalArmor = 1
+            animName = "fire"
+            cooldown = 750
+            spellEff = ->(){
+                defender = collisionDetect.check_collision(object,8,true)
+                if defender != nil && defender != true
+                    damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
+                    @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
+                    puts("fireball hit!")
+                    defender = defender.battle
+                    defender.currentHP -= damage
+                    damageInfo(defender,mDMG,damage)
+                    
+                else
+                    @animation.play_animation("fire",(object.x - 96) ,(object.y - 96),nil)
+                    puts("fireball miss!")
+                end
+                spell.currentHP = 0
+            }
+            array = [object,spell,spellEff,animName,cooldown,spellName,range]
             return array
         end
     end

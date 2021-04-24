@@ -19,7 +19,15 @@ class Control_movement
     def initialize(name)
         @name = name
     end
-
+    def isAnEnemy(baddy,goody)
+        goody.enemyGroups.each {|e|
+        if baddy.battle.hateGroup == e
+            return true
+        end
+        
+        }
+        return false
+    end  
     def Move(vector,objectToMove,direction,speed=1,timing = 6)
         vector.x = 0
         vector.y = 0
@@ -65,7 +73,8 @@ class Control_movement
         end
         
     end
-    def Follow(vectorToMove,attackerClass, objectToMove,atkType="ranged",range=6*32,nearDist,objectToFollow,moveArray)
+    
+    def Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
         @objectToFollow = objectToFollow
         lockedOn = false
         detectDist = range
@@ -95,11 +104,20 @@ class Control_movement
         facingDown = ->(){ draw_character(objectToMove, "downStop",time)}
         facingLeft = ->(){ draw_character(objectToMove, "leftStop",time)}
         facingRight = ->(){ draw_character(objectToMove, "rightStop",time)}
-        
+        if @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
+            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
+                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+                if theEnemy.is_a?(Event)
+                    if isAnEnemy(theEnemy,attackerClass.battle)
+                        @objectToFollow = theEnemy.eventObject
+                    end
+                end
+            end
+        end
         if @objectToFollow.is_a?(GameObject) == true
             followAbsX = ((@objectToFollow.x+(@objectToFollow.w/2)) - (objectToMove.x+(objectToMove.w/2)) ).abs
             followAbsY = ((@objectToFollow.y+32) - (objectToMove.y+32) ).abs
-
+            
             if objDetect.check_inRange(objectToMove,detectDist ,false) == true#in total range
                 if objDetect.check_inRange(objectToMove,nearDist ,false) == true #is in close range
                     if followAbsY <= tileDetectW
@@ -130,24 +148,59 @@ class Control_movement
                         if objDetect.check_surrounding("up", objectToMove)  == false
                             moveArray.push(moveUp)
                         elsif objDetect.check_surrounding("up", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     elsif @objectToFollow.y > objectToMove.y#below
                         if objDetect.check_surrounding("down", objectToMove)  == false
                             moveArray.push(moveDown)
                         elsif objDetect.check_surrounding("down", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     end
                 elsif followAbsY <= tileDetectW && followAbsX > nearDist && followAbsY > nearDist # on horizontal
                     if @objectToFollow.x < objectToMove.x#left
                         if objDetect.check_surrounding("left", objectToMove)  == false
-                            puts("yhi")
                             moveArray.push(moveLeft)
                         elsif objDetect.check_surrounding("left", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     elsif @objectToFollow.x > objectToMove.x#right
                         if objDetect.check_surrounding("right", objectToMove)  == false
                             moveArray.push(moveRight)
                         elsif objDetect.check_surrounding("right", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     end
                 elsif followAbsY > followAbsX# farther up or down
@@ -155,11 +208,29 @@ class Control_movement
                         if objDetect.check_surrounding("up", objectToMove)  == false
                             moveArray.push(moveUp)
                         elsif objDetect.check_surrounding("up", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     elsif @objectToFollow.y > objectToMove.y#down
                         if objDetect.check_surrounding("down", objectToMove)  == false
                             moveArray.push(moveDown)
                         elsif objDetect.check_surrounding("down", objectToMove)  == true
+                            if @objectToFollow.x > objectToMove.x
+                                if objDetect.check_surrounding("left", objectToMove)
+                                    moveArray.push(moveLeft)
+                                end
+                            elsif @objectToFollow.x < objectToMove.x
+                                if objDetect.check_surrounding("right", objectToMove)
+                                    moveArray.push(moveRight)
+                                end
+                            end
                         end
                     end
                 elsif followAbsY < followAbsX#farther left or right
@@ -167,36 +238,41 @@ class Control_movement
                         if objDetect.check_surrounding("left", objectToMove)  == false
                             moveArray.push(moveLeft)
                         elsif objDetect.check_surrounding("left", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     elsif @objectToFollow.x > objectToMove.x#right
                         if objDetect.check_surrounding("right", objectToMove)  == false
                             moveArray.push(moveRight)
                         elsif objDetect.check_surrounding("right", objectToMove)  == true
+                            if @objectToFollow.y > objectToMove.y
+                                if objDetect.check_surrounding("up", objectToMove)
+                                    moveArray.push(moveUp)
+                                end
+                            elsif @objectToFollow.y < objectToMove.y
+                                if objDetect.check_surrounding("down", objectToMove)
+                                    moveArray.push(moveDown)
+                                end
+                            end
                         end
                     end
+                elsif objDetect.check_inRange(objectToMove,detectDist ,false) == false
                 end
-                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
-            end
-        elsif @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
-            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
-                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
-                if theEnemy.is_a?(Event)
-                    if isAnEnemy(theEnemy,attackerClass.battle)
-                        @objectToFollow = theEnemy.eventObject
-                    end
+                defender = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+                if defender.is_a?(Event) 
+                    Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                 end
             end
         end
-    end
-     def isAnEnemy(baddy,goody)
-        goody.enemyGroups.each {|e|
-        if baddy.battle.hateGroup == e
-            return true
-        end
-        
-        }
-        return false
-    end   
+    end 
+     
     def RandomMove(vectorToMove,objectToMove,randomDir,delayStart=490)
         @randomNum = rand(4)
         @delayStop = Gosu.milliseconds
@@ -221,24 +297,33 @@ class Control_movement
         # targetObject is likely the player
         # returns the event in that direction if present
         collisionDetect = MoveCollision.new
-        upEventCheck = collisionDetect.checkDir(targetObject,"up",0,true)
-        downEventCheck = collisionDetect.checkDir(targetObject,"down",0,true)
-        leftEventCheck = collisionDetect.checkDir(targetObject,"left",0,true)
-        rightEventCheck = collisionDetect.checkDir(targetObject,"right",0,true)
+        rangePlus = 2
+        upEventCheck = collisionDetect.checkDir(targetObject,"up",rangePlus,true)
+        downEventCheck = collisionDetect.checkDir(targetObject,"down",rangePlus,true)
+        leftEventCheck = collisionDetect.checkDir(targetObject,"left",rangePlus,true)
+        rightEventCheck = collisionDetect.checkDir(targetObject,"right",rangePlus,true)
         
         #check if input and colliding
-        if collisionDetect.checkDir(targetObject,"up",0) == true
+        if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
             activateType = upEventCheck
-            activateType = activateType.activateType
-        elsif collisionDetect.checkDir(targetObject,"down",0) == true
+            if activateType.is_a?(Event)
+                activateType = activateType.activateType
+            end
+        elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
             activateType = downEventCheck
-            activateType = activateType.activateType
-        elsif collisionDetect.checkDir(targetObject,"left",0) == true
+            if activateType.is_a?(Event)
+                activateType = activateType.activateType
+            end
+        elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
             activateType = leftEventCheck
-            activateType = activateType.activateType
-        elsif collisionDetect.checkDir(targetObject,"right",0) == true
+            if activateType.is_a?(Event)
+                activateType = activateType.activateType
+            end
+        elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
             activateType = rightEventCheck
-            activateType = activateType.activateType
+            if activateType.is_a?(Event)
+                activateType = activateType.activateType
+            end
         else
             activateType = "SELECT"
         end
@@ -256,13 +341,13 @@ class Control_movement
                 end
             end
         elsif activateType == "TOUCH"
-            if collisionDetect.checkDir(targetObject,"up",0) == true
+            if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
                 upEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"down",0) == true
+            elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
                 downEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"left",0) == true
+            elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
                 leftEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"right",0) == true
+            elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
                 rightEventCheck.activate_event
             end
         end

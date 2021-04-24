@@ -7,14 +7,14 @@ class Menu
     include WindowBase
 
     def updateMenu()
-        if (@inventory.items.length > 0)
-            @items = @inventory.items.each_with_index.map{|e,index| 
-                Option.new(e.name,->(){
-                    $scene_manager.feature["party"].use_item(e,@party[0])
-                })
-            }
-        else
-            @items = [Option.new("No Items",->(){})]
+        if @inventory.items.is_a?(Array)
+            if (@inventory.items.length > 0)
+                @items = @inventory.items.each_with_index.map{|e,index| 
+                    Option.new(e.name,->(){})
+                }
+            else
+                @items = [Option.new("No Items",->(){})]
+            end
         end
     end
 
@@ -27,6 +27,8 @@ class Menu
         @deathTotal = @party.deathTotal
         @party = $scene_manager.feature["party"].party
         @showItems = false
+        @selectCool = false
+        @cooldownTime = Gosu::milliseconds
         # Colors
         @white = Gosu::Color.argb(0xff_ffffff)
         @black = Gosu::Color.argb(0xff_000000)
@@ -56,8 +58,13 @@ class Menu
 
         
         #Options and Boxes
-        @options = [Option.new("Party",->(){}),
-            Option.new("Items",->(){@input.addToStack("itemsBox")
+        @options = 
+            [Option.new("Equip",->(){
+                @input.addToStack("Equipment")
+                $scene_manager.register("equipMenu",EquipMenu.new())
+                $scene_manager.switch_scene("equipMenu")}),
+            Option.new("Items",->(){
+                @input.addToStack("itemsBox")
                 @showItems = true }),
             Option.new("Save",->(){SaveGame.new().writeSave(1)}),
             Option.new("Exit Game",->(){
@@ -70,8 +77,17 @@ class Menu
         #@optionsBox.exitable = false
         
     end
-
+    def selectCooldown()
+        if @selectCool == true
+            if ((Gosu::milliseconds - @cooldownTime)) >= 400
+                #@cooldownTime = Gosu::milliseconds
+                @selectCool = false
+            end
+        end
+    end
     def update()
+        @cooldownTime
+        selectCooldown()
         @party.each {|e| 
             if e.currentHP <= 0 && e.alive == true
                 @deathTotal += 1
@@ -85,18 +101,16 @@ class Menu
         
         
         if @showItems == true
+            
             @inventory = $scene_manager.feature["party"].inventory
             @itemsBox.update
             stackLength = ($scene_manager.input.inputStack.length-1)
             if $scene_manager.input.inputStack[stackLength] == "itemsBox"
                 @itemNames = @items.map{|e|e.text_image}
-                @itemChoice =  @items.map{|e|e.function}
+                @itemChoice =  @inventory.items.map{|e|e.function}
                 @itemAmount = @items.length
 
-                if @items.size >= 1
-                else
-                @items = [Option.new("No Items",->(){})]
-                end
+                updateMenu()
 
                 if @input.keyPressed(InputTrigger::UP) then # Up Arrow
                     if @currentItemOp != 0
@@ -111,7 +125,14 @@ class Menu
                         @colors[@currentItemOp] = @currentColor
                     end
                 elsif @input.keyPressed(InputTrigger::SELECT) then #Select Key
-                    @itemChoice[@currentItemOp].call()
+                    if @selectCool == false
+                        if @itemChoice[@currentItemOp] != nil
+                            puts("itemcalled")
+                            @itemChoice[@currentItemOp].call(@party[0])
+                            @selectCool = true
+                        end
+                        
+                    end
                     @colors = Array.new(25,@notCurrentColor)
                     @colors[@currentItemOp] = @currentColor
                 end         

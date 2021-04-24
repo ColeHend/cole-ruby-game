@@ -25,12 +25,10 @@ class DialogBox
             @evtMessage.draw((@x*32)+15,(@y*32)+15,9,scale_x=1,scale_y=1,color=@textColor)
         end
         drawing()
-        if (Gosu.milliseconds / 4 % 3 == 0)
-            if @input.keyDown(InputTrigger::SELECT)
-                exitLambda.call()
-                @input.removeFromStack(@stackName)
-            end    
-        end
+        if @input.keyDown(InputTrigger::SELECT)
+            exitLambda.call()
+            @input.removeFromStack(@stackName)
+        end    
         
     end
 

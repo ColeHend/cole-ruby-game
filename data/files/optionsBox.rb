@@ -31,7 +31,16 @@ class OptionsBox
         #$can_move = !@drawDialog
     end
 
-    
+    def change_options(newChoices)
+        @notCurrentColor = @white
+        @currentColor = @brightGreen
+        @colors = Array.new(40,@notCurrentColor)
+        @colors[0] = @currentColor
+        @choices = newChoices
+        @choice =  @choices.map{|e|e.function}
+        @choiceNames = @choices.map{|e|e.text_image}
+        @choiceAmount = @choiceNames.length 
+    end
     
     def doInput(key)
         stackLength = ($scene_manager.input.inputStack.length-1)
@@ -51,7 +60,7 @@ class OptionsBox
                 end
             when "select"
                     @choice[@currentOp].call()
-                    #@currentOp = 0
+                    @currentOp = 0
                     @colors = Array.new(25,@notCurrentColor)
                     @colors[@currentOp] = @currentColor
                     
@@ -61,6 +70,10 @@ class OptionsBox
     end
 
     def update
+        @choiceNames = @choices.map{|e|e.text_image}
+        @choice =  @choices.map{|e|e.function}
+        @choiceAmount = @choiceNames.length
+
         if @input.keyPressed(InputTrigger::UP) then #down
             doInput("up") 
         elsif @input.keyPressed(InputTrigger::DOWN) then #up
@@ -68,9 +81,7 @@ class OptionsBox
         elsif @input.keyPressed(InputTrigger::SELECT) then #select
             doInput("select")
         end
-        @choiceNames = @choices.map{|e|e.text_image}
-        @choice =  @choices.map{|e|e.function}
-        @choiceAmount = @choiceNames.length
+        
     end
         
     def hidden(visible)
