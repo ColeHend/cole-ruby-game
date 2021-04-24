@@ -38,8 +38,6 @@ class PlayerCharacter < CharacterBase
         @playerLevel = (@playerLevel+1)
         self.hp = (self.hp+5)
         @lvlUpExp = (1000*@playerLevel) 
-        self.int = (self.int+1)
-        self.con = (self.con+1)
         
     end
 

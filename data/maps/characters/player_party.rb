@@ -15,6 +15,7 @@ class PlayerParty
         @inventory.add_item("megaPotion")
         @inventory.add_weapon("ironMace")
         @inventory.add_weapon("ironSword")
+        @inventory.add_weapon("fireBrand")
         @inventory.add_weapon("bronzeMace")
         @inventory.add_weapon("bronzeSword")
         @inventory.add_armor("leatherHelm")
