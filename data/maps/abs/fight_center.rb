@@ -8,7 +8,8 @@ class FightCenter
     @name = name
     @collisionDetect = MoveCollision.new(name)
     @skillAnimation = PlayAnimation.new()
-    @magicAttack 
+    @magicAttack
+    @actorBattle = bat 
     @showDamage = true
     @meleeCool = false
     @cooldownTime = cooldownTimer
@@ -44,9 +45,9 @@ class FightCenter
             return false
         end
     end
-    def meleeCooldown(cooldownTime=350)
+    def meleeCooldown()
         if @meleeCool == true
-            if ((Gosu::milliseconds - @cooldownTime)) >= cooldownTime
+            if ((Gosu::milliseconds - @cooldownTime)) >= @actorBattle.weapon.cooldown
                 @cooldownTime = Gosu::milliseconds
                 @meleeCool = false
             end
@@ -309,7 +310,7 @@ class FightCenter
         end
 
         magicCoolList()
-        meleeCooldown(350)
+        meleeCooldown()
     end
     def draw
         @skillAnimation.draw

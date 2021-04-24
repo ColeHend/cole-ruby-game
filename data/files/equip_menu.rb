@@ -95,7 +95,9 @@ class EquipMenu
         
         
         @partyNames = @party.party.map{|e|Gosu::Image.from_text(e.name, 25,:underline=>true)}
-        @partyHP = @party.party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
+        @partyDEX = @party.party.map{|e|Gosu::Image.from_text("Dexterity: "+e.dex.to_s, 18)}
+        @partyINT = @party.party.map{|e|Gosu::Image.from_text("Intelligence: "+e.int.to_s, 18)}
+        @partyCON = @party.party.map{|e|Gosu::Image.from_text("Constitution: "+e.con.to_s, 18)}
         @partyLVL = @party.party.map{|e|Gosu::Image.from_text("Level: "+e.playerLevel.to_s, 18)}
         @partyXP = @party.party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
 
@@ -262,12 +264,10 @@ class EquipMenu
     end
     def draw
         #Draw Party Info 
+        @partyHP = @party.party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
         @partyAC = @party.party.map{|e|Gosu::Image.from_text("Armor: "+e.total_ac(0).to_s, 18)}
         @partySTR = @party.party.map{|e|Gosu::Image.from_text("Strength: "+e.str.to_s, 18)}
         @partyWPNDMG = @party.party.map{|e|Gosu::Image.from_text("Weapon Damage: "+(e.weapon.damage*(@party.party[@currentPartyMember].getMod(@party.party[@currentPartyMember].str))).to_s, 18)}
-        @partyDEX = @party.party.map{|e|Gosu::Image.from_text("Dexterity: "+e.dex.to_s, 18)}
-        @partyINT = @party.party.map{|e|Gosu::Image.from_text("Intelligence: "+e.int.to_s, 18)}
-        @partyCON = @party.party.map{|e|Gosu::Image.from_text("Constitution: "+e.con.to_s, 18)}
         @partyMRES = @party.party.map{|e|Gosu::Image.from_text("Magic Resistance: "+e.mRes.to_s, 18)}
         mapPartyEquipment()
         

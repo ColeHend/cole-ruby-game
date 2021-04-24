@@ -61,6 +61,7 @@ class Menu
         @options = 
             [Option.new("Equip",->(){
                 @input.addToStack("Equipment")
+                $scene_manager.register("equipMenu",EquipMenu.new())
                 $scene_manager.switch_scene("equipMenu")}),
             Option.new("Items",->(){
                 @input.addToStack("itemsBox")
