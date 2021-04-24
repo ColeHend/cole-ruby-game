@@ -104,7 +104,16 @@ class Control_movement
         facingDown = ->(){ draw_character(objectToMove, "downStop",time)}
         facingLeft = ->(){ draw_character(objectToMove, "leftStop",time)}
         facingRight = ->(){ draw_character(objectToMove, "rightStop",time)}
-        
+        if @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
+            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
+                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
+                if theEnemy.is_a?(Event)
+                    if isAnEnemy(theEnemy,attackerClass.battle)
+                        @objectToFollow = theEnemy.eventObject
+                    end
+                end
+            end
+        end
         if @objectToFollow.is_a?(GameObject) == true
             followAbsX = ((@objectToFollow.x+(@objectToFollow.w/2)) - (objectToMove.x+(objectToMove.w/2)) ).abs
             followAbsY = ((@objectToFollow.y+32) - (objectToMove.y+32) ).abs
@@ -225,7 +234,6 @@ class Control_movement
                         end
                     end
                 elsif followAbsY < followAbsX#farther left or right
-
                     if @objectToFollow.x < objectToMove.x#left
                         if objDetect.check_surrounding("left", objectToMove)  == false
                             moveArray.push(moveLeft)
@@ -260,15 +268,6 @@ class Control_movement
                 defender = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
                 if defender.is_a?(Event) 
                     Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
-                end
-            end
-        elsif @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
-            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
-                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
-                if theEnemy.is_a?(Event)
-                    if isAnEnemy(theEnemy,attackerClass.battle)
-                        @objectToFollow = theEnemy.eventObject
-                    end
                 end
             end
         end

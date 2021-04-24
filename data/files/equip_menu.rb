@@ -39,7 +39,6 @@ class EquipMenu
         @startOptions.push(back[0])
         mapPartyEquipment()
         @currentOptions = @startOptions
-        #@optionsBox.change_options(@startOptions)
         @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
         #equiment options
         #--------------------------
@@ -80,8 +79,6 @@ class EquipMenu
             }),
             Option.new("Back",->(){
                 @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
-                #@currentOptions = @startOptions
-                #@optionsBox.change_options(@startOptions)
         })]
         #change to party options
         
@@ -103,7 +100,7 @@ class EquipMenu
         @partyXP = @party.party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
 
         #   Armor 
-        #Types Are : "helm","neck", "body", "hands", "legs", "feet"
+        #
         @currentArmorOp = 0 
         
         @colors = Array.new(40,@notCurrentColor)
@@ -118,7 +115,7 @@ class EquipMenu
             end
         end
     end
-    def armorArray(arrayType)
+    def armorArray(arrayType) #Types Are : "helm","neck", "body", "hands", "legs", "feet"
         array = Array.new
         @party.inventory.armor.each{|e|
             if e.type == arrayType
@@ -145,7 +142,6 @@ class EquipMenu
         array.push(Option.new("Back",->(){
             @currentOptions = @equipmentOptions
             @optionsBox.change_options(@equipmentOptions)
-            #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,@equipmentOptions,"")
         }))
         return array
     end
@@ -167,7 +163,6 @@ class EquipMenu
         array.push(Option.new("Back",->(){
             @currentOptions = @equipmentOptions
             @optionsBox.change_options(@equipmentOptions)
-            #@optionsBox = OptionsBox.new("Equipment",0,0,4,19,@equipmentOptions,"")
         }))
         puts(array[0].text)
         return array
@@ -238,7 +233,6 @@ class EquipMenu
         @currentChoices =  @currentOptions.map{|e|e.function}
         @choiceAmount = @currentOptions.length
         @currentChoiceOp = @optionsBox.currentOp
-        #@white = @currentEquipColor
         @optionsBox.update
         
         if @input.keyPressed(InputTrigger::UP) then # Up Arrow

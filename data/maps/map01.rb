@@ -135,7 +135,7 @@ class Map01
         end
         if event103.battle.currentHP > 0#set charizard ai
             event103.activateType = "SELECT"
-            event103.set_move("followPlayer",10*32,5*32,"ranged",event102.eventObject) 
+            event103.set_move("followPlayer",10*32,5*32,"ranged",player.eventObject) 
         end
     end
     def draw

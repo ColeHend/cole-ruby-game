@@ -236,12 +236,12 @@ class FightCenter
             end
         end
     end
-    def npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+    def npcAttack(objectToMove, battle,facing ,closestDist,atkRange,animation)
         theEnemy = MoveCollision.new.check_inRange(objectToMove,closestDist,true)
         if theEnemy.is_a?(Event) 
             if isAnEnemy(theEnemy,battle) == true #attacks inside here
                 if atkRange == "melee"
-                    closeCombat(objectToMove, battle,facing,"slash")
+                    closeCombat(objectToMove, battle,facing,animation)
                 elsif atkRange == "ranged"
                     rangedCombat(objectToMove,facing,battle.knownSpells[0],battle)
                 else
@@ -261,25 +261,25 @@ class FightCenter
                             when "up"
                                 if objCollision.checkRange(objectToMove,"up",closestDist) == true
                                     if (objectToMove.y - objectToFollow.y).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange,battle.weapon.animation)
                                     end
                                 end
                             when "down"
                                 if objCollision.checkRange(objectToMove,"down",closestDist) == true
                                     if (objectToMove.y - objectToFollow.y).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange,battle.weapon.animation)
                                     end
                                 end
                             when "left"
                                 if objCollision.checkRange(objectToMove,"left",closestDist) == true
                                     if (objectToMove.x - objectToFollow.x).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange,battle.weapon.animation)
                                     end
                                 end
                             when "right"
                                 if objCollision.checkRange(objectToMove,"right",closestDist) == true
                                     if (objectToMove.x - objectToFollow.x).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange)
+                                        npcAttack(objectToMove, battle,facing ,closestDist,atkRange,battle.weapon.animation)
                                     end
                                 end
                             end
