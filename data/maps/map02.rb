@@ -52,8 +52,6 @@ class Map02 < Map
                 #@talkin = true
                 #$scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
-                @events[0].set_move("followPlayer")
-                @events[1].set_move("random")
         },@bestiary.enemy("goblin")
         ))
         $scene_manager.event["Event201"].activateType = "SELECT"
