@@ -21,8 +21,8 @@ class SceneManager
         @images[name] = Game_Object.new(name,0,0,0,0,imgName,nil,columns,rows)
            
     end
-    def register_object(name,img,x,y,bbWidth,bbHeight,cols,rows)
-        @object[name]= GameObject.new(x,y,bbWidth,bbHeight,img,nil,cols,rows)
+    def register_object(name,img,x,y,bbWidth,bbHeight,cols,rows,img_gap=nil)
+        @object[name]= GameObject.new(x,y,bbWidth,bbHeight,img,img_gap,cols,rows)
     end
 
     def registerFeature(featureName,featureClass)

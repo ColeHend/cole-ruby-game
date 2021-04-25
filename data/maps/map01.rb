@@ -1,5 +1,6 @@
 require_relative "map.rb"
 require_relative "scene_map.rb"
+require_relative "tileset.rb"
 require_relative "events/event.rb"
 require_relative "events/event_trigger.rb"
 require_relative "../files/windowBase.rb"
@@ -10,13 +11,13 @@ require_relative "characters/character_npc.rb"
 require "json"
 
 class Map01
-    attr_reader :name, :map, :mapfile, :events, :width, :height
+    attr_reader :name, :map, :mapfile, :events, :width, :height, :tileset
     include WindowBase
     def initialize()
         # Initilize variables
         @name = "map01"
         @talkin = false
-        @tileset = $scene_manager.images["CastleTownTileset"]
+        @tileset = Tileset.new("CastleTown")
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
         @events = $scene_manager.eventMap[1]
         @map = Mapper.new(@tileset,30,20,@mapfile)
@@ -81,7 +82,7 @@ class Map01
         @teleport2.y = 1*32
         #-----------------------------------------------------------------
         # Event 101
-        $scene_manager.register_object("Event101","goblin",4*32,14*32,48,64,4,4)
+        $scene_manager.register_object("Event101",:sandslash,4*32,14*32,63,64,4,4)
         $scene_manager.registerEvent(1,"Event101",
             Event.new($scene_manager.object["Event101"], ->(){
                 #$scene_manager.input.addToStack("ev0Dialog")
@@ -89,11 +90,11 @@ class Map01
                 $scene_manager.feature["party"].addToParty(NpcCharacter.new("Johnny",5))
                 $scene_manager.feature["party"].party[0].level_up
                 
-        },@bestiary.enemy("goblin")))
+        },@bestiary.enemy("sandslash")))
         $scene_manager.event["Event101"].activateType = "SELECT"
 
         # Event 102
-        $scene_manager.register_object("Event102","ghost",19*32,15*32,30,48,4,4)
+        $scene_manager.register_object("Event102",:hitmonchan,19*32,15*32,63,62,4,4)
         $scene_manager.registerEvent(1,"Event102",
             Event.new($scene_manager.object["Event102"], ->(){
                 if @showChoices == false
@@ -103,7 +104,7 @@ class Map01
                 else
                     #@optionBox.hidden = true
                 end
-        },@bestiary.enemy("ghost")))
+        },@bestiary.enemy("hitmonchan")))
         $scene_manager.event["Event102"].activateType = "SELECT"
 
         # Event 103
@@ -114,8 +115,8 @@ class Map01
         $scene_manager.event["Event103"].activateType = "SELECT"
     end
     def setMovement()
-        event101 = $scene_manager.event["Event101"] #greenguy 
-        event102 = $scene_manager.event["Event102"] #ghost
+        event101 = $scene_manager.event["Event101"] #sandslash 
+        event102 = $scene_manager.event["Event102"] #hitmonchan
         event103 = $scene_manager.event["Event103"] #charizard
         player = $scene_manager.scene["player"]
         @teleport1.x, @teleport1.y = 12*32, 16
@@ -125,11 +126,11 @@ class Map01
 
         @teleport1.set_move("none")
         @teleport2.set_move("none")
-        if event101.battle.currentHP > 0 #set greenguy ai
+        if event101.battle.currentHP > 0 #set sandslash ai
             event101.activateType = "SELECT"
             event101.set_move("followPlayer",6*32,1.75*32,"melee",player.eventObject) 
         end
-        if event102.battle.currentHP > 0#set ghost ai
+        if event102.battle.currentHP > 0#set hitmonchan ai
             event102.activateType = "SELECT"
             event102.set_move("followPlayer",8*32,1.75*32,"melee",player.eventObject) 
         end

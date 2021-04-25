@@ -31,7 +31,7 @@ class WeaponStorage
             return Weapon.new("Iron Mace",damage,animation,enchantment,cooldown)
         when "fireBrand"
             damage = 65 + 25
-            animation="fire"
+            animation="fireExplosion"
             enchantment = nil
             rangeBoost = 3*32
             cooldown = 280

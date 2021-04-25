@@ -158,7 +158,11 @@ class FightCenter
         end
         
     end
-    def meleeAnimation(name,dir,x,y)
+    def meleeAnimation(name,dir,object)
+        x = object.x
+        y = object.y
+        w = object.w
+        h = object.h
         if name == "slash"
             case dir
             when "up"
@@ -201,16 +205,16 @@ class FightCenter
             
             case facing
             when "left"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
                 meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             when "right"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
                 meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             when "up"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
                 meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             when "down"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
                 meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             end
             @meleeCool = true

@@ -17,8 +17,16 @@ class PlayAnimation
                 @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4]))
             when "fire"
                 @runEffects.push(Effect.new(x, y, "fire", 5, 2, 1, [0,1,2,3]))
+            when "fireExplosion"
+                @runEffects.push(Effect.new(x, y, "fireExplosion", 5, 2, 1, [0,1,2,3,4,5]))
+            when "earthExplosion"
+                @runEffects.push(Effect.new(x, y, "Earth1", 5, 2, 1, [0,1,2,3,4,5,6]))
+            when "electricShock"
+                @runEffects.push(Effect.new(x, y, "ThunderShock", 5, 2, 1, [0,1,2,3,4,5,6]))
             when "blunt"
                 @runEffects.push(Effect.new(x, y, "bluntWeapon", 5, 2, 1, [0,1,2,3]))
+            when "magicCircle"
+                @runEffects.push(Effect.new(x, y, "Action01", 5, 2, 2, [0,2,3,4]))
             else 
                 puts("FAIL") 
                 

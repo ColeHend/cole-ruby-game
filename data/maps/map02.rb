@@ -9,13 +9,13 @@ require_relative "characters/inventory.rb"
 require_relative "characters/character_npc.rb"
 require "json"
 class Map02 < Map
-    attr_reader :name, :mapfile, :map , :events, :width, :height
+    attr_reader :name, :mapfile, :map , :events, :width, :height, :tileset
     include WindowBase
     def initialize()
         #Variable Init
         @name = "map02"
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
-        @tileset = $scene_manager.images["CastleTownTileset"]
+        @tileset = Tileset.new("CastleTown")
         @width, @height = 30, 20
         @map = Mapper.new(@tileset,@width,@height,@mapfile)
         @events = $scene_manager.eventMap[2]
@@ -52,13 +52,13 @@ class Map02 < Map
                 #@talkin = true
                 #$scene_manager.input.addToStack(@followDialog.stackName)
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(5000)}
-        },@bestiary.enemy("goblin")
+        },@bestiary.enemy("sandslash")
         ))
         $scene_manager.event["Event201"].activateType = "SELECT"
 
         $scene_manager.registerEvent(2,"Event202",
             Event.new($scene_manager.object["Event202"], ->(){
-            },@bestiary.enemy("goblin")
+            },@bestiary.enemy("sandslash")
             ))
             $scene_manager.event["Event202"].activateType = "SELECT"
     end
