@@ -28,7 +28,7 @@ class MoveCollision
     def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
         range = 32
         range += rangeBoost
-        if event != nil && targetObject != nil
+        if event.is_a?(Event) == true || event.is_a?(GameObject) == true && targetObject.is_a?(Event) == true || targetObject.is_a?(GameObject) == true
             targetX = targetObject.x
             targetY = targetObject.y
             targetW = targetObject.w
@@ -40,7 +40,7 @@ class MoveCollision
             case dir
                 when "up"
                     if (range + 6) >= (eventY + (eventH) - (targetY + targetH)).abs && ((eventX) - targetX).abs <= (range - 16) #up
-                        if (overlap?(((eventY)...(eventY+eventH+8)),(targetY...(targetY+targetH))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
+                        if (overlap?(((eventY)...(eventY+eventH)),(targetY...(targetY+targetH-8))) === true) && (overlap?(((eventX)...(eventX+eventW)),((targetX)...(targetX+targetW))) === true)
                             if evtReturn == true
                                 return event
                             end
@@ -171,8 +171,8 @@ class MoveCollision
     
     def check_surrounding(direction,targetObject)
         #currentMap =  $scene_manager.scene["map"].currentMap 
-        mWidth = 30
-        mHeight = 20
+        mWidth = $scene_manager.scene["map"].currentMap.width
+        mHeight = $scene_manager.scene["map"].currentMap.height
         objectX = targetObject.x
         objectY = targetObject.y
         playerObj = $scene_manager.scene["player"].eventObject

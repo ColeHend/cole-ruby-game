@@ -22,7 +22,7 @@ class Bestiary
             return hitmonchan
         when "sandslash"
             sandslash = PlayerCharacter.new("sandslash",30.0,12,12,12,12,2)
-            sandslash.weapon = Weapon.new("slash",10,"slash",350)
+            sandslash.weapon = Weapon.new("slash",10,"slash",350,8)
             sandslash.totalArmor = 12
             sandslash.exp = 800 # gives 5% of 
             sandslash.hateGroup = "sandslash"

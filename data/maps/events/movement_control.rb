@@ -297,7 +297,7 @@ class Control_movement
         # targetObject is likely the player
         # returns the event in that direction if present
         collisionDetect = MoveCollision.new
-        rangePlus = 2
+        rangePlus = 8
         upEventCheck = collisionDetect.checkDir(targetObject,"up",rangePlus,true)
         downEventCheck = collisionDetect.checkDir(targetObject,"down",rangePlus,true)
         leftEventCheck = collisionDetect.checkDir(targetObject,"left",rangePlus,true)
@@ -330,13 +330,13 @@ class Control_movement
         
         if activateType == "SELECT"
             if KB.key_pressed?(InputTrigger::SELECT)
-                if collisionDetect.checkDir(targetObject,"up",0) == true
+                if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
                     upEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"down",0) == true
+                elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
                     downEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"left",0) == true
+                elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
                     leftEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"right",0) == true
+                elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
                     rightEventCheck.activate_event
                 end
             end

@@ -169,6 +169,7 @@ class Menu
             @currentMap.map.draw
             @currentMap.events.each {|e|e.draw()}
             @player.draw
+            @currentMap.map.drawAbove
         end
 
         #Draw Party Info

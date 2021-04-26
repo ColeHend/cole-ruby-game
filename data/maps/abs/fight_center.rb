@@ -28,10 +28,11 @@ class FightCenter
     end
     def isAnEnemy(baddy,goody)
         goody.enemyGroups.each {|e|
-        if baddy.battle.hateGroup == e
-            return true
+        if baddy.is_a?(Event)
+            if baddy.battle.hateGroup == e
+                return true
+            end
         end
-        
         }
         return false
     end

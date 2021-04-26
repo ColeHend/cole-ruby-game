@@ -13,15 +13,13 @@
 
     **Missing major features**
 - sound
-- tileset class controlling tile based events
-- menu needs tighter abs intergration *(set the spell,change equipment,etc..)*
+- menu needs tighter abs intergration *(set the spell,etc..)*
 
     **Missing features(or potential features)**
 - Shop
 - Character Creator
 - Multiplayer (*local or network*)
 - Transition effects
-- Weapons and spell hold attack range
 - Stitch maps together like pokemon
 - More animations for weapons and spells
 

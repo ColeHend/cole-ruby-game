@@ -9,6 +9,7 @@ class SceneMap
         @mapHash = Hash.new()
         @mapHash["map01"] = Map01.new()
         @mapHash["map02"] = Map02.new()
+        @mapHash["map03"] = Map03.new()
         startMap = @mapHash["map01"]
         @currentMap = startMap
         @player = $scene_manager.scene["player"]
@@ -22,10 +23,24 @@ class SceneMap
         @camera_x = @camera_y = 0
 
     end 
-    def change_map(map)
+
+    def change_map(map,newX,newY,facing="down")
         $scene_manager.input.addToStack("map")
+        @player.eventObject.x = newX
+        @player.eventObject.y = newY
+        case facing
+        when "up"
+            @player.eventObject.set_animation(12)
+        when "down"
+            @player.eventObject.set_animation(0)
+        when "left"
+            @player.eventObject.set_animation(4)
+        when "right"
+            @player.eventObject.set_animation(8)
+        end
         @currentMap = @mapHash[map]
     end
+
     def will_Collide(collisionArray,key)
         @currentMap.willCollide(collisionArray,@player.x,@player.y,key)
     end
@@ -65,6 +80,8 @@ class SceneMap
             } 
             
         end
+        @mWidth = @currentMap.width 
+        @mHeight = @currentMap.height
         @camera_x = [[(@player.x) - 800 / 2, 0].max, ((@mWidth * 32) + 32) - 800].min
         @camera_y = [[(@player.y) - 600 / 2, 0].max, ((@mHeight * 32) + 32) - 600].min
         
@@ -88,7 +105,7 @@ class SceneMap
                 @player.draw
             end
              # events
-            
+            @currentMap.map.drawAbove
         end
         @currentMap.draw
     end
