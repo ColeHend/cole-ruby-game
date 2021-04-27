@@ -273,23 +273,42 @@ class Control_movement
         end
     end 
      
-    def RandomMove(vectorToMove,objectToMove,randomDir,delayStart=490)
+    def RandomMove(vectorToMove,objectToMove,moveDist,moveArray,facing,delayStart = Gosu::milliseconds())
         @randomNum = rand(4)
-        @delayStop = Gosu.milliseconds
-
-        if (@delayStop - delayStart < 500)
+        speed = 0.25
+        time = 10
+        @delayStart = delayStart
+        moveLeft = ->(){
+            facing = "left"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveRight = ->(){
+            facing = "right"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveUp = ->(){
+            facing = "up"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveDown = ->(){
+            facing = "down"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveWaitTime = (Gosu::milliseconds()/100 % 32)
+        #puts("RandomMoveTime: #{moveWaitTime}")
+        if (moveWaitTime == 0)
+            moveNumber = moveDist
             case @randomNum
             when 0
-                Move(vectorToMove,objectToMove,"none")
+                moveNumber.times{moveArray.push(moveRight) }
             when 1
-                Move(vectorToMove,objectToMove,"right",1)
+                moveNumber.times{moveArray.push(moveUp) }
             when 2
-                Move(vectorToMove,objectToMove,"up",1)
+                moveNumber.times{moveArray.push(moveLeft) }
             when 3
-                Move(vectorToMove,objectToMove,"left",1)
-            when 4
-                Move(vectorToMove,objectToMove,"down",1)
+                moveNumber.times{ moveArray.push(moveDown)}
             end
+            @delayStart = Gosu::milliseconds()
         end
     end   
     

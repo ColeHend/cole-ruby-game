@@ -19,6 +19,7 @@ class Mapper
               $scene_manager.object[eventName], 
               eventTriggered,
               Bestiary.new.enemy(bestiaryName)))
+      $scene_manager.event[eventName].name = eventName
       $scene_manager.event[eventName].activateType = activateType
     end
     def draw_tile_loop()

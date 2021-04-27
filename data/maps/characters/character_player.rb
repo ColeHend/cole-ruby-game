@@ -15,14 +15,14 @@ class PlayerCharacter < CharacterBase
         @str, @dex, @int, @con, @mRes = str, dex, int, con, mRes
         @lvlUpExp = (1000*@playerLevel)
         @knownSpells = ["firebolt"]
-        @weapon = Weapon.new("Big Stick",1,"blunt")
-        @shield = Armor.new("Pot Lid","shield",1)
-        @helm = Armor.new("Sun Hat","helm",1)
-        @necklace = Armor.new("Charm","necklace",1)
-        @chest = Armor.new("Cotton Shirt","body",1)
-        @hands = Armor.new("Cotton Gloves","hands",1)
-        @legs = Armor.new("Cotton Pants","legs",1)
-        @feet = Armor.new("Cotton Shoes","feet",1)
+        @weapon = Weapon.new("Big Stick","bigStick",1,"blunt")
+        @shield = Armor.new("Pot Lid","potLid","shield",1)
+        @helm = Armor.new("Sun Hat","sunHat","helm",1)
+        @necklace = Armor.new("Charm","charm","necklace",1)
+        @chest = Armor.new("Cotton Shirt","cottonShirt","body",1)
+        @hands = Armor.new("Cotton Gloves","cottonGloves","hands",1)
+        @legs = Armor.new("Cotton Pants","cottonPants","legs",1)
+        @feet = Armor.new("Cotton Shoes","cottonShoes","feet",1)
         @totalArmor = total_ac(0)
         @hateGroup = "player"
         @enemyGroups = ["undead","goblin","charizard"]
@@ -50,22 +50,22 @@ class PlayerCharacter < CharacterBase
 
     def total_ac(modifier = 0)
         totalAC = 10
-        if @shield != nil
+        if @shield.is_a?(Armor)
             totalAC += @shield.armor
         end
-        if @helm != nil
+        if @helm.is_a?(Armor)
             totalAC += @helm.armor
         end
-        if @chest != nil
+        if @chest.is_a?(Armor)
             totalAC += @chest.armor
         end
-        if @hands != nil
+        if @hands.is_a?(Armor)
             totalAC += @hands.armor
         end
-        if @legs != nil
+        if @legs.is_a?(Armor)
             totalAC += @legs.armor
         end
-        if @feet != nil
+        if @feet.is_a?(Armor)
             totalAC += @feet.armor
         end
         return totalAC + modifier

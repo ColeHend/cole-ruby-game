@@ -26,19 +26,64 @@ class Map01
         @sceneMap = $scene_manager.scene["map"]
         @theParty = $scene_manager.feature["party"]
         @bestiary = Bestiary.new()
-
+        @inventory = $scene_manager.feature["party"].inventory
         #Event choices and Windows
         @diffDialog = DialogBox.new(0,10,20,5,"ev0Dialog","Here's Johnny!! Have fun on map 2 with 300 more XP.")
         #@optionBox.hidden(true) 
 
         #--------------------Events--------------------------
         #registerEvent(eventName,imgName,eventX,eventY,bbWidth,bbHeight,columns,rows,mapNumber,bestiaryName,activateType,eventTriggered=->(){})
-
+        #----- Event 101 -----
+        @map.registerEvent("Event101",:lightCoat,15*32,18*32,32,46,4,4,1,"god","SELECT",->(){
+            event101 = $scene_manager.event["Event101"]
+            if event101.page == 1
+                $scene_manager.register("event101DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend! Have Some Weapons And Armor! Hit F for a Melee Attack, Hit G for a Ranged Attack\nHit Escape to open the Menu",->(){}))
+                @inventory.add_weapon("ironMace")
+                @inventory.add_weapon("ironSword")
+                @inventory.add_weapon("fireBrand")
+                @inventory.add_weapon("bronzeMace")
+                @inventory.add_weapon("bronzeSword")
+                @inventory.add_armor("leatherHelm")
+                @inventory.add_armor("leatherArmor")
+                $scene_manager.switch_scene("event101DialogBox")
+                event101.page = 2
+            elsif event101.page == 2
+                $scene_manager.register("event101DialogBox2",DialogBox.new(0,10,20,5,"Hello There Friend!\nHit Escape to open the Menu",->(){}))
+                $scene_manager.switch_scene("event101DialogBox2")
+            end
+            
+        })
+        $scene_manager.object["Event101"].set_animation(12)
+        #----- Event 102 -----
+        @map.registerEvent("Event102",:greenCoat,17*32,6*32,32,47,4,4,1,"god","SELECT",->(){
+            event102 = $scene_manager.event["Event102"]
+            if event102.page == 1
+                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend!Have Some potions!\nHit Escape to open the Menu",->(){}))
+                @inventory.add_item("potion")
+                @inventory.add_item("potion")
+                @inventory.add_item("potion")
+                $scene_manager.switch_scene("event102DialogBox")
+                event102.page = 2
+            elsif event102.page == 2
+                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"I Think i like you!Have Some Mega potions!",->(){}))
+                @inventory.add_item("megaPotion")
+                @inventory.add_item("megaPotion")
+                @inventory.add_item("megaPotion")
+                $scene_manager.switch_scene("event102DialogBox")
+                event102.page = 3
+            elsif event102.page == 3
+                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Here have a potion.",->(){}))
+                @inventory.add_item("potion")
+                $scene_manager.switch_scene("event102DialogBox")
+            end
+        })
+        
+        $scene_manager.object["Event102"].set_animation(4)
         #------ Teleport 101 (Door) Map02
         @map.registerEvent("Teleport101",:doors,21*32, 13*32,32,36,4,4,1,"god","SELECT",->(){$scene_manager.scene["map"].change_map("map02",15.5*32,18.5*32,"up")})
         $scene_manager.object["Teleport101"].set_animation(9)
 
-        #------ Teleport 102 Map03
+        #------ Teleport 102 Map03 
         $scene_manager.registerEvent(1,"Teleport102",
             Event.new(nil, ->(){
                 $scene_manager.scene["map"].change_map("map03",15.5*32,27*32,"up")
@@ -51,8 +96,18 @@ class Map01
 
     def setMovement()
         player = $scene_manager.scene["player"]
+        event101 = $scene_manager.event["Event101"] #lightCoat
+        event102 = $scene_manager.event["Event102"] #greenCoat 
         $scene_manager.event["Teleport101"].set_move("none")
-        #$scene_manager.event["Teleport102"].set_move("none")
+        if event101.page == 1
+            event101.set_move("followPlayer",10*32,0*32,"none",player.eventObject)
+            event101.activateType = "TOUCH"
+        else
+            event101.activateType = "SELECT"
+            event101.set_move("random",4*32) 
+        end
+        event102.set_move("random",2*32) 
+        
         
     end
     def draw

@@ -191,7 +191,7 @@ class Menu
 
         if @showItems == true
             #@itemsBox.draw
-            create_window(5,0,3,8)
+            create_window(5,0,3,14)
             @itemY = (0*32) + 15
             for a in (0...@itemAmount)
                 @itemNames[a].draw((5*32)+10, @itemY+(20*a), 8,scale_x = 1, scale_y = 1, color = @colors[a])

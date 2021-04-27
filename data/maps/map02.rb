@@ -23,7 +23,10 @@ class Map02 < Map
         @followDialog = DialogBox.new(0,10,20,5,"ev0SetMove","I LOVE YOU!! I'm going to follow you. Have 5000 XP.")
         @talkin = false
         @bestiary = Bestiary.new()
-        #Events
+
+        #--------------------Events--------------------------
+        #registerEvent(eventName,imgName,eventX,eventY,bbWidth,bbHeight,columns,rows,mapNumber,bestiaryName,activateType,eventTriggered=->(){})
+
         #------------------------WarpSquare--------------------------------
         $scene_manager.registerEvent(2,"Teleport201",
             Event.new(nil, ->(){
@@ -71,9 +74,11 @@ class Map02 < Map
         event202 = $scene_manager.event["Event202"]
         if event201.battle.currentHP >= 0
             event201.set_move("followPlayer",10*32,1*32,"melee",player.eventObject)
+            event201.set_move("attack",10*32,1*32,"melee",player.eventObject)
         end
         if event202.battle.currentHP >= 0
             event202.set_move("followPlayer",10*32,1*32,"melee",player.eventObject)
+            event202.set_move("attack",10*32,1*32,"melee",player.eventObject)
         end
     end
 end

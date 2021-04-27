@@ -7,19 +7,7 @@ class PlayerParty
         @maxPartySize = 2
         @gold = 24
         @inventory = Inventory.new()
-        @inventory.add_item("potion")
-        @inventory.add_item("potion")
-        @inventory.add_item("potion")
-        @inventory.add_item("megaPotion")
-        @inventory.add_item("megaPotion")
-        @inventory.add_item("megaPotion")
-        @inventory.add_weapon("ironMace")
-        @inventory.add_weapon("ironSword")
-        @inventory.add_weapon("fireBrand")
-        @inventory.add_weapon("bronzeMace")
-        @inventory.add_weapon("bronzeSword")
-        @inventory.add_armor("leatherHelm")
-        @inventory.add_armor("leatherArmor")
+        
         @deathCap = @maxPartySize
         @deathTotal = 0
     end
@@ -38,45 +26,45 @@ class PlayerParty
         puts("unequip run")
         case equipType
         when "weapon"
-            if @party[equipSpot].weapon != nil
+            if @party[equipSpot].weapon.is_a?(Weapon)
                 @inventory.weapons.push(@party[equipSpot].weapon)
-                @party[equipSpot].weapon = nil
+                @party[equipSpot].weapon = 666
                 
             end
         when "shield"
-            if @party[equipSpot].shield != nil
+            if @party[equipSpot].shield.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].shield)
-                @party[equipSpot].shield = nil
+                @party[equipSpot].shield = 666
             end
         when "helm"
-            if @party[equipSpot].helm != nil
+            if @party[equipSpot].helm.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].helm)
-                @party[equipSpot].helm = nil
+                @party[equipSpot].helm = 666
             end
         when "neck"
-            if @party[equipSpot].necklace != nil
+            if @party[equipSpot].necklace.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].necklace)
-                @party[equipSpot].necklace = nil
+                @party[equipSpot].necklace = 666
             end
         when "body"
-            if @party[equipSpot].chest != nil
+            if @party[equipSpot].chest.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].chest)
-                @party[equipSpot].chest = nil
+                @party[equipSpot].chest = 666
             end
         when "hands"
-            if @party[equipSpot].hands != nil
+            if @party[equipSpot].hands.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].hands)
-                @party[equipSpot].hands = nil
+                @party[equipSpot].hands = 666
             end
         when "legs"
-            if @party[equipSpot].legs != nil
+            if @party[equipSpot].legs.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].legs)
-                @party[equipSpot].legs = nil
+                @party[equipSpot].legs = 666
             end
         when "feet"
-            if @party[equipSpot].feet != nil
+            if @party[equipSpot].feet.is_a?(Armor)
                 @inventory.armor.push(@party[equipSpot].feet)
-                @party[equipSpot].feet = nil
+                @party[equipSpot].feet = 666
             end
         end
     end

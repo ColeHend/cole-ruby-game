@@ -10,7 +10,7 @@ class ItemStorehouse
         case name
         when "potion"
             healAmnt = 5
-            potion = Item.new("potion",->(person){
+            potion = Item.new("potion",name,->(person){
                 if (person.currentHP + healAmnt) <= person.hp
                     person.currentHP += healAmnt 
                 elsif (person.currentHP + healAmnt) > person.hp
@@ -22,7 +22,7 @@ class ItemStorehouse
             return potion
         when "megaPotion"
             healAmnt = 20
-            megaPotion = Item.new("Mega Potion",->(person){
+            megaPotion = Item.new("Mega Potion",name,->(person){
                 if (person.currentHP + healAmnt) <= person.hp
                     person.currentHP += healAmnt 
                 elsif (person.currentHP + healAmnt) > person.hp
