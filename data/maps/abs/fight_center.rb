@@ -86,9 +86,7 @@ class FightCenter
         #@collisionDetect.checkDir(targetObject,dir,rangeBoost=0,evtReturn = false)
         @collisionDetect = MoveCollision.new(@name)
         if @collisionDetect.checkDir(attackerObj,"up",rangeBoost) == true && facing == "up"
-            puts("run")
             defender = @collisionDetect.checkDir(attackerObj,"up",rangeBoost,true)
-            def
             if isAnEnemy(defender,attacker) == true
                 defender = defender.battle
                 damage = damage_calc(attacker.weapon.damage,attacker.getMod(attacker.str),defender.totalArmor)

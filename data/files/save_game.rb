@@ -20,42 +20,42 @@ class SaveGame
         @partyStats = @party.party.map {|member| 
             {member.name=>[
                 member.hp,member.currentHP,member.exp,
-                if member.weapon == 666
+                if member.weapon == 666 || nil
                     member.weapon
                 else
                     member.weapon.codeName
                 end, 
-                if member.shield == 666
+                if member.shield == 666 || nil
                     member.shield
                 else
                     member.shield.codeName
                 end,
-                if member.helm == 666
+                if member.helm == 666 || nil
                     member.helm
                 else
                     member.helm.codeName
                 end, 
-                if member.necklace == 666
+                if member.necklace == 666 || nil
                     member.necklace
                 else
                     member.necklace.codeName
                 end,
-                if member.chest == 666
+                if member.chest == 666 || nil
                     member.chest
                 else
                     member.chest.codeName
                 end, 
-                if member.hands == 666
+                if member.hands == 666 || nil
                     member.hands
                 else
                     member.hands.codeName
                 end,
-                if member.legs == 666
+                if member.legs == 666 || nil
                     member.legs
                 else
                     member.legs.codeName
                 end, 
-                if member.feet == 666
+                if member.feet == 666 || nil
                     member.feet
                 else
                     member.feet.codeName
@@ -117,9 +117,7 @@ class SaveGame
 
                 @saveFile["party"].map do |value| # Adds the entire Party
                     value.map do |name,person|
-                        personAdd = PlayerCharacter.new(name,person[0])
-                        personAdd.give_xp(person[2])
-                        personAdd.currentHP = person[1]
+                        personAdd = PartyCollection.new.party(name)
                         $scene_manager.feature["party"].addToParty(personAdd)
                     end
                      
@@ -130,7 +128,6 @@ class SaveGame
                     @saveFile["party"].each{|memberHash|
                         memberHashNames = memberHash.keys[0]
                         if  memberHashNames == partyMember.name
-                            puts(memberHashNames)
                             partyMember.hp = @saveFile["party"][0][memberHashNames][0].to_i
                             partyMember.currentHP = @saveFile["party"][0][memberHashNames][1].to_i
 

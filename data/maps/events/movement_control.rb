@@ -82,23 +82,31 @@ class Control_movement
         speed = 0.25
         time = 10
         tileDetectW = 6
-        
+        moveNumber = 1
 
         moveLeft = ->(){
-            attackerClass.facing = "left"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "left"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         moveRight = ->(){
-            attackerClass.facing = "right"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "right"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         moveUp = ->(){
-            attackerClass.facing = "up"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "up"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         moveDown = ->(){
-            attackerClass.facing = "down"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "down"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         facingUp = ->(){ draw_character(objectToMove, "upStop",time)}
         facingDown = ->(){ draw_character(objectToMove, "downStop",time)}

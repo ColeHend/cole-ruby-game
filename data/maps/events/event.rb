@@ -93,8 +93,13 @@ class Event #$scene_manager.scene["player"].eventObject
         @moveControl.update
         @fightControl.update
         if @moveArray.length > 0
-          @moveArray[0].call()
-          @moveArray.delete_at(0)
+          moveTiming = 3 # $time/100 % 4
+          #puts("Time divide and modulus: #{moveTiming}") 
+          #puts("Time divide: #{$time/100}")
+          if moveTiming  == 3
+            @moveArray[0].call()
+            @moveArray.delete_at(0)
+          end
         end
         set_move(@moveType)
       end
