@@ -16,16 +16,16 @@ class PlayerCharacter < CharacterBase
         @lvlUpExp = (1000*@playerLevel)
         @knownSpells = ["firebolt"]
         @weapon = Weapon.new("Big Stick","bigStick",1,"blunt")
-        @shield = Armor.new("Pot Lid","potLid","shield",1)
-        @helm = Armor.new("Sun Hat","sunHat","helm",1)
-        @necklace = Armor.new("Charm","charm","necklace",1)
-        @chest = Armor.new("Cotton Shirt","cottonShirt","body",1)
-        @hands = Armor.new("Cotton Gloves","cottonGloves","hands",1)
-        @legs = Armor.new("Cotton Pants","cottonPants","legs",1)
-        @feet = Armor.new("Cotton Shoes","cottonShoes","feet",1)
+        @shield = 666
+        @helm = 666
+        @necklace = 666
+        @chest = 666
+        @hands = 666
+        @legs = 666
+        @feet = 666
         @totalArmor = total_ac(0)
         @hateGroup = "player"
-        @enemyGroups = ["undead","goblin","charizard"]
+        @enemyGroups = ["sandslash","hitmonchan","charizard"]
     end
     def getMod(stat)
         @totalArmor = total_ac(0)
@@ -36,8 +36,14 @@ class PlayerCharacter < CharacterBase
     def level_up
         #stat increases and stuff
         @playerLevel = (@playerLevel+1)
-        self.hp = (self.hp+5)
+        self.hp = (self.hp+10)
         @lvlUpExp = (1000*@playerLevel) 
+        if @playerLevel % 3 == 0
+            @str += 1
+            @dex += 1
+            @int += 1
+            @con += 1
+        end
         
     end
 

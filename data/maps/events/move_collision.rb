@@ -134,15 +134,18 @@ class MoveCollision
         end
     end
     def checkDir(targetObject,dir,rangeBoost,evtReturn = false)
-        playerObj = $scene_manager.scene["player"]
-        $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
-        if collideCheck(targetObject,tile,dir,rangeBoost,false) == true
-            if sameOb(targetObject,tile) == false
-                return true
-            end
-        end
-        }
+        
         $scene_manager.scene["map"].currentMap.events.each {|event|
+            playerObj = $scene_manager.scene["player"]
+            if evtReturn == false
+                $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
+                if collideCheck(targetObject,tile,dir,rangeBoost,false) == true
+                    if sameOb(targetObject,tile) == false
+                            return true
+                    end
+                end
+                }
+            end
             if collideCheck(targetObject,event,dir,rangeBoost,false) == true
                 if sameOb(targetObject,event) == false
                     if evtReturn == true
@@ -165,8 +168,8 @@ class MoveCollision
                     end
                 end
             end
-            
         }
+        
     end
     
     def check_surrounding(direction,targetObject)

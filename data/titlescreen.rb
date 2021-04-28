@@ -11,7 +11,7 @@ class TitleScreen
             $scene_manager.register("title",TitleScreen.new())
             $scene_manager.register("gameover",Gameover.new())
             $scene_manager.registerFeature("party",PlayerParty.new)
-            $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",30.0))
+            $scene_manager.feature["party"].addToParty(PartyCollection.new.party("Steve"))
              # change to make player an event instead
             $scene_manager.register("map",SceneMap.new())
             

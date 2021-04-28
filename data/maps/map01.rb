@@ -37,14 +37,15 @@ class Map01
         @map.registerEvent("Event101",:lightCoat,15*32,18*32,32,46,4,4,1,"god","SELECT",->(){
             event101 = $scene_manager.event["Event101"]
             if event101.page == 1
-                $scene_manager.register("event101DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend! Have Some Weapons And Armor! Hit F for a Melee Attack, Hit G for a Ranged Attack\nHit Escape to open the Menu",->(){}))
-                @inventory.add_weapon("ironMace")
-                @inventory.add_weapon("ironSword")
-                @inventory.add_weapon("fireBrand")
-                @inventory.add_weapon("bronzeMace")
-                @inventory.add_weapon("bronzeSword")
-                @inventory.add_armor("leatherHelm")
-                @inventory.add_armor("leatherArmor")
+                $scene_manager.register("event101DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend! Have Some Weapons And Armor! Hit F for a Melee Attack, Hit G for a Ranged Attack\nHit Escape to open the Menu",->(){
+                    @inventory.add_weapon("ironMace")
+                    @inventory.add_weapon("ironSword")
+                    @inventory.add_weapon("fireBrand")
+                    @inventory.add_weapon("bronzeMace")
+                    @inventory.add_weapon("bronzeSword")
+                    @inventory.add_armor("leatherHelm")
+                    @inventory.add_armor("leatherArmor")
+                }))
                 $scene_manager.switch_scene("event101DialogBox")
                 event101.page = 2
             elsif event101.page == 2
@@ -58,22 +59,23 @@ class Map01
         @map.registerEvent("Event102",:greenCoat,17*32,6*32,32,47,4,4,1,"god","SELECT",->(){
             event102 = $scene_manager.event["Event102"]
             if event102.page == 1
-                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend!Have Some potions!\nHit Escape to open the Menu",->(){}))
-                @inventory.add_item("potion")
-                @inventory.add_item("potion")
-                @inventory.add_item("potion")
+                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend!Have Some potions!\nHit Escape to open the Menu",->(){
+                    @inventory.add_item("potion")
+                    @inventory.add_item("potion")
+                    @inventory.add_item("potion")
+                }))
                 $scene_manager.switch_scene("event102DialogBox")
                 event102.page = 2
             elsif event102.page == 2
-                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"I Think i like you!Have Some Mega potions!",->(){}))
-                @inventory.add_item("megaPotion")
-                @inventory.add_item("megaPotion")
-                @inventory.add_item("megaPotion")
+                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"I Think i like you!Have Some Mega potions!",->(){
+                    @inventory.add_item("megaPotion")
+                    @inventory.add_item("megaPotion")
+                    @inventory.add_item("megaPotion")
+                }))
                 $scene_manager.switch_scene("event102DialogBox")
                 event102.page = 3
             elsif event102.page == 3
-                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Here have a potion.",->(){}))
-                @inventory.add_item("potion")
+                $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Here have a potion.",->(){@inventory.add_item("potion")}))
                 $scene_manager.switch_scene("event102DialogBox")
             end
         })

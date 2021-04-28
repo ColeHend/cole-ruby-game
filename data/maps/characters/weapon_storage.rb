@@ -10,31 +10,37 @@ class WeaponStorage
             animation = "blunt"
             enchantment = nil
             cooldown = 450
-            return Weapon.new("Big Stick",name,damage,animation,enchantment,cooldown)
+            rangeBoost = 16
+            return Weapon.new("Big Stick",name,damage,animation,enchantment,cooldown,rangeBoost)
         when "bronzeSword"
             damage = 7
             animation="slash"
             enchantment = nil
             cooldown = 300
-            return Weapon.new("Bronze Sword",name,damage,animation,enchantment,cooldown)
+            rangeBoost = 16
+            return Weapon.new("Bronze Sword",name,damage,animation,enchantment,cooldown,rangeBoost)
         when "ironSword"
             damage = 18
             animation="slash"
             enchantment = nil
             cooldown = 300
-            return Weapon.new("Iron Sword",name,damage,animation,enchantment,cooldown)
+            rangeBoost = 32
+            return Weapon.new("Iron Sword",name,damage,animation,enchantment,cooldown,rangeBoost)
         when "bronzeMace"
             damage = 10
             animation="blunt"
             enchantment = nil
             cooldown = 600
-            return Weapon.new("Bronze Mace",name,damage,animation,enchantment,cooldown)
+            rangeBoost = 16
+            return Weapon.new("Bronze Mace",name,damage,animation,enchantment,cooldown,rangeBoost)
         when "ironMace"
             damage = 25
             animation="blunt"
             enchantment = nil
             cooldown = 600
-            return Weapon.new("Iron Mace",name,damage,animation,enchantment,cooldown)
+            rangeBoost = 0
+            rangeBoost = 16
+            return Weapon.new("Iron Mace",name,damage,animation,enchantment,cooldown,rangeBoost)
         when "fireBrand"
             damage = 65 + 25
             animation="fireExplosion"
