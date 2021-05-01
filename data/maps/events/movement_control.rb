@@ -131,22 +131,62 @@ class Control_movement
                     if followAbsY <= tileDetectW
                         if @objectToFollow.x < objectToMove.x
                             if moveArray.length < 1
-                                moveArray.push(moveLeft)
+                                if objDetect.check_surrounding("left", objectToMove)  == false
+                                    moveArray.push(moveLeft)
+                                elsif objDetect.check_surrounding("left", objectToMove)  == true
+                                    if objDetect.check_surrounding("up", objectToMove)  == false
+                                        moveArray.push(moveUp)
+                                    elsif objDetect.check_surrounding("up", objectToMove)  == true
+                                        if objDetect.check_surrounding("down", objectToMove)  == false
+                                            moveArray.push(moveDown)
+                                        end
+                                    end
+                                end
                             end
                         elsif @objectToFollow.x > objectToMove.x
                             if moveArray.length < 1
-                                moveArray.push(moveRight)
+                                if objDetect.check_surrounding("right", objectToMove)  == false
+                                    moveArray.push(moveRight)
+                                elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                    if objDetect.check_surrounding("up", objectToMove)  == false
+                                        moveArray.push(moveUp)
+                                    elsif objDetect.check_surrounding("up", objectToMove)  == true
+                                        if objDetect.check_surrounding("down", objectToMove)  == false
+                                            moveArray.push(moveDown)
+                                        end
+                                    end
+                                end
                             end
                         end
                     end
                     if followAbsX <= tileDetectW
                         if @objectToFollow.y < objectToMove.y
                             if moveArray.length < 1
-                                moveArray.push(moveUp)
+                                if objDetect.check_surrounding("up", objectToMove)  == false
+                                    moveArray.push(moveUp)
+                                elsif objDetect.check_surrounding("up", objectToMove)  == true
+                                    if objDetect.check_surrounding("right", objectToMove)  == false
+                                        moveArray.push(moveRight)
+                                    elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                        if objDetect.check_surrounding("left", objectToMove)  == false
+                                            moveArray.push(moveLeft)
+                                        end
+                                    end
+                                end
                             end
                         elsif @objectToFollow.y > objectToMove.y
                             if moveArray.length < 1
-                                moveArray.push(moveDown)
+                                if objDetect.check_surrounding("down", objectToMove)  == false
+                                    moveArray.push(moveDown)
+                                elsif objDetect.check_surrounding("down", objectToMove)  == true
+                                    if objDetect.check_surrounding("right", objectToMove)  == false
+                                        moveArray.push(moveRight)
+                                    elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                        if objDetect.check_surrounding("left", objectToMove)  == false
+                                            moveArray.push(moveLeft)
+                                        end
+                                    end
+                                end
                             end
                         end
                     end

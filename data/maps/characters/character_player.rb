@@ -28,7 +28,6 @@ class PlayerCharacter < CharacterBase
         @enemyGroups = ["sandslash","hitmonchan","charizard"]
     end
     def getMod(stat)
-        @totalArmor = total_ac(0)
         modifier = ((stat - 10))
         return modifier
     end
