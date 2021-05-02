@@ -44,10 +44,25 @@ class WeaponStorage
         when "fireBrand"
             damage = 65 + 25
             animation="fire"
-            enchantment = nil
+            enchantment = ->(event){
+                event.dex += 20
+                event.mRes += 12
+            }
+            unequipEnchantment = ->(event){
+                event.dex -= 20
+                event.mRes -= 12
+            }
             rangeBoost = 3*32
             cooldown = 280
-            return Weapon.new("Fire Brand",name,damage,animation,enchantment,cooldown,rangeBoost)
+            return Weapon.new("Fire Brand",name,damage,animation,enchantment,cooldown,rangeBoost,unequipEnchantment)
+        when "magicSlayer"
+            damage = 12
+            animation="slash"
+            enchantment = ->(event){event.mRes += 4}
+            unequipEnchantment = ->(event){event.mRes -= 4}
+            cooldown = 300
+            rangeBoost = 16
+            return Weapon.new("Magician Slayer",name,damage,animation,enchantment,cooldown,rangeBoost,unequipEnchantment)
         end
     end
 end

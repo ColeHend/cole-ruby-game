@@ -38,6 +38,14 @@ class Bestiary
             charizard.knownSpells = ["fireball","firebolt"]
             charizard.enemyGroups = ["player","guard","hitmonchan","sandslash"] 
             return charizard
+        when "metagross"
+            metagross = PlayerCharacter.new("metagross",750.0,16,12,12,12,2)
+            metagross.weapon = Weapon.new("Force Punch","forcePunch",100,"blunt",250,8,128)
+            metagross.totalArmor = 1000
+            metagross.exp = 20000 # gives 5% of 
+            metagross.hateGroup = "metagross"
+            metagross.enemyGroups = ["player","guard","hitmonchan","sandslash"] 
+            return metagross
         end
 
     end

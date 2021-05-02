@@ -18,9 +18,10 @@ class ArmorStorage
             return Armor.new("Pot Lid",name,type,armor,enchantment)
         when "charm"
             type = "necklace"
-            armor = 1
-            enchantment = nil
-            return Armor.new("Charm",name,type,armor,enchantment)
+            armor = 0
+            enchantment = ->(event){event.mRes += 1}
+            unequipEnchantment = ->(event){event.mRes -= 1}
+            return Armor.new("Charm",name,type,armor,enchantment,unequipEnchantment)
         when "cottonShirt"
             type = "body"
             armor = 1
@@ -40,7 +41,7 @@ class ArmorStorage
             type = "feet"
             armor = 1
             enchantment = nil
-            return Armor.new("Cotton SHoes",name,type,armor,enchantment)
+            return Armor.new("Cotton Shoes",name,type,armor,enchantment)
         when "leatherHelm"
             type = "helm"
             armor = 5

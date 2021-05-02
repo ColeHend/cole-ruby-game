@@ -3,8 +3,8 @@ require_relative "weapon_storage.rb"
 require_relative "armor.rb"
 class PlayerCharacter < CharacterBase
     attr_accessor :currentHP, :alive, :exp, :playerLevel,:enemyGroups, :hateGroup, :knownSpells 
-    attr_accessor :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor, :mRes
-    attr_reader :str, :dex, :int, :con, :hp, :deathExp
+    attr_accessor :str, :dex, :int, :con, :hp, :weapon, :shield, :helm, :necklace, :chest, :legs, :feet, :hands, :totalArmor, :mRes
+    attr_reader  :deathExp
     def initialize(name,hp,str=14,dex=12,int=12,con=12,mRes=1)
         self.name = name
         self.hp = hp

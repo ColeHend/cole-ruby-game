@@ -134,6 +134,7 @@ class EquipMenu
         if e.is_a?(Weapon) == true
             Option.new(e.name,->(){ #Actual weapon option
                 @party.equip(e,@currentPartyMember)
+                
                 @currentOptions = @equipmentOptions
                 @optionsBox.change_options(@equipmentOptions)
             })

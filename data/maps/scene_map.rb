@@ -12,6 +12,7 @@ class SceneMap
         @mapHash["map03"] = Map03.new()
         startMap = @mapHash["map01"]
         @currentMap = startMap
+        @currentMap.bgm.play(true)
         @player = $scene_manager.scene["player"]
         @party = $scene_manager.feature["party"]
         @deathCap = @party.maxPartySize
@@ -38,7 +39,11 @@ class SceneMap
         when "right"
             @player.eventObject.set_animation(8)
         end
+        if @currentMap.bgm.playing? == true
+            @currentMap.bgm.stop
+        end
         @currentMap = @mapHash[map]
+        @currentMap.bgm.play
     end
 
     def will_Collide(collisionArray,key)

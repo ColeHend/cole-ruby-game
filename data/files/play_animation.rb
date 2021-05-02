@@ -14,17 +14,17 @@ class PlayAnimation
         @animation = animation
         case @animation
             when "slash"
-                @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4]))
+                @runEffects.push(Effect.new(x, y, "Weapon04", 5, 5, 1, [0,1,2,3,4],nil,"sword",".ogg"))
             when "fire"
-                @runEffects.push(Effect.new(x, y, "fire", 5, 2, 1, [0,1,2,3]))
+                @runEffects.push(Effect.new(x, y, "fire", 5, 2, 1, [0,1,2,3],nil,"explosion",".ogg"))
             when "fireExplosion"
-                @runEffects.push(Effect.new(x, y, "fireExplosion", 5, 2, 1, [0,1,2,3,4,5]))
+                @runEffects.push(Effect.new(x, y, "fireExplosion", 5, 2, 1, [0,1,2,3,4,5],nil,"explosion",".ogg"))
             when "earthExplosion"
-                @runEffects.push(Effect.new(x, y, "Earth1", 5, 2, 1, [0,1,2,3,4,5,6]))
+                @runEffects.push(Effect.new(x, y, "Earth1", 5, 2, 1, [0,1,2,3,4,5,6],nil,"explosion",".ogg"))
             when "electricShock"
                 @runEffects.push(Effect.new(x, y, "ThunderShock", 5, 2, 1, [0,1,2,3,4,5,6]))
             when "blunt"
-                @runEffects.push(Effect.new(x, y, "bluntWeapon", 5, 2, 1, [0,1,2,3]))
+                @runEffects.push(Effect.new(x, y, "bluntWeapon", 5, 2, 1, [0,1,2,3],nil,"hit",".ogg"))
             when "magicCircle"
                 @runEffects.push(Effect.new(x, y, "Action01", 5, 2, 2, [0,2,3,4]))
             else 

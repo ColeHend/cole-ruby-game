@@ -9,13 +9,14 @@ require_relative "characters/inventory.rb"
 require_relative "characters/character_npc.rb"
 require "json"
 class Map02 < Map
-    attr_reader :name, :mapfile, :map , :events, :width, :height, :tileset
+    attr_reader :name, :mapfile, :map , :events, :width, :height, :tileset,:bgm
     include WindowBase
     def initialize()
         #Variable Init
         @name = "map02"
         @mapfile = JSON.load(File.read("data/maps/map02.json"))
         @tileset = Tileset.new("CastleTown")
+        @bgm = $scene_manager.songs['town']
         @width, @height = 30, 20
         @map = Mapper.new(@tileset,@width,@height,@mapfile)
         @events = $scene_manager.eventMap[2]
@@ -49,7 +50,7 @@ class Map02 < Map
         #-----------------------------------------------------------------
         @map.registerEvent("Event201","shadowGuy",6*32,5*32,32,48,4,4,2,"sandslash","SELECT",->(){
             $scene_manager.register("event201DialogBox",DialogBox.new(0,10,20,5,"Here have some experience!",->(){
-                $scene_manager.feature["party"].party.each{|e| e.give_xp(50)}
+                $scene_manager.feature["party"].party.each{|e| e.give_xp(500)}
             }))
             $scene_manager.switch_scene("event201DialogBox")
         })

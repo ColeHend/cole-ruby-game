@@ -14,7 +14,6 @@ class TitleScreen
             $scene_manager.feature["party"].addToParty(PartyCollection.new.party("Steve"))
              # change to make player an event instead
             $scene_manager.register("map",SceneMap.new())
-            
             $scene_manager.register_object("fancyWindowSkin","fancyWindowSkin",0,0,0,0,6,4)
             $scene_manager.register_object("earthboundWindowSkin","earthboundWindowSkin",0,0,0,0,6,4)
             $scene_manager.register_object("blackWindowSkin","blackWindowSkin",0,0,0,0,6,4)

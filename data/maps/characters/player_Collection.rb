@@ -3,7 +3,7 @@ require_relative "weapon_storage.rb"
 require_relative "armor_storage.rb"
 class PartyCollection 
     def initialize()
-        @enemyGroups = ["sandslash","hitmonchan","charizard"]
+        @enemyGroups = ["sandslash","hitmonchan","charizard","metagross"]
     end
     def party(memberName) 
         case memberName # (name,hp,str,dex,int,con)

@@ -12,6 +12,7 @@ require "json"
 
 class Map01
     attr_reader :name, :map, :mapfile, :events, :width, :height, :tileset
+    attr_accessor :bgm
     include WindowBase
     def initialize()
         # Initilize variables
@@ -19,6 +20,13 @@ class Map01
         @tileset = Tileset.new("CastleTownExterior",8,30)
         @mapfile = JSON.load(File.read("data/maps/map01.json"))
         @events = $scene_manager.eventMap[1]
+        $scene_manager.register_song("serious","serious",".ogg")
+        $scene_manager.register_song("town","town",".ogg")
+        $scene_manager.register_sound("select","select",".ogg")
+        $scene_manager.register_sound("sword","sword",".ogg")
+        $scene_manager.register_sound("explosion","explosion",".ogg")
+        $scene_manager.register_sound("youLose","youLose",".ogg")
+        @bgm = $scene_manager.songs['town']
         @map = Mapper.new(@tileset,30,20,@mapfile)
         @width = 30
         @height = 20
@@ -41,6 +49,7 @@ class Map01
                     @inventory.add_weapon("ironMace")
                     @inventory.add_weapon("ironSword")
                     @inventory.add_weapon("fireBrand")
+                    @inventory.add_weapon("magicSlayer")
                     @inventory.add_weapon("bronzeMace")
                     @inventory.add_weapon("bronzeSword")
                     @inventory.add_armor("leatherHelm")
