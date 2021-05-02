@@ -29,7 +29,7 @@ class PlayerControl
                 @fightControl.closeCombat(@playerObj, @playerBattle,@facing,"slash")
             elsif @input.keyPressed(InputTrigger::SPELL)
                 
-                @fightControl.rangedCombat(@playerObj,@facing,"firebolt",@playerBattle)
+                @fightControl.rangedCombat(@playerObj,@facing,@playerBattle.currentSpell,@playerBattle)
             end
         end
     end

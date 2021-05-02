@@ -63,6 +63,10 @@ class Menu
                 @input.addToStack("Equipment")
                 $scene_manager.register("equipMenu",EquipMenu.new())
                 $scene_manager.switch_scene("equipMenu")}),
+            Option.new("Spells",->(){
+                @input.addToStack("spellMenu")
+                $scene_manager.register("spellMenu",SpellMenu.new())
+                $scene_manager.switch_scene("spellMenu")}),
             Option.new("Items",->(){
                 @input.addToStack("itemsBox")
                 @showItems = true }),
@@ -129,6 +133,10 @@ class Menu
                         if @itemChoice[@currentItemOp] != nil
                             puts("itemcalled")
                             @itemChoice[@currentItemOp].call(@party[0])
+                            @colors[@currentItemOp] = @notCurrentColor
+                            @currentItemOp = 0
+                            @colors[@currentItemOp] = @currentColor
+
                             @selectCool = true
                         end
                         

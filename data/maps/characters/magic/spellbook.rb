@@ -73,6 +73,34 @@ class Spellbook
             }
             array = [object,spell,spellEff,animName,cooldown,spellName,range]
             return array
+        when "natureBolt"
+            object = $scene_manager.register_object("naturebolt","natureBolt",0,0,32,32,4,4)
+            spell = PlayerCharacter.new("naturebolt",1)
+            collisionDetect = MoveCollision.new
+            manaCost = 4 #does nothing
+            mDMG = 3
+            range = 8
+            spell.totalArmor = 1
+            animName = "earthExplosion"
+            cooldown = 750
+            spellEff = ->(){
+                defender = collisionDetect.check_collision(object,8,true)
+                if defender != nil && defender != true
+                    damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
+                    @animation.play_animation(animName,(defender.x - 86) ,(defender.y - 86) ,nil)
+                    puts("nature bolt hit!")
+                    defender = defender.battle
+                    defender.currentHP -= damage
+                    damageInfo(defender,mDMG,damage)
+                    
+                else
+                    @animation.play_animation(animName,(object.x - 96) ,(object.y - 96),nil)
+                    puts("nature bolt miss!")
+                end
+                spell.currentHP = 0
+            }
+            array = [object,spell,spellEff,animName,cooldown,spellName,range]
+            return array
         end
     end
     def update
