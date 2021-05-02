@@ -110,7 +110,7 @@ class EquipMenu
     end
     def amountIsNone(equipment) # return if an array is empty
         if equipment != nil
-            if equipment.length > 0 && equipment[0] != nil
+            if equipment.length > 0 && equipment[0] != 666
                 return false
             else 
                 return true
@@ -120,9 +120,11 @@ class EquipMenu
     def armorArray(arrayType) #Types Are : "helm","neck", "body", "hands", "legs", "feet"
         array = Array.new
         @party.inventory.armor.each{|e|
+        if e.is_a?(Armor) == true
             if e.type == arrayType
                 array.push(e)
             end
+        end
         }
         return array
     end
@@ -132,6 +134,7 @@ class EquipMenu
         if e.is_a?(Weapon) == true
             Option.new(e.name,->(){ #Actual weapon option
                 @party.equip(e,@currentPartyMember)
+                
                 @currentOptions = @equipmentOptions
                 @optionsBox.change_options(@equipmentOptions)
             })
@@ -172,56 +175,56 @@ class EquipMenu
     #----
     def mapPartyEquipment()
         @partyWeapons = @party.party.map{|e|
-        if e.weapon != nil
+        if e.weapon.is_a?(Weapon)
             Gosu::Image.from_text("Weapon: #{e.weapon.name}", 18)
         else
             Gosu::Image.from_text("Weapon: None", 18)
         end
         }
         @partyShield = @party.party.map{|e|
-        if e.shield != nil
+        if e.shield.is_a?(Armor)
             Gosu::Image.from_text("Shield: #{e.shield.name}", 18)
         else
             Gosu::Image.from_text("Shield: None", 18)
         end
         }
         @partyHead = @party.party.map{|e|
-        if e.helm != nil
+        if e.helm.is_a?(Armor)
             Gosu::Image.from_text("Head: #{e.helm.name}", 18)
         else
             Gosu::Image.from_text("Head: None", 18)
         end
         }
         @partyNeck = @party.party.map{|e|
-        if e.necklace != nil
+        if e.necklace.is_a?(Armor)
             Gosu::Image.from_text("Neck: #{e.necklace.name}", 18)
         else
             Gosu::Image.from_text("Neck: None", 18)
         end
         }
         @partyBody = @party.party.map{|e|
-        if e.chest != nil
+        if e.chest.is_a?(Armor)
             Gosu::Image.from_text("Body: #{e.chest.name}", 18)
         else
             Gosu::Image.from_text("Body: None", 18)
         end
         }
         @partyHands = @party.party.map{|e|
-        if e.hands != nil
+        if e.hands.is_a?(Armor)
             Gosu::Image.from_text("Hands: #{e.hands.name}", 18)
         else
             Gosu::Image.from_text("Hands: None", 18)
         end
         }    
         @partyLegs = @party.party.map{|e|
-        if e.legs != nil
+        if e.legs.is_a?(Armor)
             Gosu::Image.from_text("Legs: #{e.legs.name}", 18)
         else
             Gosu::Image.from_text("Legs: None", 18)
         end
         }
         @partyFeet = @party.party.map{|e|
-        if e.feet != nil
+        if e.feet.is_a?(Armor)
             Gosu::Image.from_text("Feet: #{e.feet.name}", 18)
         else
             Gosu::Image.from_text("Feet: None", 18)

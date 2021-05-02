@@ -82,23 +82,31 @@ class Control_movement
         speed = 0.25
         time = 10
         tileDetectW = 6
-        
+        moveNumber = 1
 
         moveLeft = ->(){
-            attackerClass.facing = "left"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "left"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         moveRight = ->(){
-            attackerClass.facing = "right"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "right"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         moveUp = ->(){
-            attackerClass.facing = "up"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "up"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         moveDown = ->(){
-            attackerClass.facing = "down"
-            Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            moveNumber.times{
+                attackerClass.facing = "down"
+                Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
+            }
         }
         facingUp = ->(){ draw_character(objectToMove, "upStop",time)}
         facingDown = ->(){ draw_character(objectToMove, "downStop",time)}
@@ -123,22 +131,62 @@ class Control_movement
                     if followAbsY <= tileDetectW
                         if @objectToFollow.x < objectToMove.x
                             if moveArray.length < 1
-                                moveArray.push(moveLeft)
+                                if objDetect.check_surrounding("left", objectToMove)  == false
+                                    moveArray.push(moveLeft)
+                                elsif objDetect.check_surrounding("left", objectToMove)  == true
+                                    if objDetect.check_surrounding("up", objectToMove)  == false
+                                        moveArray.push(moveUp)
+                                    elsif objDetect.check_surrounding("up", objectToMove)  == true
+                                        if objDetect.check_surrounding("down", objectToMove)  == false
+                                            moveArray.push(moveDown)
+                                        end
+                                    end
+                                end
                             end
                         elsif @objectToFollow.x > objectToMove.x
                             if moveArray.length < 1
-                                moveArray.push(moveRight)
+                                if objDetect.check_surrounding("right", objectToMove)  == false
+                                    moveArray.push(moveRight)
+                                elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                    if objDetect.check_surrounding("up", objectToMove)  == false
+                                        moveArray.push(moveUp)
+                                    elsif objDetect.check_surrounding("up", objectToMove)  == true
+                                        if objDetect.check_surrounding("down", objectToMove)  == false
+                                            moveArray.push(moveDown)
+                                        end
+                                    end
+                                end
                             end
                         end
                     end
                     if followAbsX <= tileDetectW
                         if @objectToFollow.y < objectToMove.y
                             if moveArray.length < 1
-                                moveArray.push(moveUp)
+                                if objDetect.check_surrounding("up", objectToMove)  == false
+                                    moveArray.push(moveUp)
+                                elsif objDetect.check_surrounding("up", objectToMove)  == true
+                                    if objDetect.check_surrounding("right", objectToMove)  == false
+                                        moveArray.push(moveRight)
+                                    elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                        if objDetect.check_surrounding("left", objectToMove)  == false
+                                            moveArray.push(moveLeft)
+                                        end
+                                    end
+                                end
                             end
                         elsif @objectToFollow.y > objectToMove.y
                             if moveArray.length < 1
-                                moveArray.push(moveDown)
+                                if objDetect.check_surrounding("down", objectToMove)  == false
+                                    moveArray.push(moveDown)
+                                elsif objDetect.check_surrounding("down", objectToMove)  == true
+                                    if objDetect.check_surrounding("right", objectToMove)  == false
+                                        moveArray.push(moveRight)
+                                    elsif objDetect.check_surrounding("right", objectToMove)  == true
+                                        if objDetect.check_surrounding("left", objectToMove)  == false
+                                            moveArray.push(moveLeft)
+                                        end
+                                    end
+                                end
                             end
                         end
                     end
@@ -273,23 +321,42 @@ class Control_movement
         end
     end 
      
-    def RandomMove(vectorToMove,objectToMove,randomDir,delayStart=490)
+    def RandomMove(vectorToMove,objectToMove,moveDist,moveArray,facing,delayStart = Gosu::milliseconds())
         @randomNum = rand(4)
-        @delayStop = Gosu.milliseconds
-
-        if (@delayStop - delayStart < 500)
+        speed = 0.25
+        time = 10
+        @delayStart = delayStart
+        moveLeft = ->(){
+            facing = "left"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveRight = ->(){
+            facing = "right"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveUp = ->(){
+            facing = "up"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveDown = ->(){
+            facing = "down"
+            Move(vectorToMove,objectToMove,facing,speed,time)
+        }
+        moveWaitTime = (Gosu::milliseconds()/100 % 32)
+        #puts("RandomMoveTime: #{moveWaitTime}")
+        if (moveWaitTime == 0)
+            moveNumber = moveDist
             case @randomNum
             when 0
-                Move(vectorToMove,objectToMove,"none")
+                moveNumber.times{moveArray.push(moveRight) }
             when 1
-                Move(vectorToMove,objectToMove,"right",1)
+                moveNumber.times{moveArray.push(moveUp) }
             when 2
-                Move(vectorToMove,objectToMove,"up",1)
+                moveNumber.times{moveArray.push(moveLeft) }
             when 3
-                Move(vectorToMove,objectToMove,"left",1)
-            when 4
-                Move(vectorToMove,objectToMove,"down",1)
+                moveNumber.times{ moveArray.push(moveDown)}
             end
+            @delayStart = Gosu::milliseconds()
         end
     end   
     
@@ -297,7 +364,7 @@ class Control_movement
         # targetObject is likely the player
         # returns the event in that direction if present
         collisionDetect = MoveCollision.new
-        rangePlus = 2
+        rangePlus = 8
         upEventCheck = collisionDetect.checkDir(targetObject,"up",rangePlus,true)
         downEventCheck = collisionDetect.checkDir(targetObject,"down",rangePlus,true)
         leftEventCheck = collisionDetect.checkDir(targetObject,"left",rangePlus,true)
@@ -330,13 +397,13 @@ class Control_movement
         
         if activateType == "SELECT"
             if KB.key_pressed?(InputTrigger::SELECT)
-                if collisionDetect.checkDir(targetObject,"up",0) == true
+                if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
                     upEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"down",0) == true
+                elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
                     downEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"left",0) == true
+                elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
                     leftEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"right",0) == true
+                elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
                     rightEventCheck.activate_event
                 end
             end

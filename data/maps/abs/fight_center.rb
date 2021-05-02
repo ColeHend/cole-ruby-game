@@ -28,10 +28,11 @@ class FightCenter
     end
     def isAnEnemy(baddy,goody)
         goody.enemyGroups.each {|e|
-        if baddy.battle.hateGroup == e
-            return true
+        if baddy.is_a?(Event)
+            if baddy.battle.hateGroup == e
+                return true
+            end
         end
-        
         }
         return false
     end
@@ -158,7 +159,11 @@ class FightCenter
         end
         
     end
-    def meleeAnimation(name,dir,x,y)
+    def meleeAnimation(name,dir,object)
+        x = object.x
+        y = object.y
+        w = object.w
+        h = object.h
         if name == "slash"
             case dir
             when "up"
@@ -177,9 +182,20 @@ class FightCenter
             when "down"
                 return @skillAnimation.play_animation(name,x-1*32,y+8,:vert)
             when "left"
-                return @skillAnimation.play_animation(name,x-2*32,y-24,nil)
+                return @skillAnimation.play_animation(name,x-2*32,y-2*32,nil)
             when "right"
                 return @skillAnimation.play_animation(name,x,y-24,:horiz)
+            end
+        elsif name == "fire"
+            case dir
+            when "up"
+                return @skillAnimation.play_animation(name,x-2.5*32,y-4*32,nil)
+            when "down"
+                return @skillAnimation.play_animation(name,x-2.5*32,y+7,:vert)
+            when "left"
+                return @skillAnimation.play_animation(name,x-4.2*32,y-2*32,nil)
+            when "right"
+                return @skillAnimation.play_animation(name,x-0.5*32,y-2.5*32,:horiz)
             end
         end
     end
@@ -190,17 +206,17 @@ class FightCenter
             
             case facing
             when "left"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
-                meleeAttack(objectToMove,battle,facing,32)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
+                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             when "right"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
-                meleeAttack(objectToMove,battle,facing,32)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
+                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             when "up"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
-                meleeAttack(objectToMove,battle,facing,32)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
+                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             when "down"
-                meleeAnimation(wpnAnimation,facing,objectToMove.x,objectToMove.y)
-                meleeAttack(objectToMove,battle,facing,32)
+                meleeAnimation(wpnAnimation,facing,objectToMove)
+                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
             end
             @meleeCool = true
         end

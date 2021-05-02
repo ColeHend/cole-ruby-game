@@ -1,7 +1,7 @@
 require_relative "files/input.rb"
 require_relative "files/game_object.rb"
 class SceneManager
-    attr_accessor :scene, :currentScene, :feature, :images, :event, :eventMap, :object
+    attr_accessor :scene, :currentScene, :feature, :images, :event, :eventMap, :object, :songs, :sounds
     attr_reader :input
     def initialize()    
         @scene = Hash.new
@@ -11,6 +11,8 @@ class SceneManager
         @object = Hash.new
         @images = Hash.new()
         @input = Input.new()
+        @songs = Hash.new
+        @sounds = Hash.new
         
     end
     def register(sceneName,sceneObject)
@@ -21,8 +23,14 @@ class SceneManager
         @images[name] = Game_Object.new(name,0,0,0,0,imgName,nil,columns,rows)
            
     end
-    def register_object(name,img,x,y,bbWidth,bbHeight,cols,rows)
-        @object[name]= GameObject.new(x,y,bbWidth,bbHeight,img,nil,cols,rows)
+    def register_song(name,id,ext='.ogg')
+        @songs[name] = Res.song(id,true,ext)
+    end
+    def register_sound(name,id,ext='.ogg')
+        @sounds[name] = Res.sound(id,true,ext)
+    end
+    def register_object(name,img,x,y,bbWidth,bbHeight,cols,rows,img_gap=nil)
+        @object[name]= GameObject.new(x,y,bbWidth,bbHeight,img,img_gap,cols,rows)
     end
 
     def registerFeature(featureName,featureClass)

@@ -5,8 +5,8 @@ require_relative "../player_control.rb"
 require_relative "../scene_map.rb"
 require_relative "hpbar.rb"
 class Event #$scene_manager.scene["player"].eventObject
-  attr_accessor :animate,:canMove,:moveType,:distance,:moving,:x,:y,:w,:h,:dir,:vector
-  attr_accessor :battle, :activateType, :eventObject, :facing, :name, :playerControl
+  attr_accessor :animate,:canMove,:moveType,:distance,:moving,:x,:y,:w,:h,:dir,:vector,:page
+  attr_accessor :battle, :activateType, :eventObject, :facing, :name, :playerControl,:randomTime
 
   #include  Animate, Control_movement
   def initialize(object, event,battle)
@@ -22,6 +22,7 @@ class Event #$scene_manager.scene["player"].eventObject
       @w = 32
       @h = 32
     end
+    @page = 1
     @moveArray = Array.new
     @name = battle.name
     @fightControl = FightCenter.new(@name,battle,Gosu::milliseconds())
@@ -31,12 +32,11 @@ class Event #$scene_manager.scene["player"].eventObject
     @dir = 8
     @battle = battle
     @moveType = "none"
-    
+    @randomTime = Gosu::milliseconds()
     @moveControl = Control_movement.new(battle.name)
     @activateType = "SELECT" # SELECT or TOUCH options
     @distance = 1
     @hpbar = HPbar.new(@x,@y,@battle.hp,@battle.currentHP)
-    
     @event = event
     @moving = false
     @animate, @canMove, @facing = false, true, "down"
@@ -48,16 +48,19 @@ class Event #$scene_manager.scene["player"].eventObject
     @moveType = kind
     @distance = dist
     vector2 = Vector2.new(0, 0)
+    
     case @moveType
       when "random"
         randomDir = rand(4)
-        startTime = Gosu.milliseconds
-        @moveControl.RandomMove(@vector,@eventObject,randomDir,startTime)
+        @moveControl.RandomMove(@vector,@eventObject,dist,@moveArray,@facing,@randomTime)
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
-          @facing
           #  Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
           @moveControl.Follow(vector2,self, @eventObject,atkType,dist,innerDist,objectOfFocus,@moveArray)
+        end
+      when "attack"
+        if @eventObject.w != nil || @eventObject.h != nil
+          @facing
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
       when "player"
@@ -90,8 +93,13 @@ class Event #$scene_manager.scene["player"].eventObject
         @moveControl.update
         @fightControl.update
         if @moveArray.length > 0
-          @moveArray[0].call()
-          @moveArray.delete_at(0)
+          moveTiming = 3 # $time/100 % 4
+          #puts("Time divide and modulus: #{moveTiming}") 
+          #puts("Time divide: #{$time/100}")
+          if moveTiming  == 3
+            @moveArray[0].call()
+            @moveArray.delete_at(0)
+          end
         end
         set_move(@moveType)
       end

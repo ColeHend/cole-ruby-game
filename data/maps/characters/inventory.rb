@@ -33,9 +33,13 @@ class Inventory
     end
 
     def add_item(name)
-        daItem = takeItem(name)
-        puts("Added to Inventory: #{daItem.name}")
-        @items.push(daItem)
+        if @items.length < 23
+            daItem = takeItem(name)
+            puts("Added to Inventory: #{daItem.name}")
+            @items.push(daItem)
+        else 
+            puts("Inventory Full!")
+        end
     end
     def add_weapon(name)
         daItem = takeWeapon(name)

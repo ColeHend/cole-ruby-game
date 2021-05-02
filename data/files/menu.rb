@@ -169,6 +169,7 @@ class Menu
             @currentMap.map.draw
             @currentMap.events.each {|e|e.draw()}
             @player.draw
+            @currentMap.map.drawAbove
         end
 
         #Draw Party Info
@@ -176,21 +177,23 @@ class Menu
         @partyHP = @party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
         @partyLVL = @party.map{|e|Gosu::Image.from_text("Level: "+e.playerLevel.to_s, 18)}
         @partyXP = @party.map{|e|Gosu::Image.from_text("XP: "+e.exp.to_s, 18)}
+        @partyGold = Gosu::Image.from_text("Gold: "+$scene_manager.feature["party"].gold.to_s, 18)
         
         for a in (0...@party.length)
-            @partyNames[a].draw((10*32), 20+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyLVL[a].draw((10*32), 45+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyXP[a].draw((10*32), 70+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
-            @partyHP[a].draw((10*32), 95+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyNames[a].draw((10.5*32), 20+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyLVL[a].draw((10.5*32), 45+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyXP[a].draw((10.5*32), 70+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
+            @partyHP[a].draw((10.5*32), 95+(90*a), 8,scale_x = 1, scale_y = 1, color = @white)
         end
 
         #Draw Windows And Boxes
-        create_window(10,0,10,10)    
+        create_window(10,0,10,10)
+        create_window(0,10,2,1)    
         @optionsBox.draw
-
+        @partyGold.draw(16,10.5*32,8, 1, 1, @white)
         if @showItems == true
             #@itemsBox.draw
-            create_window(5,0,3,8)
+            create_window(5,0,3,14)
             @itemY = (0*32) + 15
             for a in (0...@itemAmount)
                 @itemNames[a].draw((5*32)+10, @itemY+(20*a), 8,scale_x = 1, scale_y = 1, color = @colors[a])
