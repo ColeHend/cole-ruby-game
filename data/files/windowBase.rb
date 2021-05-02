@@ -1,6 +1,6 @@
 module WindowBase
     def create_window(x,y,width,height) #use the same grid pattern as events use ("fancyWindowSkin",,0,0,0,0,6,4)
-        @windowSkin = GameObject.new(0,0, 0, 0, "fancyWindowSkin", nil, 6, 4)
+        @windowSkin = GameObject.new(0,0, 0, 0, $scene_manager.windowskin, nil, 6, 4)
         for a in (0..width) do
             for b in (0..height) do
                 @windowSkin.set_animation(0)

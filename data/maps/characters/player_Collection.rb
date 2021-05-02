@@ -25,7 +25,8 @@ class PartyCollection
             steve.feet = ArmorStorage.new.take("cottonShoes")
             steve.hateGroup = "player"
             steve.enemyGroups = @enemyGroups
-            steve.knownSpells = ["firebolt","fireball","natureBolt"]
+            steve.allSpells = [[1,"firebolt"],[3,"natureBolt"],[5,"fireball"]]
+            steve.knownSpells = ["firebolt"]
              
             return steve
         end

@@ -20,7 +20,7 @@ class Spellbook
         case spellName
         when "firebolt"
             object = $scene_manager.register_object("firebolt","fireshotCharacter",0,0,32,32,4,4)
-            spell = PlayerCharacter.new("firebolt",1)
+            spell = PlayerCharacter.new("Firebolt",1)
             collisionDetect = MoveCollision.new
             manaCost = 2 #does nothing
             mDMG = 2
@@ -47,7 +47,7 @@ class Spellbook
             return array
         when "fireball"
             object = $scene_manager.register_object("fireball","fireball",0,0,32,32,4,4)
-            spell = PlayerCharacter.new("fireball",1)
+            spell = PlayerCharacter.new("Fireball",1)
             collisionDetect = MoveCollision.new
             manaCost = 4 #does nothing
             mDMG = 5
@@ -75,7 +75,7 @@ class Spellbook
             return array
         when "natureBolt"
             object = $scene_manager.register_object("naturebolt","natureBolt",0,0,32,32,4,4)
-            spell = PlayerCharacter.new("naturebolt",1)
+            spell = PlayerCharacter.new("Naturebolt",1)
             collisionDetect = MoveCollision.new
             manaCost = 4 #does nothing
             mDMG = 3

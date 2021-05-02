@@ -43,6 +43,30 @@ class Event #$scene_manager.scene["player"].eventObject
     
   end
 
+  def isAnEnemy(baddy,goody)
+    goody.enemyGroups.each {|e|
+    if baddy.is_a?(Event)
+        if baddy.battle.hateGroup == e
+            return true
+        end
+    end
+    }
+    return false
+  end
+
+  def focus(detectDist,currentFocus)
+    if currentFocus.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
+      if MoveCollision.new.check_inRange(@eventObject,detectDist ,false) == true
+          theEnemy = MoveCollision.new.check_inRange(@eventObject,detectDist,true)
+          if theEnemy.is_a?(Event)
+              if isAnEnemy(theEnemy,attackerClass.battle)
+                  currentFocus = theEnemy.eventObject
+              end
+          end
+      end
+    end
+  end
+  
   def set_move(kind,dist=12*32,innerDist=8*32,atkType="ranged",objectOfFocus=nil)
     canMove()
     @moveType = kind
@@ -55,12 +79,14 @@ class Event #$scene_manager.scene["player"].eventObject
         @moveControl.RandomMove(@vector,@eventObject,dist,@moveArray,@facing,@randomTime)
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
+          focus(dist,objectOfFocus)
           #  Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
           @moveControl.Follow(vector2,self, @eventObject,atkType,dist,innerDist,objectOfFocus,@moveArray)
         end
       when "attack"
         if @eventObject.w != nil || @eventObject.h != nil
           @facing
+          focus(dist,objectOfFocus)
           @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,atkType,objectOfFocus) #  <- Starts its attack logic
         end
       when "player"
