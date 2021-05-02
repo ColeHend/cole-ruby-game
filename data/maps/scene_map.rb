@@ -43,7 +43,7 @@ class SceneMap
             @currentMap.bgm.stop
         end
         @currentMap = @mapHash[map]
-        @currentMap.bgm.play
+        @currentMap.bgm.play(true)
     end
 
     def will_Collide(collisionArray,key)
