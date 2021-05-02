@@ -51,14 +51,14 @@ class MagicBook
     def ranged_shot(attackObj,facing,spellName)
         
         spellCast = @spellList.spell(spellName)
-
-        spellObj = spellCast[0]
+        #(spellName,range,object,spell,spellEff,animName,cooldown)
+        spellObj = spellCast.object
         spellObj.x = attackObj.x
         spellObj.y = attackObj.y
-        spellRange = spellCast[6]
-        spellStability = spellCast[1]
-        spellEff = spellCast[2]
-        spellOnHit = spellCast[3]
+        spellRange = spellCast.range
+        spellStability = spellCast.stability
+        spellEff = spellCast.effect
+        spellOnHit = spellCast.animName
 
         event = Event.new(spellObj, spellEff,spellStability)
         createSpell = ->(){

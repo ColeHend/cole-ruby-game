@@ -35,6 +35,7 @@ class Bestiary
             charizard.mRes = 12
             charizard.exp = 8000 # gives 5% of 
             charizard.hateGroup = "charizard"
+            charizard.currentSpell = Spellbook.new.spell("fireball")
             charizard.knownSpells = ["fireball","firebolt"]
             charizard.enemyGroups = ["player","guard","hitmonchan","sandslash"] 
             return charizard

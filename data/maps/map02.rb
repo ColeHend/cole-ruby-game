@@ -80,10 +80,10 @@ class Map02 < Map
         event201 = $scene_manager.event["Event201"]
         event202 = $scene_manager.event["Event202"]
         if event201.battle.currentHP >= 0
-            event201.set_move("followPlayer",10*32,1*32,"melee",player.eventObject)
+            event201.set_move("followPlayer",10*32,1*32,player.eventObject)
         end
         if event202.battle.currentHP >= 0
-            event202.set_move("followPlayer",10*32,1*32,"melee",player.eventObject)
+            event202.set_move("followPlayer",10*32,1*32,player.eventObject)
         end
     end
 end

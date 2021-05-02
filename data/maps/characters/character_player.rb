@@ -15,8 +15,8 @@ class PlayerCharacter < CharacterBase
         @str, @dex, @int, @con, @mRes = str, dex, int, con, mRes
         @lvlUpExp = (1000*@playerLevel)
         @allSpells = [[1,"firebolt"]]
-        @knownSpells = ["firebolt"]
-        @currentSpell = "firebolt"
+        @knownSpells = []
+        @currentSpell = nil
         @weapon = Weapon.new("Big Stick","bigStick",1,"blunt")
         @shield = nil
         @helm = nil

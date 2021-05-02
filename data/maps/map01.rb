@@ -111,7 +111,7 @@ class Map01
         event102 = $scene_manager.event["Event102"] #greenCoat 
         $scene_manager.event["Teleport101"].set_move("none")
         if event101.page == 1
-            event101.set_move("followPlayer",10*32,0*32,"none",player.eventObject)
+            event101.set_move("followPlayer",10*32,0*32,player.eventObject)
             event101.activateType = "TOUCH"
         else
             event101.activateType = "SELECT"

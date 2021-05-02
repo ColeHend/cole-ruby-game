@@ -43,8 +43,8 @@ class SpellMenu
     def spellOptions()
         array = Array.new
         array = @party.party[@currentPartyMember].knownSpells.each.map{|e|
-            Option.new(Spellbook.new.spell(e)[1].name,->(){ #Actual spell option
-                @party.party[@currentPartyMember].currentSpell = e
+            Option.new(Spellbook.new.spell(e).name,->(){ #Actual spell option
+                @party.party[@currentPartyMember].currentSpell = Spellbook.new.spell(e)
                 @currentOptions = @startOptions
                 @optionsBox.change_options(@startOptions)
         })

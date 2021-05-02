@@ -74,7 +74,7 @@ class Control_movement
         
     end
     
-    def Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
+    def Follow(vectorToMove,attackerClass, objectToMove,range=6*32,nearDist,objectToFollow,moveArray)
         @objectToFollow = objectToFollow
         lockedOn = false
         detectDist = range
@@ -112,16 +112,7 @@ class Control_movement
         facingDown = ->(){ draw_character(objectToMove, "downStop",time)}
         facingLeft = ->(){ draw_character(objectToMove, "leftStop",time)}
         facingRight = ->(){ draw_character(objectToMove, "rightStop",time)}
-        if @objectToFollow.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
-            if MoveCollision.new.check_inRange(objectToMove,detectDist ,false) == true
-                theEnemy = MoveCollision.new.check_inRange(objectToMove,detectDist,true)
-                if theEnemy.is_a?(Event)
-                    if isAnEnemy(theEnemy,attackerClass.battle)
-                        @objectToFollow = theEnemy.eventObject
-                    end
-                end
-            end
-        end
+        
         if @objectToFollow.is_a?(GameObject) == true
             followAbsX = ((@objectToFollow.x+(@objectToFollow.w/2)) - (objectToMove.x+(objectToMove.w/2)) ).abs
             followAbsY = ((@objectToFollow.y+32) - (objectToMove.y+32) ).abs

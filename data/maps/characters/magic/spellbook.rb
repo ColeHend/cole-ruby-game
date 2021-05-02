@@ -43,8 +43,7 @@ class Spellbook
                 end
                 spell.currentHP = 0
             }
-            array = [object,spell,spellEff,animName,cooldown,spellName,range]
-            return array
+            return Magic.new(spellName,range,object,spell,spellEff,animName,cooldown)
         when "fireball"
             object = $scene_manager.register_object("fireball","fireball",0,0,32,32,4,4)
             spell = PlayerCharacter.new("Fireball",1)
@@ -71,8 +70,7 @@ class Spellbook
                 end
                 spell.currentHP = 0
             }
-            array = [object,spell,spellEff,animName,cooldown,spellName,range]
-            return array
+            return Magic.new(spellName,range,object,spell,spellEff,animName,cooldown)
         when "natureBolt"
             object = $scene_manager.register_object("naturebolt","natureBolt",0,0,32,32,4,4)
             spell = PlayerCharacter.new("Naturebolt",1)
@@ -99,8 +97,7 @@ class Spellbook
                 end
                 spell.currentHP = 0
             }
-            array = [object,spell,spellEff,animName,cooldown,spellName,range]
-            return array
+            return Magic.new(spellName,range,object,spell,spellEff,animName,cooldown)
         end
     end
     def update
