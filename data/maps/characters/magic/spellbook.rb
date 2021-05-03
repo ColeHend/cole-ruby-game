@@ -24,13 +24,13 @@ class Spellbook
             collisionDetect = MoveCollision.new
             manaCost = 2 #does nothing
             mDMG = 2
-            range = 5
+            range = 5 * 32
             spell.totalArmor = 1
             animName = "fire"
             cooldown = 750
             spellEff = ->(){
                 defender = collisionDetect.check_collision(object,8,true)
-                if defender != nil && defender != true
+                if defender.is_a?(Event)
                     damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation("fire",(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("firebolt hit!")
@@ -50,13 +50,13 @@ class Spellbook
             collisionDetect = MoveCollision.new
             manaCost = 4 #does nothing
             mDMG = 5
-            range = 8
+            range = 8*32
             spell.totalArmor = 1
             animName = "fire"
             cooldown = 750
             spellEff = ->(){
                 defender = collisionDetect.check_collision(object,8,true)
-                if defender != nil && defender != true
+                if defender.is_a?(Event)
                     damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation(animName,(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("fireball hit!")
@@ -77,13 +77,13 @@ class Spellbook
             collisionDetect = MoveCollision.new
             manaCost = 4 #does nothing
             mDMG = 3
-            range = 8
+            range = 8 * 32
             spell.totalArmor = 1
             animName = "earthExplosion"
             cooldown = 750
             spellEff = ->(){
                 defender = collisionDetect.check_collision(object,8,true)
-                if defender != nil && defender != true
+                if defender.is_a?(Event)
                     damage = FightCenter.new("damage",defender).magicDamage_calc(mDMG,spell.getMod(@int),defender.battle.mRes)
                     @animation.play_animation(animName,(defender.x - 86) ,(defender.y - 86) ,nil)
                     puts("nature bolt hit!")

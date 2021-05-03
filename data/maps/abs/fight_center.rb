@@ -263,18 +263,34 @@ class FightCenter
         end
         theEnemyMelee = MoveCollision.new.check_inRange(objectToMove,meleeRange,true)
         theEnemyRanged = MoveCollision.new.check_inRange(objectToMove,spellRange,true)
-        if isAnEnemy(theEnemyMelee,battle) == true || isAnEnemy(theEnemyRanged,battle) == true
-            if theEnemyMelee.is_a?(Event) == true
+        
+        if theEnemyMelee.is_a?(Event) == true
+            if isAnEnemy(theEnemyMelee,battle) == true
                 closeCombat(objectToMove, battle,facing,battle.weapon.animation)
-            elsif theEnemyRanged.is_a?(Event) == true
+            end
+        elsif theEnemyRanged.is_a?(Event) == true
+            if isAnEnemy(theEnemyRanged,battle) == true
                 rangedCombat(objectToMove,facing,battle.currentSpell.name,battle)
             end
         end
     end
-    def eventAtkChoice(objectToMove, battle,facing ,detectDist,closestDist,objectToFollow)
+    def eventAtkChoice(objectToMove, battle,facing ,detectDist,objectToFollow)
         objCollision = MoveCollision.new
         
         if objectToFollow.is_a?(GameObject)
+            meleeRange = battle.weapon.range
+            if battle.currentSpell.is_a?(Magic) == true
+                spellRange = battle.currentSpell.range
+            else
+                spellRange = 0
+            end
+            if meleeRange > spellRange
+                closestDist = meleeRange
+            elsif meleeRange < spellRange
+                closestDist = spellRange
+            else
+                closestDist = 32
+            end
             #if objectToFollow.x != objectToMove.x && objectToFollow.y != objectToMove.y
                 if (objectToFollow.x - objectToMove.x ).abs <= detectDist && (objectToFollow.y - objectToMove.y ).abs <= detectDist # outer ring
                     if (objectToFollow.x - objectToMove.x ).abs <= closestDist && (objectToFollow.y - objectToMove.y ).abs <= closestDist #inner ring
@@ -282,27 +298,19 @@ class FightCenter
                             case facing
                             when "up"
                                 if objCollision.checkRange(objectToMove,"up",closestDist) == true
-                                    if (objectToMove.y - objectToFollow.y).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing)
-                                    end
+                                    npcAttack(objectToMove, battle,facing)
                                 end
                             when "down"
                                 if objCollision.checkRange(objectToMove,"down",closestDist) == true
-                                    if (objectToMove.y - objectToFollow.y).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing)
-                                    end
+                                    npcAttack(objectToMove, battle,facing)
                                 end
                             when "left"
                                 if objCollision.checkRange(objectToMove,"left",closestDist) == true
-                                    if (objectToMove.x - objectToFollow.x).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing)
-                                    end
+                                    npcAttack(objectToMove, battle,facing)
                                 end
                             when "right"
                                 if objCollision.checkRange(objectToMove,"right",closestDist) == true
-                                    if (objectToMove.x - objectToFollow.x).abs < closestDist
-                                        npcAttack(objectToMove, battle,facing)
-                                    end
+                                    npcAttack(objectToMove, battle,facing)
                                 end
                             end
                         end

@@ -24,7 +24,7 @@ class MagicBook
     end
     
     def make_shot(targetObject,spellEVT,facing,spellStability,spellRange)
-        range = spellRange*8
+        range = spellRange/4
         u = 0
         
             Thread.new{
@@ -66,24 +66,24 @@ class MagicBook
             @activeSpells.push(event)
         }
         
-        dist = 56
+        dist = 2
         @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
         draw_character(event.eventObject, (facing) ,1)
         case facing
         when "up"
-            spellObj.y -= dist
+            spellObj.y -= (attackObj.h+dist)
             createSpell.call
             make_shot(spellObj,event,"up",spellStability,spellRange)
         when "down"
-            spellObj.y += dist 
+            spellObj.y += (attackObj.h+dist)
             createSpell.call
             make_shot(spellObj,event,"down",spellStability,spellRange)
         when "left"
-            spellObj.x -= dist
+            spellObj.x -= (attackObj.w+dist)
             createSpell.call
             make_shot(spellObj,event,"left",spellStability,spellRange)
         when "right"
-            spellObj.x += dist
+            spellObj.x += (attackObj.w+dist)
             createSpell.call
             make_shot(spellObj,event,"right",spellStability,spellRange)
         end

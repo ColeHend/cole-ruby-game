@@ -1,8 +1,9 @@
 require_relative 'inventory.rb'
 class PlayerParty
     attr_reader  :name
-    attr_accessor :gold, :party, :inventory, :items, :maxPartySize, :deathCap, :deathTotal
+    attr_accessor :gold, :party, :inventory, :items, :maxPartySize, :deathCap, :deathTotal, :partyActors
     def initialize
+        @partyActors = Array.new
         @party = Array.new()
         @maxPartySize = 2
         @gold = 24
@@ -15,13 +16,17 @@ class PlayerParty
     def get_items
     end
 
-    def addToParty(character)
-        if @party.length < @maxPartySize
-            self.party.push(character)
-            puts("New Party Member Name: #{character.name}| HP: #{character.hp}")
+    def addToParty(characterEvent)
+        if characterEvent.is_a?(Event)
+            if @party.length < @maxPartySize
+                self.party.push(characterEvent.battle)
+                self.partyActors.push(characterEvent)
+                puts("New Party Member Name: #{characterEvent.name}| HP: #{characterEvent.battle.hp}")
+            end
         end
     end
-    
+    def removeFromParty(characterName)
+    end
     def unequip(equipType,equipSpot)
         puts("unequip run")
         case equipType

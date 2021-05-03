@@ -27,18 +27,22 @@ class SceneMap
 
     def change_map(map,newX,newY,facing="down")
         $scene_manager.input.addToStack("map")
-        @player.eventObject.x = newX
-        @player.eventObject.y = newY
-        case facing
-        when "up"
-            @player.eventObject.set_animation(12)
-        when "down"
-            @player.eventObject.set_animation(0)
-        when "left"
-            @player.eventObject.set_animation(4)
-        when "right"
-            @player.eventObject.set_animation(8)
-        end
+        @party.partyActors.each{|e|
+            e.eventObject.x = newX
+            e.eventObject.y = newY
+            case facing
+            when "up"
+                e.eventObject.set_animation(12)
+            when "down"
+                e.eventObject.set_animation(0)
+            when "left"
+                e.eventObject.set_animation(4)
+            when "right"
+                e.eventObject.set_animation(8)
+            end
+        }
+        
+        
         if @currentMap.bgm.playing? == true
             @currentMap.bgm.stop
         end
@@ -50,7 +54,7 @@ class SceneMap
         @currentMap.willCollide(collisionArray,@player.x,@player.y,key)
     end
     def update()
-        
+        @partyActors = $scene_manager.feature["party"].partyActors
         @party.party.each {|e| 
             if e.currentHP <= 0 && e.alive == true
                 @deathTotal += 1
@@ -61,7 +65,12 @@ class SceneMap
         if @deathTotal >= @deathCap
             $scene_manager.switch_scene("gameover")
         end
-        @player.update()#update player 
+        if @partyActors[1].is_a?(Event) == true
+            @partyActors[1].set_move("followPlayer",12*32,$scene_manager.scene["player"].eventObject) 
+            @partyActors[1].set_move("attack",12*32,nil)
+        end
+        @partyActors.each{|e|e.update}
+        #@player.update()#update player 
         @currentMap.update()#update map
         
         stackLength = ($scene_manager.input.inputStack.length-1)
@@ -94,15 +103,18 @@ class SceneMap
     def draw()
         
         @player = $scene_manager.scene["player"]
+        @partyActors = $scene_manager.feature["party"].partyActors
         Gosu.translate(-@camera_x, -@camera_y) do
             @currentMap.map.draw
             if @currentMap.events.length > 0
                 @currentMap.events.each {|e|
                     if @player.y >= e.y
                         e.draw()
-                        @player.draw 
+                        @partyActors.each{|e|e.draw}
+                        #@player.draw 
                     elsif @player.y < e.y
-                        @player.draw 
+                        #@player.draw
+                        @partyActors.each{|e|e.draw}
                         e.draw()
                     end
                 }

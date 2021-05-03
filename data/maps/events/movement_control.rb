@@ -74,10 +74,11 @@ class Control_movement
         
     end
     
-    def Follow(vectorToMove,attackerClass, objectToMove,range=6*32,nearDist,objectToFollow,moveArray)
+    def Follow(vectorToMove,attackerClass, objectToMove,range=6*32,objectToFollow,moveArray)
         @objectToFollow = objectToFollow
         lockedOn = false
         detectDist = range
+        nearDist = (range / 2)
         objDetect = MoveCollision.new
         speed = 0.25
         time = 10
@@ -351,33 +352,33 @@ class Control_movement
         end
     end   
     
-    def triggerEvent(targetObject,activateType="SELECT")
-        # targetObject is likely the player
+    def triggerEvent(targetEvent,activateType="SELECT")
+        # targetEvent is likely the player
         # returns the event in that direction if present
         collisionDetect = MoveCollision.new
         rangePlus = 8
-        upEventCheck = collisionDetect.checkDir(targetObject,"up",rangePlus,true)
-        downEventCheck = collisionDetect.checkDir(targetObject,"down",rangePlus,true)
-        leftEventCheck = collisionDetect.checkDir(targetObject,"left",rangePlus,true)
-        rightEventCheck = collisionDetect.checkDir(targetObject,"right",rangePlus,true)
+        upEventCheck = collisionDetect.checkDir(targetEvent,"up",rangePlus,true)
+        downEventCheck = collisionDetect.checkDir(targetEvent,"down",rangePlus,true)
+        leftEventCheck = collisionDetect.checkDir(targetEvent,"left",rangePlus,true)
+        rightEventCheck = collisionDetect.checkDir(targetEvent,"right",rangePlus,true)
         
         #check if input and colliding
-        if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
+        if collisionDetect.checkDir(targetEvent,"up",rangePlus) == true
             activateType = upEventCheck
             if activateType.is_a?(Event)
                 activateType = activateType.activateType
             end
-        elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
+        elsif collisionDetect.checkDir(targetEvent,"down",rangePlus) == true
             activateType = downEventCheck
             if activateType.is_a?(Event)
                 activateType = activateType.activateType
             end
-        elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
+        elsif collisionDetect.checkDir(targetEvent,"left",rangePlus) == true
             activateType = leftEventCheck
             if activateType.is_a?(Event)
                 activateType = activateType.activateType
             end
-        elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
+        elsif collisionDetect.checkDir(targetEvent,"right",rangePlus) == true
             activateType = rightEventCheck
             if activateType.is_a?(Event)
                 activateType = activateType.activateType
@@ -388,24 +389,24 @@ class Control_movement
         
         if activateType == "SELECT"
             if KB.key_pressed?(InputTrigger::SELECT)
-                if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
+                if collisionDetect.checkDir(targetEvent,"up",rangePlus) == true
                     upEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
+                elsif collisionDetect.checkDir(targetEvent,"down",rangePlus) == true
                     downEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
+                elsif collisionDetect.checkDir(targetEvent,"left",rangePlus) == true
                     leftEventCheck.activate_event
-                elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
+                elsif collisionDetect.checkDir(targetEvent,"right",rangePlus) == true
                     rightEventCheck.activate_event
                 end
             end
         elsif activateType == "TOUCH"
-            if collisionDetect.checkDir(targetObject,"up",rangePlus) == true
+            if collisionDetect.checkDir(targetEvent,"up",rangePlus) == true
                 upEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"down",rangePlus) == true
+            elsif collisionDetect.checkDir(targetEvent,"down",rangePlus) == true
                 downEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"left",rangePlus) == true
+            elsif collisionDetect.checkDir(targetEvent,"left",rangePlus) == true
                 leftEventCheck.activate_event
-            elsif collisionDetect.checkDir(targetObject,"right",rangePlus) == true
+            elsif collisionDetect.checkDir(targetEvent,"right",rangePlus) == true
                 rightEventCheck.activate_event
             end
         end

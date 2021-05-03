@@ -22,6 +22,7 @@ class Event #$scene_manager.scene["player"].eventObject
       @w = 32
       @h = 32
     end
+    @self = self
     @page = 1
     @moveArray = Array.new
     @name = battle.name
@@ -55,21 +56,22 @@ class Event #$scene_manager.scene["player"].eventObject
   end
 
   def focus(detectDist,currentFocus)
-    if currentFocus.is_a?(GameObject) == false#|| @objectToFollow.is_a?(Event) == false
-      if MoveCollision.new.check_inRange(@eventObject,detectDist ,false) == true
-        theEnemy = MoveCollision.new.check_inRange(@eventObject,detectDist,true)
+    if MoveCollision.new.check_inRange(@eventObject,detectDist ,false) == true
+      theEnemy = MoveCollision.new.check_inRange(@eventObject,detectDist,true)
 
-        if theEnemy.is_a?(Event)
-          if isAnEnemy(theEnemy,@battle)
-              currentFocus = theEnemy.eventObject
-          end
+      if theEnemy.is_a?(Event)
+        if isAnEnemy(theEnemy,@battle)
+          currentFocus = theEnemy.eventObject
+          return currentFocus
+          
         end
-
+        
       end
     end
+    return currentFocus
   end
   
-  def set_move(kind,dist=12*32,innerDist=8*32,objectOfFocus=nil)
+  def set_move(kind,dist=12*32,objectOfFocus=nil)
     canMove()
     @moveType = kind
     @distance = dist
@@ -81,15 +83,15 @@ class Event #$scene_manager.scene["player"].eventObject
         @moveControl.RandomMove(@vector,@eventObject,dist,@moveArray,@facing,@randomTime)
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
-          focus(dist,objectOfFocus)
+          
           #  Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
-          @moveControl.Follow(vector2,self, @eventObject,dist,innerDist,objectOfFocus,@moveArray)
+          @moveControl.Follow(vector2,self, @eventObject,dist,focus(dist,objectOfFocus),@moveArray)
         end
       when "attack"
         if @eventObject.w != nil || @eventObject.h != nil
           @facing
           focus(dist,objectOfFocus)
-          @fightControl.eventAtkChoice(@eventObject,@battle,@facing,dist,innerDist,objectOfFocus) #  <- Starts its attack logic
+          @fightControl.eventAtkChoice(@self,@battle,@facing,dist,focus(dist,objectOfFocus)) #  <- Starts its attack logic
         end
       when "player"
         @playerControl = PlayerControl.new()
