@@ -56,9 +56,9 @@ class SceneMap
     def update()
         @partyActors = $scene_manager.feature["party"].partyActors
         @party.party.each {|e| 
-            if e.currentHP <= 0 && e.alive == true
+            if @party.party[0].currentHP <= 0 && e.alive == true
                 @deathTotal += 1
-                e.alive = false
+                @party.party[0].alive = false
                 $scene_manager.switch_scene("gameover")
             end
         }
@@ -69,7 +69,11 @@ class SceneMap
             @partyActors[1].set_move("followPlayer",12*32,$scene_manager.scene["player"].eventObject) 
             @partyActors[1].set_move("attack",12*32,nil)
         end
-        @partyActors.each{|e|e.update}
+        @partyActors.each{|e|
+                        if e.battle.currentHP > 0
+                            e.update
+                        end
+                        }
         #@player.update()#update player 
         @currentMap.update()#update map
         
@@ -110,11 +114,19 @@ class SceneMap
                 @currentMap.events.each {|e|
                     if @player.y >= e.y
                         e.draw()
-                        @partyActors.each{|e|e.draw}
+                        @partyActors.each{|e|
+                        if e.battle.currentHP > 0
+                            e.draw
+                        end
+                        }
                         #@player.draw 
                     elsif @player.y < e.y
                         #@player.draw
-                        @partyActors.each{|e|e.draw}
+                        @partyActors.each{|e|
+                        if e.battle.currentHP > 0
+                            e.draw
+                        end
+                        }
                         e.draw()
                     end
                 }

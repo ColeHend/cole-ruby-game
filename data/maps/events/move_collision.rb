@@ -13,11 +13,11 @@ class MoveCollision
         !(r1.first > r2.last || r1.last < r2.first)
     end
     def sameOb(obj1,obj2)
-        if obj1.is_a?(Event)
-            if obj1.battle.hateGroup != obj2.battle.hateGroup && obj1.w != obj2.w
+        if obj1.is_a?(Event) 
+            if  obj1.w != obj2.w && obj1.h != obj2.h
                 return false
             end
-        elsif obj1.is_a?(GameObject)
+        elsif obj1.is_a?(GameObject) 
             if  obj1.w != obj2.w && obj1.h != obj2.h
                 return false
             end
@@ -154,10 +154,11 @@ class MoveCollision
                     
                 end
             end
-            if collideCheck(targetEvent,playerObj,dir,rangeBoost,false) == true
-                if sameOb(targetEvent,playerObj) == false
+            $scene_manager.feature["party"].partyActors.each{|partyObj|
+            if collideCheck(targetEvent,partyObj,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,partyObj) == false
                     if evtReturn == true
-                        playa = collideCheck(targetEvent,playerObj,dir,rangeBoost,true)
+                        playa = collideCheck(targetEvent,partyObj,dir,rangeBoost,true)
                         #puts("checkDir player return #{playa.battle.name}")
                         return playa
                     else 
@@ -165,6 +166,8 @@ class MoveCollision
                     end
                 end
             end
+            }
+            
         }
         
     end
@@ -176,7 +179,7 @@ class MoveCollision
         objectX = targetEvent.x
         objectY = targetEvent.y
         playerObj = $scene_manager.scene["player"]
-        
+        $scene_manager.feature["party"].partyActors.each{|partyObj|
         case direction
             when "up"
                 if objectY <= 0 
@@ -184,8 +187,8 @@ class MoveCollision
                 elsif checkDir(targetEvent,"up",8) == true#check events
                     return true
                 else
-                    if sameOb(targetEvent,playerObj) == false
-                        if collideCheck(targetEvent,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
@@ -197,8 +200,8 @@ class MoveCollision
                 elsif checkDir(targetEvent,"down",8) == true#true collide
                     return true
                 else
-                    if sameOb(targetEvent,playerObj) == false
-                        if collideCheck(targetEvent,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
@@ -210,8 +213,8 @@ class MoveCollision
                 elsif checkDir(targetEvent,"left",8) == true#true collide
                     return true
                 else
-                    if sameOb(targetEvent,playerObj) == false
-                        if collideCheck(targetEvent,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
@@ -223,15 +226,15 @@ class MoveCollision
                 elsif checkDir(targetEvent,"right",8) == true#true collide
                     return true
                 else
-                    if sameOb(targetEvent,playerObj) == false
-                        if collideCheck(targetEvent,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
                     return false
                 end
         end
-            
+    }   
     end
     
     def check_collision(targetEvent,rangeBoost ,evtReturn = false)
@@ -328,11 +331,13 @@ class MoveCollision
                 
             end
         end
+        }
 
-        if inRange(targetEvent,playerObj,dir,rangeBoost,false) == true
-            if sameOb(targetEvent,playerObj) == false
+        $scene_manager.feature["party"].partyActors.each{|partyObj|
+        if inRange(targetEvent,partyObj,dir,rangeBoost,false) == true
+            if sameOb(targetEvent,partyObj) == false
                 if evtReturn == true
-                    playa = inRange(targetEvent,playerObj,dir,rangeBoost,true)
+                    playa = inRange(targetEvent,partyObj,dir,rangeBoost,true)
                     #puts("checkDir player return #{playa.battle.name}")
                     return playa
                 else
@@ -341,9 +346,8 @@ class MoveCollision
                 
             end
         end
-         
-            
         }
+
         $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
         if collideCheck(targetEvent,tile,dir,rangeBoost,false) == true
             if sameOb(targetEvent,tile) == false

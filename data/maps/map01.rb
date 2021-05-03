@@ -65,7 +65,7 @@ class Map01
         })
         $scene_manager.object["Event101"].set_animation(12)
         #----- Event 102 -----
-        @map.registerEvent("Event102",:greenCoat,17*32,6*32,32,47,4,4,1,"god","SELECT",->(){
+        @map.registerEvent("Event102",:greenCoat,17*32,6*32,32,46,4,4,1,"god","SELECT",->(){
             event102 = $scene_manager.event["Event102"]
             if event102.page == 1
                 $scene_manager.register("event102DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend!Have Some potions!\nHit Escape to open the Menu",->(){

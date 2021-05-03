@@ -54,7 +54,7 @@ class Map02 < Map
             }))
             $scene_manager.switch_scene("event201DialogBox")
         })
-        @map.registerEvent("Event202","lightCoat",15*32,10*32,30,47,4,4,2,"sandslash","SELECT",->(){
+        @map.registerEvent("Event202","lightCoat",15*32,10*32,30,46,4,4,2,"sandslash","SELECT",->(){
             $scene_manager.register("event202DialogBox",DialogBox.new(0,10,20,5,"Here heal!",->(){
                 $scene_manager.feature["party"].party.each{|e| e.currentHP = e.hp}
             }))
