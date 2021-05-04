@@ -259,9 +259,9 @@ class EquipMenu
             
         end
         if @input.keyPressed(InputTrigger::ESCAPE) then #Escape Key
-            #@input.removeFromStack(@optionsBox.stackName)
-            #$scene_manager.switch_scene("menu")
-            #@input.addToStack("options")
+            @input.removeFromStack(@optionsBox.stackName)
+            $scene_manager.switch_scene("menu")
+            @input.addToStack("options")
         end
         
     end

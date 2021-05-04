@@ -63,6 +63,10 @@ class Menu
                 @input.addToStack("Equipment")
                 $scene_manager.register("equipMenu",EquipMenu.new())
                 $scene_manager.switch_scene("equipMenu")}),
+            Option.new("Spells",->(){
+                @input.addToStack("spellMenu")
+                $scene_manager.register("spellMenu",SpellMenu.new())
+                $scene_manager.switch_scene("spellMenu")}),
             Option.new("Items",->(){
                 @input.addToStack("itemsBox")
                 @showItems = true }),
@@ -129,6 +133,10 @@ class Menu
                         if @itemChoice[@currentItemOp] != nil
                             puts("itemcalled")
                             @itemChoice[@currentItemOp].call(@party[0])
+                            @colors[@currentItemOp] = @notCurrentColor
+                            @currentItemOp = 0
+                            @colors[@currentItemOp] = @currentColor
+
                             @selectCool = true
                         end
                         
@@ -155,6 +163,7 @@ class Menu
 
     def draw()
         @player = $scene_manager.scene["player"]
+        @partyActors = $scene_manager.feature["party"].partyActors
         @currentMap =  $scene_manager.scene["map"].currentMap
         @mWidth, @mHeight = @currentMap.width, @currentMap.height
 
@@ -168,7 +177,11 @@ class Menu
         Gosu.translate(-@camera_x, -@camera_y) do
             @currentMap.map.draw
             @currentMap.events.each {|e|e.draw()}
-            @player.draw
+            @partyActors.each{|e|
+                        if e.battle.currentHP > 0
+                            e.draw
+                        end
+                        }
             @currentMap.map.drawAbove
         end
 

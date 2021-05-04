@@ -13,26 +13,25 @@ class MoveCollision
         !(r1.first > r2.last || r1.last < r2.first)
     end
     def sameOb(obj1,obj2)
-        #if obj1.x == obj2.x
-            #if obj1.y == obj2.y
-                if obj1.w == obj2.w
-                    if obj1.h == obj2.h
-                        return true
-                    end
-                end
-            #end
-        #end
-        return false
+        if obj1.is_a?(Event) 
+            if  obj1.w != obj2.w && obj1.h != obj2.h
+                return false
+            end
+        elsif obj1.is_a?(GameObject) 
+            if  obj1.w != obj2.w && obj1.h != obj2.h
+                return false
+            end
+        end
+        return true
     end
-
-    def collideCheck(targetObject,event,dir,rangeBoost,evtReturn)
+    def collideCheck(targetEvent,event,dir,rangeBoost,evtReturn)
         range = 32
         range += rangeBoost
-        if event.is_a?(Event) == true || event.is_a?(GameObject) == true && targetObject.is_a?(Event) == true || targetObject.is_a?(GameObject) == true
-            targetX = targetObject.x
-            targetY = targetObject.y
-            targetW = targetObject.w
-            targetH = targetObject.h
+        if event.is_a?(Event) == true || event.is_a?(GameObject) == true && targetEvent.is_a?(Event) == true || targetEvent.is_a?(GameObject) == true
+            targetX = targetEvent.x
+            targetY = targetEvent.y
+            targetW = targetEvent.w
+            targetH = targetEvent.h
             eventX = event.x
             eventY = event.y
             eventW = event.w
@@ -79,14 +78,14 @@ class MoveCollision
             return false
         end
     end
-    def collideDirectionCheck(targetObject,event,dir,rangeBoost,evtReturn)
+    def collideDirectionCheck(targetEvent,event,dir,rangeBoost,evtReturn)
         range = 32
         range += rangeBoost
-        if event != nil && targetObject != nil
-            targetX = targetObject.x
-            targetY = targetObject.y
-            targetW = targetObject.w
-            targetH = targetObject.h
+        if event != nil && targetEvent != nil
+            targetX = targetEvent.x
+            targetY = targetEvent.y
+            targetW = targetEvent.w
+            targetH = targetEvent.h
             eventX = event.x
             eventY = event.y
             eventW = event.w
@@ -133,23 +132,21 @@ class MoveCollision
             return false
         end
     end
-    def checkDir(targetObject,dir,rangeBoost,evtReturn = false)
+    def checkDir(targetEvent,dir,rangeBoost,evtReturn = false)
         
         $scene_manager.scene["map"].currentMap.events.each {|event|
             playerObj = $scene_manager.scene["player"]
             if evtReturn == false
                 $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
-                if collideCheck(targetObject,tile,dir,rangeBoost,false) == true
-                    if sameOb(targetObject,tile) == false
-                            return true
-                    end
+                if collideCheck(targetEvent,tile,dir,rangeBoost,false) == true
+                    return true
                 end
                 }
             end
-            if collideCheck(targetObject,event,dir,rangeBoost,false) == true
-                if sameOb(targetObject,event) == false
+            if collideCheck(targetEvent,event,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,event) == false
                     if evtReturn == true
-                        #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
+                        #puts("event: #{collideCheck(targetEvent,event,dir,rangeBoost,false)}")
                         return event
                     else
                         return true
@@ -157,10 +154,11 @@ class MoveCollision
                     
                 end
             end
-            if collideCheck(targetObject,playerObj,dir,rangeBoost,false) == true
-                if sameOb(targetObject,playerObj) == false
+            $scene_manager.feature["party"].partyActors.each{|partyObj|
+            if collideCheck(targetEvent,partyObj,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,partyObj) == false
                     if evtReturn == true
-                        playa = collideCheck(targetObject,playerObj,dir,rangeBoost,true)
+                        playa = collideCheck(targetEvent,partyObj,dir,rangeBoost,true)
                         #puts("checkDir player return #{playa.battle.name}")
                         return playa
                     else 
@@ -168,27 +166,29 @@ class MoveCollision
                     end
                 end
             end
+            }
+            
         }
         
     end
     
-    def check_surrounding(direction,targetObject)
+    def check_surrounding(direction,targetEvent)
         #currentMap =  $scene_manager.scene["map"].currentMap 
         mWidth = $scene_manager.scene["map"].currentMap.width
         mHeight = $scene_manager.scene["map"].currentMap.height
-        objectX = targetObject.x
-        objectY = targetObject.y
-        playerObj = $scene_manager.scene["player"].eventObject
-        
+        objectX = targetEvent.x
+        objectY = targetEvent.y
+        playerObj = $scene_manager.scene["player"]
+        $scene_manager.feature["party"].partyActors.each{|partyObj|
         case direction
             when "up"
                 if objectY <= 0 
                     return true
-                elsif checkDir(targetObject,"up",8) == true#check events
+                elsif checkDir(targetEvent,"up",8) == true#check events
                     return true
                 else
-                    if sameOb(targetObject,playerObj) == false
-                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
@@ -197,11 +197,11 @@ class MoveCollision
             when "down"
                 if objectY >= (mHeight * 32-16)
                     return true
-                elsif checkDir(targetObject,"down",8) == true#true collide
+                elsif checkDir(targetEvent,"down",8) == true#true collide
                     return true
                 else
-                    if sameOb(targetObject,playerObj) == false
-                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
@@ -210,11 +210,11 @@ class MoveCollision
             when "left" 
                 if objectX <= 1 
                     return true
-                elsif checkDir(targetObject,"left",8) == true#true collide
+                elsif checkDir(targetEvent,"left",8) == true#true collide
                     return true
                 else
-                    if sameOb(targetObject,playerObj) == false
-                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
@@ -223,45 +223,45 @@ class MoveCollision
             when "right" 
                 if objectX >= (mWidth * 32) 
                     return true
-                elsif checkDir(targetObject,"right",8) == true#true collide
+                elsif checkDir(targetEvent,"right",8) == true#true collide
                     return true
                 else
-                    if sameOb(targetObject,playerObj) == false
-                        if collideCheck(targetObject,playerObj,direction,8,false) == true
+                    if sameOb(targetEvent,partyObj) == false
+                        if collideCheck(targetEvent,partyObj,direction,8,false) == true
                             return true 
                         end
                     end
                     return false
                 end
         end
-            
+    }   
     end
     
-    def check_collision(targetObject,rangeBoost ,evtReturn = false)
-        if checkDir(targetObject,"up",rangeBoost) == true
+    def check_collision(targetEvent,rangeBoost ,evtReturn = false)
+        if checkDir(targetEvent,"up",rangeBoost) == true
             if evtReturn == true
-                event = checkDir(targetObject,"up",rangeBoost,true)
+                event = checkDir(targetEvent,"up",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkDir(targetObject,"down",rangeBoost) == true
+        elsif checkDir(targetEvent,"down",rangeBoost) == true
             if evtReturn == true
-                event = checkDir(targetObject,"down",rangeBoost,true)
+                event = checkDir(targetEvent,"down",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkDir(targetObject,"left",rangeBoost) == true
+        elsif checkDir(targetEvent,"left",rangeBoost) == true
             if evtReturn == true
-                event = checkDir(targetObject,"left",rangeBoost,true)
+                event = checkDir(targetEvent,"left",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkDir(targetObject,"right",rangeBoost) == true
+        elsif checkDir(targetEvent,"right",rangeBoost) == true
             if evtReturn == true
-                event = checkDir(targetObject,"right",rangeBoost,true)
+                event = checkDir(targetEvent,"right",rangeBoost,true)
                 return event
             else
                 return true
@@ -269,14 +269,14 @@ class MoveCollision
         end
     end
 
-    def inRange(targetObject,event,dir,rangeBoost,evtReturn)
+    def inRange(targetEvent,event,dir,rangeBoost,evtReturn)
         range = 33
         range += rangeBoost
-        if event != nil && targetObject != nil
-            targetX = targetObject.x
-            targetY = targetObject.y
-            targetW = targetObject.w
-            targetH = targetObject.h
+        if event != nil && targetEvent != nil
+            targetX = targetEvent.x
+            targetY = targetEvent.y
+            targetW = targetEvent.w
+            targetH = targetEvent.h
             eventX = event.x
             eventY = event.y
             eventW = event.w
@@ -315,79 +315,95 @@ class MoveCollision
             puts("collideCheck skipped..")
         end
     end
-    def checkRange(targetObject,dir,rangeBoost,evtReturn = false)
-        playerObj = $scene_manager.scene["player"]
+    def vectorArray(divBy=32)
+        vectorArr = Array.new 
+        $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
+            vectorArr.push(Vector2.new(tile.x/divBy,tile.y/divBy))
+        }
 
         $scene_manager.scene["map"].currentMap.events.each {|event|
-
-        if inRange(targetObject,event,dir,rangeBoost,false) == true
-            if sameOb(targetObject,event) == false
-                if evtReturn == true
-                    #puts("event: #{collideCheck(targetObject,event,dir,rangeBoost,false)}")
-                    return event
-                else
-                    return true
-                end
-                
-            end
-        end
-
-        if inRange(targetObject,playerObj,dir,rangeBoost,false) == true
-            if sameOb(targetObject,playerObj) == false
-                if evtReturn == true
-                    playa = inRange(targetObject,playerObj,dir,rangeBoost,true)
-                    #puts("checkDir player return #{playa.battle.name}")
-                    return playa
-                else
-                    return true
-                end
-                
-            end
-        end
-         
-            
+            vectorArr.push(Vector2.new((event.x+(event.w/2))/divBy,(event.y+(event.h/2))/divBy))
         }
-        $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
-        if collideCheck(targetObject,tile,dir,rangeBoost,false) == true
-            if sameOb(targetObject,tile) == false
-                if evtReturn != true
-                    return true
+
+        $scene_manager.feature["party"].partyActors.each{|partyObj|
+            vectorArr.push(Vector2.new((partyObj.x+(partyObj.w/2))/divBy,(partyObj.y+(partyObj.h/2))/divBy))
+        }
+        return vectorArr
+    end
+    def checkRange(targetEvent,dir,rangeBoost,evtReturn = false)
+        playerObj = $scene_manager.scene["player"]
+
+        if evtReturn == false
+            $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
+            if collideCheck(targetEvent,tile,dir,rangeBoost,false) == true
+                return true
+            end
+            }
+        end
+
+        $scene_manager.scene["map"].currentMap.events.each {|event|
+            if inRange(targetEvent,event,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,event) == false
+                    if evtReturn == true
+                        #puts("event: #{collideCheck(targetEvent,event,dir,rangeBoost,false)}")
+                        return event
+                    else
+                        return true
+                    end
+                    
                 end
             end
-        end
         }
+
+        $scene_manager.feature["party"].partyActors.each{|partyObj|
+            if inRange(targetEvent,partyObj,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,partyObj) == false
+                    if evtReturn == true
+                        playa = inRange(targetEvent,partyObj,dir,rangeBoost,true)
+                        #puts("checkDir player return #{playa.battle.name}")
+                        return playa
+                    else
+                        return true
+                    end
+                    
+                end
+            end
+        }
+        
+        return false
     end
     
-    def check_inRange(targetObject,rangeBoost ,evtReturn = false)
-        if checkRange(targetObject,"up",rangeBoost) == true
+    def check_inRange(targetEvent,rangeBoost ,evtReturn = false)
+        if checkRange(targetEvent,"up",rangeBoost) == true
             if evtReturn == true
-                event = checkRange(targetObject,"up",rangeBoost,true)
+                event = checkRange(targetEvent,"up",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkRange(targetObject,"down",rangeBoost) == true
+        elsif checkRange(targetEvent,"down",rangeBoost) == true
             if evtReturn == true
-                event = checkRange(targetObject,"down",rangeBoost,true)
+                event = checkRange(targetEvent,"down",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkRange(targetObject,"left",rangeBoost) == true
+        elsif checkRange(targetEvent,"left",rangeBoost) == true
             if evtReturn == true
-                event = checkRange(targetObject,"left",rangeBoost,true)
+                event = checkRange(targetEvent,"left",rangeBoost,true)
                 return event
             else
                 return true
             end
-        elsif checkRange(targetObject,"right",rangeBoost) == true
+        elsif checkRange(targetEvent,"right",rangeBoost) == true
             if evtReturn == true
-                event = checkRange(targetObject,"right",rangeBoost,true)
+                event = checkRange(targetEvent,"right",rangeBoost,true)
                 return event
             else
                 return true
             end
         end
+        return false
     end
     
 end

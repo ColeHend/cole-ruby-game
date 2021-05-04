@@ -24,7 +24,7 @@ class MagicBook
     end
     
     def make_shot(targetObject,spellEVT,facing,spellStability,spellRange)
-        range = spellRange*8
+        range = spellRange/4
         u = 0
         
             Thread.new{
@@ -51,14 +51,14 @@ class MagicBook
     def ranged_shot(attackObj,facing,spellName)
         
         spellCast = @spellList.spell(spellName)
-
-        spellObj = spellCast[0]
+        #(spellName,range,object,spell,spellEff,animName,cooldown)
+        spellObj = spellCast.object
         spellObj.x = attackObj.x
         spellObj.y = attackObj.y
-        spellRange = spellCast[6]
-        spellStability = spellCast[1]
-        spellEff = spellCast[2]
-        spellOnHit = spellCast[3]
+        spellRange = spellCast.range
+        spellStability = spellCast.stability
+        spellEff = spellCast.effect
+        spellOnHit = spellCast.animName
 
         event = Event.new(spellObj, spellEff,spellStability)
         createSpell = ->(){
@@ -66,24 +66,24 @@ class MagicBook
             @activeSpells.push(event)
         }
         
-        dist = 56
+        dist = 2
         @animation.play_animation(spellOnHit,(event.x - 86) ,(event.y - 86) ,nil)
         draw_character(event.eventObject, (facing) ,1)
         case facing
         when "up"
-            spellObj.y -= dist
+            spellObj.y -= (attackObj.h+dist)
             createSpell.call
             make_shot(spellObj,event,"up",spellStability,spellRange)
         when "down"
-            spellObj.y += dist 
+            spellObj.y += (attackObj.h+dist)
             createSpell.call
             make_shot(spellObj,event,"down",spellStability,spellRange)
         when "left"
-            spellObj.x -= dist
+            spellObj.x -= (attackObj.w+dist)
             createSpell.call
             make_shot(spellObj,event,"left",spellStability,spellRange)
         when "right"
-            spellObj.x += dist
+            spellObj.x += (attackObj.w+dist)
             createSpell.call
             make_shot(spellObj,event,"right",spellStability,spellRange)
         end

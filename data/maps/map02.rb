@@ -48,13 +48,13 @@ class Map02 < Map
         teleport2.x = 15*32
         teleport2.y = 20*32
         #-----------------------------------------------------------------
-        @map.registerEvent("Event201","shadowGuy",6*32,5*32,32,48,4,4,2,"sandslash","SELECT",->(){
+        @map.registerEvent("Event201","shadowGuy",6*32,5*32,32,48,4,4,2,"npc","SELECT",->(){
             $scene_manager.register("event201DialogBox",DialogBox.new(0,10,20,5,"Here have some experience!",->(){
                 $scene_manager.feature["party"].party.each{|e| e.give_xp(500)}
             }))
             $scene_manager.switch_scene("event201DialogBox")
         })
-        @map.registerEvent("Event202","lightCoat",15*32,10*32,30,47,4,4,2,"sandslash","SELECT",->(){
+        @map.registerEvent("Event202","lightCoat",15*32,10*32,30,46,4,4,2,"npc","SELECT",->(){
             $scene_manager.register("event202DialogBox",DialogBox.new(0,10,20,5,"Here heal!",->(){
                 $scene_manager.feature["party"].party.each{|e| e.currentHP = e.hp}
             }))
@@ -80,10 +80,10 @@ class Map02 < Map
         event201 = $scene_manager.event["Event201"]
         event202 = $scene_manager.event["Event202"]
         if event201.battle.currentHP >= 0
-            event201.set_move("followPlayer",10*32,1*32,"melee",player.eventObject)
+            event201.set_move("followPlayer",10*32,player.eventObject)
         end
         if event202.battle.currentHP >= 0
-            event202.set_move("followPlayer",10*32,1*32,"melee",player.eventObject)
+            event202.set_move("followPlayer",10*32,player.eventObject)
         end
     end
 end
