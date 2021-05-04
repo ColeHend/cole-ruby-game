@@ -26,6 +26,11 @@ class PlayerParty
         end
     end
     def removeFromParty(characterName)
+        @partyActors.each_with_index{|actor,index|
+            if actor.name == characterName
+                @partyActors.delete_at(index)
+            end
+        }
     end
     def unequip(equipType,equipSpot)
         puts("unequip run")

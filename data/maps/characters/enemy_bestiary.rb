@@ -11,6 +11,11 @@ class Bestiary
             god.hateGroup = "notouchy"
             god.enemyGroups = ["nobody"] 
             return god
+        when "npc"
+            npc = PlayerCharacter.new("npc",10.0,12,12,12,12,1)
+            npc.hateGroup = "npc"
+            npc.enemyGroups = ["nothing"]
+            return npc
         when "hitmonchan"
             hitmonchan = PlayerCharacter.new("hitmonchan",20.0,12,12,12,12)
             hitmonchan.weapon = Weapon.new("Mega Punch","megaPunch",15,"blunt",350)

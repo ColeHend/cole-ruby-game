@@ -315,48 +315,62 @@ class MoveCollision
             puts("collideCheck skipped..")
         end
     end
-    def checkRange(targetEvent,dir,rangeBoost,evtReturn = false)
-        playerObj = $scene_manager.scene["player"]
+    def vectorArray(divBy=32)
+        vectorArr = Array.new 
+        $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
+            vectorArr.push(Vector2.new(tile.x/divBy,tile.y/divBy))
+        }
 
         $scene_manager.scene["map"].currentMap.events.each {|event|
-
-        if inRange(targetEvent,event,dir,rangeBoost,false) == true
-            if sameOb(targetEvent,event) == false
-                if evtReturn == true
-                    #puts("event: #{collideCheck(targetEvent,event,dir,rangeBoost,false)}")
-                    return event
-                else
-                    return true
-                end
-                
-            end
-        end
+            vectorArr.push(Vector2.new((event.x+(event.w/2))/divBy,(event.y+(event.h/2))/divBy))
         }
 
         $scene_manager.feature["party"].partyActors.each{|partyObj|
-        if inRange(targetEvent,partyObj,dir,rangeBoost,false) == true
-            if sameOb(targetEvent,partyObj) == false
-                if evtReturn == true
-                    playa = inRange(targetEvent,partyObj,dir,rangeBoost,true)
-                    #puts("checkDir player return #{playa.battle.name}")
-                    return playa
-                else
-                    return true
-                end
-                
+            vectorArr.push(Vector2.new((partyObj.x+(partyObj.w/2))/divBy,(partyObj.y+(partyObj.h/2))/divBy))
+        }
+        return vectorArr
+    end
+    def checkRange(targetEvent,dir,rangeBoost,evtReturn = false)
+        playerObj = $scene_manager.scene["player"]
+
+        if evtReturn == false
+            $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
+            if collideCheck(targetEvent,tile,dir,rangeBoost,false) == true
+                return true
             end
+            }
         end
+
+        $scene_manager.scene["map"].currentMap.events.each {|event|
+            if inRange(targetEvent,event,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,event) == false
+                    if evtReturn == true
+                        #puts("event: #{collideCheck(targetEvent,event,dir,rangeBoost,false)}")
+                        return event
+                    else
+                        return true
+                    end
+                    
+                end
+            end
         }
 
-        $scene_manager.scene["map"].currentMap.tileset.impassableTiles.each {|tile|
-        if collideCheck(targetEvent,tile,dir,rangeBoost,false) == true
-            if sameOb(targetEvent,tile) == false
-                if evtReturn != true
-                    return true
+        $scene_manager.feature["party"].partyActors.each{|partyObj|
+            if inRange(targetEvent,partyObj,dir,rangeBoost,false) == true
+                if sameOb(targetEvent,partyObj) == false
+                    if evtReturn == true
+                        playa = inRange(targetEvent,partyObj,dir,rangeBoost,true)
+                        #puts("checkDir player return #{playa.battle.name}")
+                        return playa
+                    else
+                        return true
+                    end
+                    
                 end
             end
-        end
         }
+        
+        return false
     end
     
     def check_inRange(targetEvent,rangeBoost ,evtReturn = false)
@@ -389,6 +403,7 @@ class MoveCollision
                 return true
             end
         end
+        return false
     end
     
 end

@@ -81,18 +81,26 @@ class Event #$scene_manager.scene["player"].eventObject
       when "random"
         randomDir = rand(4)
         @moveControl.RandomMove(@vector,@eventObject,dist,@moveArray,@facing,@randomTime)
+
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
-          
           #  Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
           @moveControl.Follow(vector2,self, @eventObject,dist,focus(dist,objectOfFocus),@moveArray)
         end
+
+      when "newFollow"
+        if @eventObject.w != nil || @eventObject.h != nil
+          #  newFollow(attackerClass,objectToMove,vectorToMove,objectToFollow,moveArray)
+          @moveControl.newFollow(self,@eventObject,vector2,focus(dist,objectOfFocus),@moveArray)
+        end
+
       when "attack"
         if @eventObject.w != nil || @eventObject.h != nil
           @facing
           focus(dist,objectOfFocus)
           @fightControl.eventAtkChoice(@self,@battle,@facing,dist,focus(dist,objectOfFocus)) #  <- Starts its attack logic
         end
+
       when "player"
         @playerControl = PlayerControl.new()
         

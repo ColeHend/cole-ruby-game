@@ -297,19 +297,19 @@ class FightCenter
                         if objCollision.check_inRange(objectToMove,closestDist,false) == true #checks if is in total range
                             case facing
                             when "up"
-                                if objCollision.checkRange(objectToMove,"up",closestDist) == true
+                                if objCollision.checkRange(objectToMove,"up",closestDist) == true && (objectToFollow.x - objectToMove.x ).abs < 64
                                     npcAttack(objectToMove, battle,facing)
                                 end
                             when "down"
-                                if objCollision.checkRange(objectToMove,"down",closestDist) == true
+                                if objCollision.checkRange(objectToMove,"down",closestDist) == true && (objectToFollow.x - objectToMove.x ).abs < 64
                                     npcAttack(objectToMove, battle,facing)
                                 end
                             when "left"
-                                if objCollision.checkRange(objectToMove,"left",closestDist) == true
+                                if objCollision.checkRange(objectToMove,"left",closestDist) == true && (objectToFollow.y - objectToMove.y ).abs < 64
                                     npcAttack(objectToMove, battle,facing)
                                 end
                             when "right"
-                                if objCollision.checkRange(objectToMove,"right",closestDist) == true
+                                if objCollision.checkRange(objectToMove,"right",closestDist) == true && (objectToFollow.y - objectToMove.y ).abs < 64
                                     npcAttack(objectToMove, battle,facing)
                                 end
                             end
