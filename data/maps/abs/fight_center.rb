@@ -254,7 +254,7 @@ class FightCenter
         end
     end
 
-    def npcAttack(objectToMove,battle,facing,type)
+    def npcAttack(objectToMove,battle,facing,type="auto")
         
         case type
         when "melee"
@@ -267,11 +267,11 @@ class FightCenter
             end
         when "auto"
             meleeRange = battle.weapon.range
-        if battle.currentSpell.is_a?(Magic) == true
-            spellRange = battle.currentSpell.range
-        else
-            spellRange = 0
-        end
+            if battle.currentSpell.is_a?(Magic) == true
+                spellRange = battle.currentSpell.range
+            else
+                spellRange = 0
+            end
             theEnemyMelee = MoveCollision.new.check_inRange(objectToMove,meleeRange,true)
             theEnemyRanged = MoveCollision.new.check_inRange(objectToMove,spellRange,true)
             if theEnemyMelee.is_a?(Event) == true
