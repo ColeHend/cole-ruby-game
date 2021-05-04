@@ -217,14 +217,14 @@ class Control_movement
             end
         end
     end
-    def Follow(vectorToMove,attackerClass, objectToMove,range=6*32,objectToFollow,moveArray)
+    def Follow(vectorToMove,attackerClass, objectToMove,range=6*32,objectToFollow=nil,moveArray=[],speed=0.25)
         @objectToFollow = objectToFollow
         lockedOn = false
         detectDist = range
         nearDist = (range / 2)
         superClose = 0
         objDetect = MoveCollision.new
-        speed = 0.25
+        speed = 0.5
         time = 10
         tileDetectW = 6
         moveNumber = 1
@@ -232,6 +232,19 @@ class Control_movement
         downEventCheck = objDetect.checkDir(objectToMove,"down",superClose,true)
         leftEventCheck = objDetect.checkDir(objectToMove,"left",superClose,true)
         rightEventCheck = objDetect.checkDir(objectToMove,"right",superClose,true)
+        meleeRange = attackerClass.battle.weapon.range
+            if attackerClass.battle.currentSpell.is_a?(Magic) == true
+                spellRange = attackerClass.battle.currentSpell.range
+            else
+                spellRange = 30
+            end
+            if meleeRange > spellRange
+                closestDist = meleeRange
+            elsif meleeRange < spellRange
+                closestDist = spellRange
+            else
+                closestDist = 32
+            end
         moveLeft = ->(){
             moveNumber.times{
                 attackerClass.facing = "left"
@@ -279,7 +292,7 @@ class Control_movement
                                 if objDetect.check_surrounding("right",objectToMove) == false
                                     moveArray.push(moveRight)
                                 end
-                            elsif @objectToFollow.x <= objectToMove.x#couldadd
+                            elsif @objectToFollow.x < objectToMove.x#couldadd
                                 if objDetect.check_surrounding("left",objectToMove) == false
                                     moveArray.push(moveLeft)
                                 end
@@ -301,7 +314,7 @@ class Control_movement
                                 if objDetect.check_surrounding("right",objectToMove) == false
                                     moveArray.push(moveRight)
                                 end
-                            elsif @objectToFollow.x <= objectToMove.x#couldadd
+                            elsif @objectToFollow.x < objectToMove.x#couldadd
                                 if objDetect.check_surrounding("left",objectToMove) == false
                                     moveArray.push(moveLeft)
                                 end
@@ -313,7 +326,7 @@ class Control_movement
                         end
                     end
                 elsif followAbsY < followAbsX#farther left or right
-                    if @objectToFollow.x <= objectToMove.x#left
+                    if @objectToFollow.x < objectToMove.x#left
                         if objDetect.check_surrounding("left",objectToMove) == false
                             moveArray.push(moveLeft)
                         elsif objDetect.check_surrounding("left",objectToMove) == true
@@ -359,7 +372,7 @@ class Control_movement
                         end
                     end
                 elsif objDetect.check_inRange(objectToMove,detectDist ,false) == true && followAbsY <= tileDetectW#is in close range
-                    if @objectToFollow.x <= objectToMove.x
+                    if @objectToFollow.x < objectToMove.x
                         if moveArray.length < 1
                             if objDetect.check_surrounding("left",objectToMove) == false
                                 moveArray.push(moveLeft)
@@ -389,7 +402,7 @@ class Control_movement
                         end
                     end
                 elsif objDetect.check_inRange(objectToMove,detectDist ,false) == true && followAbsX <= tileDetectW
-                    if @objectToFollow.y <= objectToMove.y
+                    if @objectToFollow.y < objectToMove.y
                         if moveArray.length < 1
                             if objDetect.check_surrounding("up",objectToMove) == false
                                 moveArray.push(moveUp)
@@ -418,7 +431,7 @@ class Control_movement
                             end
                         end
                     end
-                elsif objDetect.check_inRange(objectToMove,detectDist ,false) == true
+                else
                     Move(vectorToMove,objectToMove,attackerClass.facing,speed,time)
                 end
                 defender = MoveCollision.new.check_inRange(objectToMove,detectDist,true)

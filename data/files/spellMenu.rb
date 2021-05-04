@@ -91,6 +91,7 @@ class SpellMenu
 
     def draw
         @currentMap =  $scene_manager.scene["map"].currentMap
+        @partyActors = $scene_manager.feature["party"].partyActors
         @mWidth, @mHeight = @currentMap.width, @currentMap.height
         #draw boxes
         @camera_x = [[(@player.x) - 800 / 2, 0].max, ((@mWidth * 32) + 32) - 800].min
@@ -98,7 +99,11 @@ class SpellMenu
         Gosu.translate(-@camera_x, -@camera_y) do
             @currentMap.map.draw
             @currentMap.events.each {|e|e.draw()}
-            @player.draw
+            @partyActors.each{|e|
+                        if e.battle.currentHP > 0
+                            e.draw
+                        end
+                        }
             @currentMap.map.drawAbove
         end 
         

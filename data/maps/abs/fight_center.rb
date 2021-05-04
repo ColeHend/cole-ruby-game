@@ -207,16 +207,16 @@ class FightCenter
             case facing
             when "left"
                 meleeAnimation(wpnAnimation,facing,objectToMove)
-                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
+                meleeAttack(objectToMove,battle,facing,(objectToMove.w+32+battle.weapon.range))
             when "right"
                 meleeAnimation(wpnAnimation,facing,objectToMove)
-                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
+                meleeAttack(objectToMove,battle,facing,objectToMove.w+32+battle.weapon.range)
             when "up"
                 meleeAnimation(wpnAnimation,facing,objectToMove)
-                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
+                meleeAttack(objectToMove,battle,facing,objectToMove.h+32+battle.weapon.range)
             when "down"
                 meleeAnimation(wpnAnimation,facing,objectToMove)
-                meleeAttack(objectToMove,battle,facing,32+battle.weapon.range)
+                meleeAttack(objectToMove,battle,facing,objectToMove.h+32+battle.weapon.range)
             end
             @meleeCool = true
         end
@@ -254,27 +254,38 @@ class FightCenter
         end
     end
 
-    def npcAttack(objectToMove,battle,facing)
-        meleeRange = battle.weapon.range
+    def npcAttack(objectToMove,battle,facing,type)
+        
+        case type
+        when "melee"
+            if isAnEnemy(theEnemyMelee,battle) == true
+                closeCombat(objectToMove, battle,facing,battle.weapon.animation)
+            end
+        when "ranged"
+            if isAnEnemy(theEnemyRanged,battle) == true
+                rangedCombat(objectToMove,facing,battle.currentSpell.name,battle)
+            end
+        when "auto"
+            meleeRange = battle.weapon.range
         if battle.currentSpell.is_a?(Magic) == true
             spellRange = battle.currentSpell.range
         else
             spellRange = 0
         end
-        theEnemyMelee = MoveCollision.new.check_inRange(objectToMove,meleeRange,true)
-        theEnemyRanged = MoveCollision.new.check_inRange(objectToMove,spellRange,true)
-        
-        if theEnemyMelee.is_a?(Event) == true
-            if isAnEnemy(theEnemyMelee,battle) == true
-                closeCombat(objectToMove, battle,facing,battle.weapon.animation)
-            end
-        elsif theEnemyRanged.is_a?(Event) == true
-            if isAnEnemy(theEnemyRanged,battle) == true
-                rangedCombat(objectToMove,facing,battle.currentSpell.name,battle)
+            theEnemyMelee = MoveCollision.new.check_inRange(objectToMove,meleeRange,true)
+            theEnemyRanged = MoveCollision.new.check_inRange(objectToMove,spellRange,true)
+            if theEnemyMelee.is_a?(Event) == true
+                if isAnEnemy(theEnemyMelee,battle) == true
+                    closeCombat(objectToMove, battle,facing,battle.weapon.animation)
+                end
+            elsif theEnemyRanged.is_a?(Event) == true
+                if isAnEnemy(theEnemyRanged,battle) == true
+                    rangedCombat(objectToMove,facing,battle.currentSpell.name,battle)
+                end
             end
         end
     end
-    def eventAtkChoice(objectToMove, battle,facing ,detectDist,objectToFollow)
+    def eventAtkChoice(objectToMove, battle,facing ,detectDist,objectToFollow,atkType)
         objCollision = MoveCollision.new
         
         if objectToFollow.is_a?(GameObject)
@@ -297,20 +308,20 @@ class FightCenter
                         if objCollision.check_inRange(objectToMove,closestDist,false) == true #checks if is in total range
                             case facing
                             when "up"
-                                if objCollision.checkRange(objectToMove,"up",closestDist) == true && (objectToFollow.x - objectToMove.x ).abs < 64
-                                    npcAttack(objectToMove, battle,facing)
+                                if objCollision.checkRange(objectToMove,"up",closestDist) == true && (objectToFollow.x - objectToMove.x ).abs < 33
+                                    npcAttack(objectToMove, battle,facing,atkType)
                                 end
                             when "down"
-                                if objCollision.checkRange(objectToMove,"down",closestDist) == true && (objectToFollow.x - objectToMove.x ).abs < 64
-                                    npcAttack(objectToMove, battle,facing)
+                                if objCollision.checkRange(objectToMove,"down",closestDist) == true && (objectToFollow.x - objectToMove.x ).abs < 33
+                                    npcAttack(objectToMove, battle,facing,atkType)
                                 end
                             when "left"
-                                if objCollision.checkRange(objectToMove,"left",closestDist) == true && (objectToFollow.y - objectToMove.y ).abs < 64
-                                    npcAttack(objectToMove, battle,facing)
+                                if objCollision.checkRange(objectToMove,"left",closestDist) == true && (objectToFollow.y - objectToMove.y ).abs < 33
+                                    npcAttack(objectToMove, battle,facing,atkType)
                                 end
                             when "right"
-                                if objCollision.checkRange(objectToMove,"right",closestDist) == true && (objectToFollow.y - objectToMove.y ).abs < 64
-                                    npcAttack(objectToMove, battle,facing)
+                                if objCollision.checkRange(objectToMove,"right",closestDist) == true && (objectToFollow.y - objectToMove.y ).abs < 33
+                                    npcAttack(objectToMove, battle,facing,atkType)
                                 end
                             end
                         end

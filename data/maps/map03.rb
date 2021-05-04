@@ -47,8 +47,8 @@ class Map03 < Map
         event304 = $scene_manager.event["Event304"] #metagross
         if event301.battle.currentHP > 0 #set sandslash ai
             event301.activateType = "SELECT"
-            event301.set_move("followPlayer",6*32,nil)
-            event301.set_move("attack",6*32,nil) 
+            event301.set_move("followPlayer",8*32,nil)
+            event301.set_move("attack",8*32,nil) 
         end
         if event302.battle.currentHP > 0#set hitmonchan ai
             event302.activateType = "SELECT"

@@ -71,7 +71,7 @@ class Event #$scene_manager.scene["player"].eventObject
     return currentFocus
   end
   
-  def set_move(kind,dist=12*32,objectOfFocus=nil)
+  def set_move(kind,dist=12*32,objectOfFocus=nil,atkType="auto",speed=0.25)
     canMove()
     @moveType = kind
     @distance = dist
@@ -85,7 +85,7 @@ class Event #$scene_manager.scene["player"].eventObject
       when "followPlayer"
         if @eventObject.w != nil || @eventObject.h != nil
           #  Follow(vectorToMove,attackerClass, objectToMove,atkType="melee",range=6*32,nearDist,objectToFollow,moveArray)
-          @moveControl.Follow(vector2,self, @eventObject,dist,focus(dist,objectOfFocus),@moveArray)
+          @moveControl.Follow(vector2,self, @eventObject,dist,focus(dist,objectOfFocus),@moveArray,speed)
         end
 
       when "newFollow"
@@ -98,7 +98,7 @@ class Event #$scene_manager.scene["player"].eventObject
         if @eventObject.w != nil || @eventObject.h != nil
           @facing
           focus(dist,objectOfFocus)
-          @fightControl.eventAtkChoice(@self,@battle,@facing,dist,focus(dist,objectOfFocus)) #  <- Starts its attack logic
+          @fightControl.eventAtkChoice(@self,@battle,@facing,dist,focus(dist,objectOfFocus),atkType) #  <- Starts its attack logic
         end
 
       when "player"

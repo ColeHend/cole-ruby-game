@@ -45,7 +45,8 @@ class Map01
         @map.registerEvent("Event101",:lightCoat,15*32,18*32,32,46,4,4,1,"god","SELECT",->(){
             event101 = $scene_manager.event["Event101"]
             if event101.page == 1
-                $scene_manager.register("event101DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend! Have Some Weapons And Armor! Hit F for a Melee Attack, Hit G for a Ranged Attack\nHit Escape to open the Menu",->(){
+                $scene_manager.register("event101DialogBox",DialogBox.new(0,10,20,5,"Hello There Friend! Have Some Weapons And Armor!\nSpacebar to Interact with stuff! \nHit F for a Melee Attack, \nHit G for a Ranged Attack\nDon't forget to hit Escape to open the Menu and equip weapons and spells!",
+                ->(){
                     @inventory.add_weapon("ironMace")
                     @inventory.add_weapon("ironSword")
                     @inventory.add_weapon("fireBrand")
@@ -91,7 +92,7 @@ class Map01
         
         $scene_manager.object["Event102"].set_animation(4)
         #------ Teleport 101 (Door) Map02
-        @map.registerEvent("Teleport101",:doors,21*32, 13*32,32,36,4,4,1,"god","SELECT",->(){$scene_manager.scene["map"].change_map("map02",15.5*32,18.5*32,"up")})
+        @map.registerEvent("Teleport101",:doors,21*32, 13*32,30,36,4,4,1,"god","SELECT",->(){$scene_manager.scene["map"].change_map("map02",15.5*32,18.5*32,"up")})
         $scene_manager.object["Teleport101"].set_animation(9)
 
         #------ Teleport 102 Map03 

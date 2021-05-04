@@ -66,8 +66,8 @@ class SceneMap
             $scene_manager.switch_scene("gameover")
         end
         if @partyActors[1].is_a?(Event) == true
-            @partyActors[1].set_move("followPlayer",18*32,$scene_manager.scene["player"].eventObject) 
-            @partyActors[1].set_move("attack",8*32,nil)
+            @partyActors[1].set_move("followPlayer",18*32,$scene_manager.scene["player"].eventObject,0.5) 
+            @partyActors[1].set_move("attack",8*32,nil,"auto")
         end
         @partyActors.each{|e|
                         if e.battle.currentHP > 0
