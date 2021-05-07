@@ -13,7 +13,7 @@ class EquipMenu
         @currentPartyMember = 0
         @currentLayer = "party"
         @equipmentOptions=Array.new
-        
+        @descriptionType = nil
         #   Options
         back = [Option.new("Back",->(){
             @input.removeFromStack(@optionsBox.stackName)
@@ -21,7 +21,7 @@ class EquipMenu
             @input.addToStack("options")
         })]
         @currentOptions = back
-        @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@currentOptions,"")
+        @optionsBox = OptionsBox.new("Equipment",0,0,4,10,@currentOptions,"")
         
         #   Equipment
         
@@ -33,51 +33,60 @@ class EquipMenu
                 @currentPartyMember = index
                 @currentOptions = @equipmentOptions
                 @optionsBox.change_options(@equipmentOptions)
-                @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@equipmentOptions,"")
+                @optionsBox = OptionsBox.new("Equipment",0,0,4,10,@equipmentOptions,"")
             })
         }
         @startOptions.push(back[0])
         mapPartyEquipment()
         @currentOptions = @startOptions
-        @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
+        @optionsBox = OptionsBox.new("Equipment",0,0,4,10,@startOptions,"")
         #equiment options
         #--------------------------
         
         #---- @party.unequip(equipItem,equipSpot)
         @equipmentOptions =  [
             Option.new("Weapon",->(){
+                @descriptionType = "weapon"
                 @currentOptions = weaponOptions()
                 @optionsBox.change_options(weaponOptions())
             }),
             Option.new("Shield",->(){ 
+                @descriptionType = "shield"
                 @currentOptions = armorOptions("shield")
                 @optionsBox.change_options(armorOptions("shield"))
             }),
             Option.new("Head",->(){
+                @descriptionType = "helm"
                 @currentOptions = armorOptions("helm")
                 @optionsBox.change_options(armorOptions("helm"))
             }),
             Option.new("Neck",->(){
+                @descriptionType = "neck"
                 @currentOptions = armorOptions("neck")
                 @optionsBox.change_options(armorOptions("neck"))
             }),
             Option.new("Body",->(){
+                @descriptionType = "body"
                 @currentOptions = armorOptions("body")
                 @optionsBox.change_options(armorOptions("body"))
             }),
             Option.new("Hands",->(){
+                @descriptionType = "hands"
                 @currentOptions = armorOptions("hands")
                 @optionsBox.change_options(armorOptions("hands"))
             }),
             Option.new("Legs",->(){
+                @descriptionType = "legs"
                 @currentOptions = armorOptions("legs")
                 @optionsBox.change_options(armorOptions("legs"))
             }),
             Option.new("Feet",->(){
+                @descriptionType = "feet"
                 @currentOptions = armorOptions("feet")
                 @optionsBox.change_options(armorOptions("feet"))
             }),
             Option.new("Back",->(){
+                @descriptionType = nil
                 @optionsBox = OptionsBox.new("Equipment",0,0,4,19,@startOptions,"")
         })]
         #change to party options
@@ -117,7 +126,7 @@ class EquipMenu
             end
         end
     end
-    def armorArray(arrayType) #Types Are : "helm","neck", "body", "hands", "legs", "feet"
+    def armorArray(arrayType) #Types Are : "helm","shield","neck", "body", "hands", "legs", "feet"
         array = Array.new
         @party.inventory.armor.each{|e|
         if e.is_a?(Armor) == true
@@ -145,6 +154,7 @@ class EquipMenu
         end
         #array.push(Option.new("Unequip",->(){@party.unequip("weapon",@currentPartyMember)}))
         array.push(Option.new("Back",->(){
+            @descriptionType = nil
             @currentOptions = @equipmentOptions
             @optionsBox.change_options(@equipmentOptions)
         }))
@@ -166,6 +176,7 @@ class EquipMenu
         end
         array.push(Option.new("Unequip",->(){@party.unequip(type,@currentPartyMember)}))
         array.push(Option.new("Back",->(){
+            @descriptionType = nil
             @currentOptions = @equipmentOptions
             @optionsBox.change_options(@equipmentOptions)
         }))
@@ -173,6 +184,14 @@ class EquipMenu
         return array
     end
     #----
+    def armorDescript(type)
+        array = armorArray(type).each.map{|e| 
+            if e.is_a?(Armor)
+                Gosu::Image.from_text(e.name.to_s+": "+e.description.to_s, 18)
+            end
+        }
+        return array
+    end
     def mapPartyEquipment()
         @partyWeapons = @party.party.map{|e|
         if e.weapon.is_a?(Weapon)
@@ -266,14 +285,32 @@ class EquipMenu
         
     end
     def draw
+        if @descriptionType != nil
+            
+            @partyWeaponDescription = @party.inventory.weapons.map{|e|Gosu::Image.from_text(e.name.to_s+": "+e.description.to_s, 18)}
+            descriptionDraw = armorDescript(@descriptionType)
+        end
         #Draw Party Info 
         @partyHP = @party.party.map{|e|Gosu::Image.from_text("HP: "+e.currentHP.to_s+"/"+e.hp.to_s, 18)}
         @partyAC = @party.party.map{|e|Gosu::Image.from_text("Armor: "+e.total_ac(0).to_s, 18)}
         @partySTR = @party.party.map{|e|Gosu::Image.from_text("Strength: "+e.str.to_s, 18)}
         @partyWPNDMG = @party.party.map{|e|Gosu::Image.from_text("Weapon Damage: "+(e.weapon.damage*(@party.party[@currentPartyMember].getMod(@party.party[@currentPartyMember].str))).to_s, 18)}
         @partyMRES = @party.party.map{|e|Gosu::Image.from_text("Magic Resistance: "+e.mRes.to_s, 18)}
+        
+        
         mapPartyEquipment()
         
+        #draw boxes
+        @optionsBox.draw
+        create_window(5.25,0,19,13.5)
+        create_window(5.25,14.25,19,4)
+
+        if @descriptionType != nil && descriptionDraw[@currentChoiceOp] != nil && @descriptionType != "weapon"
+            descriptionDraw[@currentChoiceOp].draw((6*32),(15*32), 8,scale_x = 1, scale_y = 1, color = @white)
+        end
+        if @descriptionType == "weapon" && @partyWeaponDescription[@currentChoiceOp] != nil
+            @partyWeaponDescription[@currentChoiceOp].draw((6*32),(15*32), 8,scale_x = 1, scale_y = 1, color = @white)
+        end
         #left column
         @partyNames[@currentPartyMember].draw((7*32), 20, 8,scale_x = 1, scale_y = 1, color = @white)
         @partyLVL[@currentPartyMember].draw((7*32), 45, 8,scale_x = 1, scale_y = 1, color = @white)
@@ -296,8 +333,6 @@ class EquipMenu
         @partyMRES[@currentPartyMember].draw((14*32), 195, 8,scale_x = 1, scale_y = 1, color = @white)
         
 
-        #draw boxes
-        @optionsBox.draw
-        create_window(6,0,19,19) 
+         
     end
 end

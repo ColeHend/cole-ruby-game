@@ -17,8 +17,8 @@ class Bestiary
             npc.enemyGroups = ["nothing"]
             return npc
         when "hitmonchan"
-            hitmonchan = PlayerCharacter.new("hitmonchan",20.0,12,12,12,12)
-            hitmonchan.weapon = Weapon.new("Mega Punch","megaPunch",15,"blunt",350,4)
+            hitmonchan = PlayerCharacter.new("hitmonchan",20.0,12,12,12,12) 
+            hitmonchan.weapon = Weapon.new("Mega Punch","megaPunch",15,"blunt",nil,350,4)#(name,codeName,damage = 6,animation="slash",enchantment = nil,cooldown = 350,rangeBoost=0,unequipEnchantment=nil,description = "")
             hitmonchan.totalArmor = 8
             hitmonchan.mRes = 1
             hitmonchan.exp = 500 # gives 5% of 
@@ -27,7 +27,7 @@ class Bestiary
             return hitmonchan
         when "sandslash"
             sandslash = PlayerCharacter.new("sandslash",30.0,12,12,12,12,2)
-            sandslash.weapon = Weapon.new("Slash","slash",10,"slash",350,4)
+            sandslash.weapon = Weapon.new("Slash","slash",10,"slash",nil,350,4)
             sandslash.totalArmor = 12
             sandslash.exp = 800 # gives 5% of 
             sandslash.hateGroup = "sandslash"
@@ -35,7 +35,7 @@ class Bestiary
             return sandslash
         when "charizard"
             charizard = PlayerCharacter.new("charizard",75.0,14,12,12,12,2)
-            charizard.weapon = Weapon.new("Claws","claws",12,"slash",350,4)
+            charizard.weapon = Weapon.new("Claws","claws",12,"slash",nil,350,4)
             charizard.totalArmor = 14
             charizard.mRes = 12
             charizard.exp = 8000 # gives 5% of 
@@ -46,7 +46,7 @@ class Bestiary
             return charizard
         when "metagross"
             metagross = PlayerCharacter.new("metagross",750.0,16,12,12,12,2)
-            metagross.weapon = Weapon.new("Force Punch","forcePunch",70,"blunt",250,32)
+            metagross.weapon = Weapon.new("Force Punch","forcePunch",70,"blunt",nil,250,32)
             metagross.totalArmor = 1000
             metagross.exp = 20000 # gives 5% of 
             metagross.hateGroup = "metagross"

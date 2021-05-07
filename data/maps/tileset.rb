@@ -93,6 +93,10 @@ class Tileset
             end
         elsif @tilesetName == "mountainTileset"
             case tile
+            when 7
+                return false
+            when 15 
+                return false
             when 40#clifftop top
                 return false
             when 41
@@ -122,6 +126,12 @@ class Tileset
             when 73
                 return false
             when 74
+                return false
+            when 98
+                return false
+            when 99
+                return false
+            when 100
                 return false
             else
                 return true

@@ -245,6 +245,7 @@ class Control_movement
             else
                 closestDist = 32
             end
+
         moveLeft = ->(){
             moveNumber.times{
                 attackerClass.facing = "left"
@@ -277,7 +278,9 @@ class Control_movement
         if @objectToFollow.is_a?(GameObject) == true
             followAbsX = ((@objectToFollow.x+(@objectToFollow.w/2)) - (objectToMove.x+(objectToMove.w/2)) ).abs #g(n) exact distance y
             followAbsY = ((@objectToFollow.y+32) - (objectToMove.y+32) ).abs#g(n) exact distance x
-            
+            if objDetect.check_inRange(objectToMove,closestDist ,false) == true  && followAbsY <= tileDetectW
+            elsif objDetect.check_inRange(objectToMove,closestDist ,false) == true && followAbsX <= tileDetectW
+            end
             if objDetect.check_inRange(objectToMove,detectDist ,false) == true#in total range
                 if followAbsY > followAbsX# farther up or down
                     if @objectToFollow.y <= objectToMove.y#up
