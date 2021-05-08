@@ -71,7 +71,7 @@ class Event #$scene_manager.scene["player"].eventObject
     return currentFocus
   end
   
-  def set_move(kind,dist=12*32,objectOfFocus=nil,atkType="auto",speed=0.25)
+  def set_move(kind,dist=12*32,objectOfFocus=nil,atkType="ranged",speed=0.25)
     canMove()
     @moveType = kind
     @distance = dist
@@ -102,6 +102,7 @@ class Event #$scene_manager.scene["player"].eventObject
         end
 
       when "player"
+        @moveType = "player"
         @playerControl = PlayerControl.new()
         
       when "none"

@@ -8,7 +8,6 @@ class PlayerParty
         @maxPartySize = 2
         @gold = 24
         @inventory = Inventory.new()
-        
         @deathCap = @maxPartySize
         @deathTotal = 0
     end
@@ -19,6 +18,7 @@ class PlayerParty
     def addToParty(characterEvent)
         if characterEvent.is_a?(Event)
             if @party.length < @maxPartySize
+                $scene_manager.allyAI[@party.length] = "auto"
                 self.party.push(characterEvent.battle)
                 self.partyActors.push(characterEvent)
                 puts("New Party Member Name: #{characterEvent.name}| HP: #{characterEvent.battle.hp}")

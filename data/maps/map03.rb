@@ -48,22 +48,22 @@ class Map03 < Map
         if event301.battle.currentHP > 0 #set sandslash ai
             event301.activateType = "SELECT"
             event301.set_move("followPlayer",8*32,nil)
-            event301.set_move("attack",8*32,nil) 
+            event301.set_move("attack",8*32,nil,"melee") 
         end
         if event302.battle.currentHP > 0#set hitmonchan ai
             event302.activateType = "SELECT"
             event302.set_move("followPlayer",8*32,nil) 
-            event302.set_move("attack",8*32,nil) 
+            event302.set_move("attack",8*32,nil,"melee") 
         end
         if event303.battle.currentHP > 0#set charizard ai
             event303.activateType = "SELECT"
             event303.set_move("followPlayer",10*32,nil) 
-            event303.set_move("attack",10*32,nil) 
+            event303.set_move("attack",10*32,nil,"auto") 
         end
         if event304.battle.currentHP > 0#set metagross ai
             event304.activateType = "SELECT"
             event304.set_move("followPlayer",12*32,nil) 
-            event304.set_move("attack",12*32,nil) 
+            event304.set_move("attack",12*32,nil,"melee") 
         end
     end
     def draw()

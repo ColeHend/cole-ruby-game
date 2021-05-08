@@ -21,7 +21,7 @@ class Bestiary
             hitmonchan.weapon = Weapon.new("Mega Punch","megaPunch",15,"blunt",nil,350,4)#(name,codeName,damage = 6,animation="slash",enchantment = nil,cooldown = 350,rangeBoost=0,unequipEnchantment=nil,description = "")
             hitmonchan.totalArmor = 8
             hitmonchan.mRes = 1
-            hitmonchan.exp = 500 # gives 5% of 
+            hitmonchan.exp = 50 # gives 
             hitmonchan.hateGroup = "hitmonchan"
             hitmonchan.enemyGroups = ["player","guard"] 
             return hitmonchan
@@ -29,7 +29,7 @@ class Bestiary
             sandslash = PlayerCharacter.new("sandslash",30.0,12,12,12,12,2)
             sandslash.weapon = Weapon.new("Slash","slash",10,"slash",nil,350,4)
             sandslash.totalArmor = 12
-            sandslash.exp = 800 # gives 5% of 
+            sandslash.exp = 50 # gives 
             sandslash.hateGroup = "sandslash"
             sandslash.enemyGroups = ["player","guard"] 
             return sandslash
@@ -38,7 +38,7 @@ class Bestiary
             charizard.weapon = Weapon.new("Claws","claws",12,"slash",nil,350,4)
             charizard.totalArmor = 14
             charizard.mRes = 12
-            charizard.exp = 8000 # gives 5% of 
+            charizard.exp = 160 # gives 
             charizard.hateGroup = "charizard"
             charizard.currentSpell = Spellbook.new.spell("fireball")
             charizard.knownSpells = ["fireball","firebolt"]
@@ -48,7 +48,7 @@ class Bestiary
             metagross = PlayerCharacter.new("metagross",750.0,16,12,12,12,2)
             metagross.weapon = Weapon.new("Force Punch","forcePunch",70,"blunt",nil,250,32)
             metagross.totalArmor = 1000
-            metagross.exp = 20000 # gives 5% of 
+            metagross.exp = 1000 # gives  
             metagross.hateGroup = "metagross"
             metagross.enemyGroups = ["player","guard"] 
             return metagross

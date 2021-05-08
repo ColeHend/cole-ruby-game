@@ -254,26 +254,27 @@ class FightCenter
         end
     end
 
-    def npcAttack(objectToMove,battle,facing,type="auto")
+    def npcAttack(objectToMove,battle,facing,type)
+        meleeRange = battle.weapon.range
+        theEnemyMelee = MoveCollision.new.check_inRange(objectToMove,meleeRange,true)
         
-        case type
-        when "melee"
+        if battle.currentSpell.is_a?(Magic) == true
+            spellRange = battle.currentSpell.range
+        else
+            spellRange = 0
+        end
+        theEnemyRanged = MoveCollision.new.check_inRange(objectToMove,spellRange,true)
+        
+        if type == "melee"
             if isAnEnemy(theEnemyMelee,battle) == true
                 closeCombat(objectToMove, battle,facing,battle.weapon.animation)
             end
-        when "ranged"
+        elsif type == "ranged" && battle.currentSpell.is_a?(Magic) == true
             if isAnEnemy(theEnemyRanged,battle) == true
                 rangedCombat(objectToMove,facing,battle.currentSpell.name,battle)
             end
-        when "auto"
-            meleeRange = battle.weapon.range
-            if battle.currentSpell.is_a?(Magic) == true
-                spellRange = battle.currentSpell.range
-            else
-                spellRange = 0
-            end
-            theEnemyMelee = MoveCollision.new.check_inRange(objectToMove,meleeRange,true)
-            theEnemyRanged = MoveCollision.new.check_inRange(objectToMove,spellRange,true)
+        elsif type == "auto"
+            
             if theEnemyMelee.is_a?(Event) == true
                 if isAnEnemy(theEnemyMelee,battle) == true
                     closeCombat(objectToMove, battle,facing,battle.weapon.animation)

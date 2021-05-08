@@ -49,7 +49,17 @@ class SceneMap
         @currentMap = @mapHash[map]
         @currentMap.bgm.play(true)
     end
-
+    def ally_ai
+        @partyActors.each_with_index{|event,index|
+            if index > 0
+                if @partyActors[index].is_a?(Event) == true
+                    @partyActors[index].set_move("followPlayer",18*32,$scene_manager.scene["player"].eventObject,0.5) 
+                    @partyActors[index].set_move("attack",8*32,nil,$scene_manager.allyAI[index])
+                end
+            end
+        }
+        
+    end
     def will_Collide(collisionArray,key)
         @currentMap.willCollide(collisionArray,@player.x,@player.y,key)
     end
@@ -65,10 +75,7 @@ class SceneMap
         if @deathTotal >= @deathCap
             $scene_manager.switch_scene("gameover")
         end
-        if @partyActors[1].is_a?(Event) == true
-            @partyActors[1].set_move("followPlayer",18*32,$scene_manager.scene["player"].eventObject,0.5) 
-            @partyActors[1].set_move("attack",8*32,nil,"auto")
-        end
+        ally_ai
         @partyActors.each{|e|
                         if e.battle.currentHP > 0
                             e.update
@@ -85,7 +92,7 @@ class SceneMap
                 e.update(KB.key_pressed?(InputTrigger::SELECT))#
                 deadEvents = Array.new
                 if e.battle.currentHP <= 0
-                    deadEvents.push([index,(e.battle.exp * 0.05)])
+                    deadEvents.push([index,(e.battle.exp)])
                 end
                 if deadEvents.length > 0
                     deadEvents.each {|e|

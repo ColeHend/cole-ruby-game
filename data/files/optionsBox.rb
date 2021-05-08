@@ -10,14 +10,16 @@ class OptionsBox
         @input.addToStack(stackName)
         @inputStackSpot = @input.inputStack.length
         @hidden = false
+        @optionsBoxHeightMod = 0
         @x, @y, @width, @height = x, y, width, height
         @choices = choice
         @choiceNames = @choices.map{|e|e.text_image}
         @choice =  @choices.map{|e|e.function}
         @choiceAmount = @choiceNames.length 
+        @onScreenChoiceAmount = @height / 27
         @done = done
         @drawChoice,@currentOp = true,0
-
+        
         @white = Gosu::Color.argb(0xff_ffffff)
         @black = Gosu::Color.argb(0xff_000000)
         @orange = Gosu::Color.argb(0xff_fc5203)
@@ -51,11 +53,19 @@ class OptionsBox
                     @colors[@currentOp] = @notCurrentColor
                     @currentOp -= 1
                     @colors[@currentOp] = @currentColor
+                elsif @currentOp == 0
+                    @colors[@currentOp] = @notCurrentColor
+                    @currentOp = @choiceAmount - 1
+                    @colors[@currentOp] = @currentColor
                 end
             when "down"
                 if @choiceAmount != (@currentOp+1)
                     @colors[@currentOp] = @notCurrentColor
                     @currentOp += 1
+                    @colors[@currentOp] = @currentColor
+                elsif @choiceAmount == (@currentOp+1)
+                    @colors[@currentOp] = @notCurrentColor
+                    @currentOp = 0
                     @colors[@currentOp] = @currentColor
                 end
             when "select"
@@ -73,7 +83,6 @@ class OptionsBox
         @choiceNames = @choices.map{|e|e.text_image}
         @choice =  @choices.map{|e|e.function}
         @choiceAmount = @choiceNames.length
-
         if @input.keyPressed(InputTrigger::UP) then #down
             doInput("up") 
         elsif @input.keyPressed(InputTrigger::DOWN) then #up
@@ -90,7 +99,8 @@ class OptionsBox
       
     def draw
         if !@hidden
-            create_window(@x,@y,@width,@height)
+            create_window(@x,@y,@width,(@height))
+
             @choiceY = (@y*32) + 15
             for a in (0...@choiceAmount)
                 @choiceNames[a].draw((@x*32)+10, @choiceY+(20*a), 8,scale_x = 1, scale_y = 1, color = @colors[a])

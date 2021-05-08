@@ -1,7 +1,7 @@
 require_relative "files/input.rb"
 require_relative "files/game_object.rb"
 class SceneManager
-    attr_accessor :scene, :currentScene, :feature, :images, :event, :eventMap, :object, :songs, :sounds, :windowskin
+    attr_accessor :scene, :currentScene, :feature, :images, :event, :eventMap, :object, :songs, :sounds, :windowskin, :allyAI
     attr_reader :input
     def initialize()    
         @scene = Hash.new
@@ -14,6 +14,7 @@ class SceneManager
         @songs = Hash.new
         @sounds = Hash.new
         @windowskin = "fancyWindowSkin"
+        @allyAI = Array.new
     end
     def register(sceneName,sceneObject)
         @scene[sceneName] = sceneObject
