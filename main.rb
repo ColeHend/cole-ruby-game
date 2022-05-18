@@ -5,6 +5,7 @@ Dir[File.join(__dir__,'data', 'files', '*.rb')].each { |file| require file }
 Dir[File.join(__dir__,'data', 'maps', '*.rb')].each { |file| require file }
 Dir[File.join(__dir__,'data', 'maps','characters', '*.rb')].each { |file| require file }
 Dir[File.join(__dir__,'data', 'maps','characters','magic', '*.rb')].each { |file| require file }
+
 class MyGame < GameWindow
   def initialize
     super 800, 600, false
