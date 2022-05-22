@@ -8,7 +8,7 @@ Dir[File.join(__dir__,'data', 'maps','characters','magic', '*.rb')].each { |file
 
 class MyGame < GameWindow
   def initialize
-    super 800, 600, false
+    super 800, 600, false 
     $window = self
     
     $scene_manager = SceneManager.new
