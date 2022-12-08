@@ -1,29 +1,30 @@
-require_relative "magic.rb" # (name,element,damage,effect = nil,target = nil)
-require_relative "spellbook.rb" # (spellName)
-require_relative "../../events/event.rb" # (object, eventTrigger, collidable, event,battle)
-require_relative "../../events/event_trigger.rb"
-require_relative "../../events/move_collision.rb"
-require_relative "../../events/movement_control.rb"
-require_relative "../../../files/animate.rb"
-
-Dir[File.join(__dir__, '..', '*.rb')].each { |file| require file }
-class MagicBook
-    attr_accessor :spellList
-    def initialize(int = 12)
-        @currentMap =  $scene_manager.scene["map"].currentMap
-        @playerObj = $scene_manager.object["player"]
-        @playerBattle = $scene_manager.feature["party"].party[0]
-        @x = (@playerObj.x )
-        @y = (@playerObj.y )
-        @int = int
-        #@fireboltObj = $scene_manager.register_object("firebolt","fireshotCharacter",0,0,32,48,4,4)
-        @activeSpells = Array.new
-        @spellList = Spellbook.new(@int)
+class Battle_Magic
+    def initialize
+    end
+end
+class Spell
+    attr_accessor :name, :range, :object, :stability, :animName, :cooldown, :element, :damage, :target, :effect, :triggered
+    def initialize(name,range,object,stability,effect,animName,cooldown)
+        @name = name
+        @range = range
+        @object = object
+        @stability = stability
+        @animName = animName
+        @effect = effect
+        @element = element
+        @damage = damage
+        @target = target
+        @cooldown = cooldown
+        @triggered = false
+    end
+end
+class Spell_Casting
+    def initialize(eventName,int)
+        @spellList = Spellbook.new(int)
         @animation = PlayAnimation.new()
         @moveControl = Control_movement.new("spell#{@x}")
     end
-    
-    def make_shot(targetObject,spellEVT,facing,spellStability,spellRange)
+    def ranged_shot(targetObject,spellEVT,facing)
         range = spellRange/4
         u = 0
             Thread.new{
@@ -41,9 +42,7 @@ class MagicBook
                 end
             }
     end
-    
-
-    def ranged_shot(attackObj,facing,spellName)
+    def ranged_casting(spell,facing,spellName)
         
         spellCast = @spellList.spell(spellName)
         #(spellName,range,object,spell,spellEff,animName,cooldown)
@@ -83,19 +82,5 @@ class MagicBook
             make_shot(spellObj,event,"right",spellStability,spellRange)
         end
         
-    end
-
-    def update
-        @spellList.update
-        
-    end
-    def draw
-        
-        if @activeSpells.length > 0
-            @activeSpells.each_with_index {|e,index|
-                e.draw
-                @spellList.draw
-            }
-        end
     end
 end

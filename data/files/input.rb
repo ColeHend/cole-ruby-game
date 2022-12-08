@@ -51,7 +51,25 @@ class Input
             return true
         end
     end
-    def keyDown(id)
+    def keyDown(id,stackName="map")
+        if $scene_manager.input.inputStack[$scene_manager.input.inputStack.length-1] == stackName
+            case id
+            when InputTrigger::UP
+                keyHeld(InputTrigger::UP)
+            when InputTrigger::DOWN
+                keyHeld(InputTrigger::DOWN)
+            when InputTrigger::LEFT
+                keyHeld(InputTrigger::LEFT)
+            when InputTrigger::RIGHT
+                keyHeld(InputTrigger::RIGHT)
+            when InputTrigger::SELECT
+                keyPressed(InputTrigger::SELECT)
+            when InputTrigger::ESCAPE
+                keyPressed(InputTrigger::ESCAPE)
+            end
+        end
+    end
+    def keyDown2(id)
         stackLength = ($scene_manager.input.inputStack.length-1)
         if $scene_manager.input.inputStack[stackLength] == "map"
             case id

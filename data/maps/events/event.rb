@@ -152,8 +152,6 @@ class Event #$scene_manager.scene["player"].eventObject
   
   def draw()
     
-    
-    
     if self.battle.currentHP > 0 && @eventObject != nil
       if @moveType == "player"
         @playerControl.draw

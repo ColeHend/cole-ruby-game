@@ -10,8 +10,7 @@ class SceneMap
         @mapHash["map01"] = Map01.new()
         @mapHash["map02"] = Map02.new()
         @mapHash["map03"] = Map03.new()
-        startMap = @mapHash["map01"]
-        @currentMap = startMap
+        @currentMap = @mapHash["map01"] #default start map
         @currentMap.bgm.play(true)
         @player = $scene_manager.scene["player"]
         @party = $scene_manager.feature["party"]

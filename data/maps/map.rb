@@ -13,14 +13,15 @@ class Mapper
         draw_tile_loop()
         draw_tile_loop_abovePlayer()
     end
-    def registerEvent(eventName,imgName,eventX,eventY,bbWidth,bbHeight,columns,rows,mapNumber,bestiaryName,activateType,eventTriggered=->(){})
-      $scene_manager.register_object(eventName,imgName,eventX,eventY,bbWidth,bbHeight,columns,rows)
-      $scene_manager.registerEvent(mapNumber,eventName,Event.new(
-              $scene_manager.object[eventName], 
+    #eventName,imgName,eventX,eventY,bbWidth,bbHeight,columns,rows,mapNumber,bestiaryName,activateType
+    def registerEvent(newEvent,eventTriggered=->(){})
+      $scene_manager.register_object(newEvent.eventName,newEvent.imgName,newEvent.x,newEvent.y,newEvent.bbWidth,newEvent.bbHeight,newEvent.columns,newEvent.rows)
+      $scene_manager.registerEvent(newEvent.mapNumber,newEvent.eventName,Event.new(
+              $scene_manager.object[newEvent.eventName], 
               eventTriggered,
-              Bestiary.new.enemy(bestiaryName)))
-      $scene_manager.event[eventName].name = eventName
-      $scene_manager.event[eventName].activateType = activateType
+              Bestiary.new.enemy(newEvent.bestiaryName)))
+      $scene_manager.event[newEvent.eventName].name = newEvent.eventName
+      $scene_manager.event[newEvent.eventName].activateType = newEvent.activateType
     end
     def draw_tile_loop()
       mapArrayY = @mapfile['draw']

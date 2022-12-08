@@ -2,6 +2,7 @@ require_relative "map.rb"
 require_relative "scene_map.rb"
 require_relative "events/event.rb"
 require_relative "events/event_trigger.rb"
+require_relative "events/event_base.rb"
 require_relative "characters/enemy_bestiary.rb"
 require_relative "../files/windowBase.rb"
 require_relative "../files/dialogBox.rb"
@@ -19,15 +20,21 @@ class Map03 < Map
         @bgm = $scene_manager.songs['serious']
         @width, @height = 40, 30
         @map = Mapper.new(@tileset,@width,@height,@mapfile)
-        @events = $scene_manager.eventMap[3]
         @bestiary = Bestiary.new()
+        @events = $scene_manager.eventMap[3]
+        @eventBase = [
+            Event_Base.new("Event301",:sandslash,4*32,17*32,60,60,4,4,3,"sandslash","SELECT"),
+            Event_Base.new("Event302",:hitmonchan,19*32,17*32,53,52,4,4,3,"hitmonchan","SELECT"),
+            Event_Base.new("Event303",:charizard,12*32,2*32,62,62,4,4,3,"charizard","SELECT"),
+            Event_Base.new("Event304",:metagross,2*32,4*32,61,62,4,4,3,"metagross","SELECT")
+        ]
 
         #--------------------Events--------------------------
         #registerEvent(eventName,imgName,eventX,eventY,bbWidth,bbHeight,columns,rows,mapNumber,bestiaryName,activateType,eventTriggered=->(){})
-        @map.registerEvent("Event301",:sandslash,4*32,17*32,60,60,4,4,3,"sandslash","SELECT")
-        @map.registerEvent("Event302",:hitmonchan,19*32,17*32,53,52,4,4,3,"hitmonchan","SELECT")
-        @map.registerEvent("Event303",:charizard,12*32,2*32,62,62,4,4,3,"charizard","SELECT")
-        @map.registerEvent("Event304",:metagross,2*32,4*32,61,62,4,4,3,"metagross","SELECT")
+        @map.registerEvent(@eventBase[0])
+        @map.registerEvent(@eventBase[1])
+        @map.registerEvent(@eventBase[2])
+        @map.registerEvent(@eventBase[3])
         #---------------------------------
         $scene_manager.registerEvent(3,"Teleport301",
             Event.new(nil, ->(){

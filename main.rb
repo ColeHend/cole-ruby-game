@@ -15,6 +15,7 @@ class MyGame < GameWindow
     $scene_manager.register("title",TitleScreen.new())
     $scene_manager.register("gameover",Gameover.new())
     $scene_manager.registerFeature("party",PlayerParty.new)
+    # adding stuff for game
     $scene_manager.feature["party"].addToParty(PlayerCharacter.new("Steve",10))  
     $scene_manager.register_object("fancyWindowSkin","fancyWindowSkin",0,0,0,0,6,4)
     $scene_manager.register_object("earthboundWindowSkin","earthboundWindowSkin",0,0,0,0,6,4)
@@ -41,3 +42,4 @@ end
 
 game = MyGame.new
 game.show
+gets
